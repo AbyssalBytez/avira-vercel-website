@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avira Perfumes - Editorial Luxury</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap');
+        
+        /* Define custom Tailwind configuration variables */
+        :root {
+            --color-primary: #1E1E1E; /* Very Dark Gray / Near Black */
+            --color-secondary: #F7F5F3; /* Warm Off-White / Cream */
+            --color-accent: #A38038; /* Richer Gold */
+        }
+
+        .playfair { font-family: 'Playfair Display', serif; }
+        .lora { font-family: 'Lora', serif; }
+        .inter { font-family: 'Inter', sans-serif; }
+
+        /* Editorial Button Style */
+        .editorial-btn {
+            border: 2px solid var(--color-primary);
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+        }
+        .editorial-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            transform: scale(1.02);
+        }
+        
+        /* Subtle Card Focus */
+        .card-focus {
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+        .card-focus:hover {
+            box-shadow: 0 0 0 2px var(--color-accent) inset;
+            transform: translateY(-2px); /* Subtle lift on hover */
+        }
+
+        /* --- Scroll Animation Classes --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Hero and Header Initial Animation --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-text {
+            opacity: 0;
+            animation: fadeInDown 1.5s ease-out 0.5s forwards;
+        }
+
+        .header-init {
+            opacity: 0;
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+        
+        /* Add smooth scrolling behavior globally */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            background-color: rgba(30, 30, 30, 0.9);
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Modal Content Animation */
+        .modal-content-animated {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-content-animated.is-open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': 'var(--color-primary)',
+                        'secondary': 'var(--color-secondary)',
+                        'accent': 'var(--color-accent)',
+                    },
+                }
+            }
+        }
+
+        // --- Scroll Animation Logic (Intersection Observer) ---
+        function setupScrollAnimations() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, {
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of element is visible
+            });
+
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        // --- Product Data Mapping and Descriptions ---
+        const imageMap = {
+            // Using "images/" prefix to point to the local images folder
+            "Cherry Blossom": "images/avira_.official_14040902_224003361.jpg",
+            "Cafe Date": "images/avira_.official_14040902_223924432.jpg",
+            "Mystic Santale": "images/avira_.official_14040902_223920104.jpg",
+            "Floral Specter": "images/avira_.official_14040902_223922400.jpg",
+            "After Hour": "images/avira_.official_14040904_155321718.jpg",
+            "Glacial Getaway": "images/avira_.official_14040904_154216336.jpg",
+            "Orion Hunt": "images/avira_.official_14040904_154223814.jpg",
+            "Midnight Swim": "images/avira_.official_14040904_154226872.jpg",
+            "Amber Malt": "images/avira_.official_14040904_155321718.jpg",
+            "Orchid": "images/avira_.official_14040904_154239914.jpg",
+        };
+
+        const perfumesData = [
+            { 
+                name: "Cherry Blossom", 
+                feel: "Airy, Delicate", 
+                notes: "Pink Petals, Water Lotus, Sandalwood",
+                description: "A soft, ephemeral bloom capturing the light sweetness of spring. Cherry Blossom is a delicate dance of pink petals and cool air, grounding to a warm, clean base of creamy sandalwood that lasts through the afternoon."
+            },
+            { 
+                name: "Cafe Date", 
+                feel: "Warm, Gourmand", 
+                notes: "Espresso Bean, Vanilla, Aged Leather",
+                description: "The perfect companion for a cozy afternoon. This scent blends the rich, dark roast of espresso with sweet vanilla and a hint of worn leather, evoking the intimate atmosphere of a cherished moment."
+            },
+            { 
+                name: "Mystic Santale", 
+                feel: "Deep, Woody", 
+                notes: "Creamy Santal, Cumin, Amber",
+                description: "An ancient, almost meditative scent. Mystic Santale is built around the creamy, velvety warmth of sandalwood, deepened by exotic cumin and a glowing amber finish. It is quiet power and grounding stability."
+            },
+            { 
+                name: "Floral Specter", 
+                feel: "Ethereal, White Floral", 
+                notes: "Ghost Flower, Green Moss, Cool Air",
+                description: "Intriguing and otherwordly. This is a cold, pure white floral scent—less sweetness, more clarity. It features the rare 'Ghost Flower' accord mixed with mineral notes and verdant moss, suggesting a silent presence."
+            },
+            { 
+                name: "After Hour", 
+                feel: "Sensual, Clandestine", 
+                notes: "Dark Rum, Tobacco Leaf, Black Musk",
+                description: "A fragrance for when the sun goes down. After Hour is a rich, boozy blend of dark rum and cured tobacco leaf, wrapped in a seductive black musk that lingers long after the night ends."
+            },
+            { 
+                name: "Glacial Getaway", 
+                feel: "Crisp, Aquatic", 
+                notes: "Icy Mint, Mountain Pine, Clean Ozone",
+                description: "An invigorating escape to the high peaks. This scent is a rush of icy mint, fresh ozone, and sharp mountain pine, offering a clean, cold, and utterly refreshing sensory experience."
+            },
+            { 
+                name: "Orion Hunt", 
+                feel: "Spicy, Ambitious", 
+                notes: "Black Pepper, Cedarwood, Vetiver",
+                description: "Bold and commanding, Orion Hunt is an expression of ambition. It opens with sharp black pepper, settling into a strong core of dry cedarwood and earthy vetiver. A scent for leadership."
+            },
+            { 
+                name: "Midnight Swim", 
+                feel: "Intriguing, Clean Amber", 
+                notes: "Saltwater Mist, Ambergris, Night Jasmine",
+                description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets an addictive, clean ambergris and a hint of intoxicating night-blooming jasmine. It is deep, yet crystal clear."
+            },
+            { 
+                name: "Amber Malt", 
+                feel: "Boozy, Comforting", 
+                notes: "Roasted Barley, Honeyed Malt, Patchouli",
+                description: "Pure comfort and rich indulgence. Amber Malt combines the nutty, sweet warmth of roasted barley and honeyed malt liquor with the deep, enveloping earthiness of patchouli. Perfect for cold evenings."
+            },
+            { 
+                name: "Orchid", 
+                feel: "Velvety, Luxurious", 
+                notes: "Black Orchid, Velvet Woods, Vanilla Pod",
+                description: "A fragrance of ultimate luxury and opulence. The central note of Black Orchid is draped in rich, velvety woods and sweetened by the dark, complex aroma of a cured vanilla pod. Decadent and smooth."
+            }
+        ];
+
+        // --- Modal Control Functions ---
+        function showScentDetails(perfumeName) {
+            const scent = perfumesData.find(p => p.name === perfumeName);
+            if (!scent) return;
+
+            const imageUrl = imageMap[scent.name];
+            const modal = document.getElementById('scent-modal');
+            const modalContent = document.getElementById('modal-content'); // Get the content div
+
+            document.getElementById('modal-image').src = imageUrl;
+            document.getElementById('modal-image').alt = scent.name + " bottle";
+            document.getElementById('modal-name').textContent = scent.name;
+            document.getElementById('modal-feel').textContent = scent.feel;
+            document.getElementById('modal-notes').textContent = scent.notes;
+            document.getElementById('modal-description').textContent = scent.description;
+
+            modal.classList.remove('hidden');
+            // Add animation class
+            requestAnimationFrame(() => { // Ensures class change is picked up by browser for transition
+                modalContent.classList.add('is-open');
+            });
+        }
+
+        function closeScentDetails() {
+            const modal = document.getElementById('scent-modal');
+            const modalContent = document.getElementById('modal-content'); // Get the content div
+
+            // Remove animation class
+            modalContent.classList.remove('is-open');
+
+            // Hide modal after transition
+            modalContent.addEventListener('transitionend', () => {
+                modal.classList.add('hidden');
+            }, { once: true }); // Ensure this listener only runs once
+        }
+
+        // --- DOM Event Listener Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Product Card Injection
+            const container = document.getElementById('collection-grid-final');
+            const cardTemplate = (perfume) => {
+                const imageUrl = imageMap[perfume.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${perfume.name.replace(/\s/g, '+')}`;
+                
+                // Add onclick handler to card
+                return `
+                    <div class="bg-white p-5 card-focus rounded-lg flex flex-col items-center text-center space-y-3 cursor-pointer border border-primary/10 animate-on-scroll"
+                         onclick="showScentDetails('${perfume.name}')">
+                        <div class="w-32 h-32 overflow-hidden rounded-full border-2 border-accent/50 shadow-lg">
+                            <img src="${imageUrl}" alt="${perfume.name} Perfume" 
+                                 class="object-cover w-full h-full"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/150x150/1E1E1E/F7F5F3?text=${perfume.name.replace(/\s/g, '+')}'">
+                        </div>
+                        <p class="text-xs uppercase tracking-widest text-accent font-semibold pt-2">${perfume.feel}</p>
+                        <h3 class="text-xl playfair font-medium text-primary">${perfume.name}</h3>
+                        <p class="text-xs text-primary/70 italic max-w-[90%]">${perfume.notes}</p>
+                    </div>
+                `;
+            };
+            perfumesData.forEach(p => {
+                container.innerHTML += cardTemplate(p);
+            });
+
+            // Initialize scroll animations after DOM is fully loaded and structured
+            setupScrollAnimations();
+
+            // Setup modal close handler for overlay
+            document.getElementById('scent-modal').addEventListener('click', (e) => {
+                // Check if the click was on the overlay (not the modal content)
+                if (e.target.id === 'scent-modal') {
+                    closeScentDetails();
+                }
+            });
+        });
+    </script>
+</head>
+<body class="bg-secondary text-primary inter antialiased">
+
+    <!-- Scent Detail Modal (Initially Hidden) --><div id="scent-modal" class="fixed inset-0 hidden z-[100] flex items-center justify-center p-4 modal-overlay">
+        <div id="modal-content" class="bg-secondary w-full max-w-lg rounded-lg shadow-2xl p-8 relative border border-primary/10 modal-content-animated">
+            <!-- Close Button --><button onclick="closeScentDetails()" class="absolute top-4 right-4 text-primary hover:text-accent transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="flex flex-col items-center text-center space-y-6">
+                <!-- Image --><div class="w-40 h-40 overflow-hidden rounded-full border-4 border-accent shadow-xl">
+                    <img id="modal-image" src="" alt="Perfume bottle" class="object-cover w-full h-full">
+                </div>
+
+                <!-- Name and Feel --><h2 id="modal-name" class="text-4xl playfair font-bold text-primary"></h2>
+                <p class="text-lg uppercase tracking-widest text-accent font-semibold">
+                    Feel: <span id="modal-feel" class="font-normal italic"></span>
+                </p>
+
+                <!-- Notes --><div class="w-full border-t border-b border-primary/10 py-4">
+                    <h3 class="text-sm uppercase tracking-widest font-medium text-primary mb-2">Key Notes</h3>
+                    <p id="modal-notes" class="text-base text-primary/80 lora italic"></p>
+                </div>
+
+                <!-- Description --><p id="modal-description" class="text-base text-primary/70 leading-relaxed"></p>
+
+                <button onclick="closeScentDetails()" class="mt-4 px-8 py-2 text-sm uppercase font-medium editorial-btn rounded-none">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar (Fixed Top) --><header class="bg-secondary border-b border-primary/10 sticky top-0 z-50 header-init">
+        <div class="container mx-auto px-6 lg:px-12 py-5 flex justify-between items-center max-w-7xl">
+            <a href="#" class="text-4xl font-bold playfair text-primary tracking-wider">AVIRA</a>
+            <nav class="hidden md:flex space-x-12 text-sm uppercase tracking-widest font-medium">
+                <!-- Smooth scrolling links --><a href="#philosophy" class="text-primary hover:text-accent transition duration-200">Our Craft</a>
+                <a href="#collection" class="text-primary hover:text-accent transition duration-200">The Scents</a>
+                <a href="#contact" class="text-primary hover:text-accent transition duration-200">Atelier</a>
+            </nav>
+            <button class="md:hidden text-primary focus:outline-none p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section (High-Impact Headline) --><section class="h-[85vh] flex items-center justify-center text-center">
+        <div class="p-6 max-w-5xl hero-text">
+            <h1 class="text-6xl md:text-8xl font-thin playfair text-primary mb-6 leading-none">
+                <span class="text-accent italic font-light block mb-4 text-3xl">Avira:</span>
+                The Scent of Permanence
+            </h1>
+            <p class="text-xl md:text-2xl text-primary/80 mb-10 max-w-3xl mx-auto lora italic">
+                "We reject the fleeting, crafting fragrances that do not just project, but gracefully endure."
+            </p>
+            <!-- Smooth scrolling link from hero --><a href="#collection" class="inline-block px-10 py-3 text-sm uppercase font-medium editorial-btn text-primary rounded-none">
+                Explore The Collection
+            </a>
+        </div>
+    </section>
+
+    <!-- Philosophy Section (Two-Column Editorial Block) --><section id="philosophy" class="container mx-auto px-6 lg:px-12 py-24 max-w-7xl border-t border-primary/10 animate-on-scroll">
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+            
+            <div class="space-y-6">
+                <h2 class="text-5xl playfair font-medium text-primary mb-4">
+                    The Avira Commitment: Time is the True Measure.
+                </h2>
+                <p class="text-primary/70 text-lg leading-relaxed">
+                    Our difference is in the depth of our formulation. We are dedicated to creating perfumes that are hand-made and structured to last long, ensuring a sustained, evolving scent experience throughout the day. This is not about initial impact; it is about enduring quality.
+                </p>
+            </div>
+            
+            <div class="space-y-8 pl-0 md:pl-10 border-l border-primary/10">
+                <div class="space-y-2">
+                    <h3 class="text-xl font-medium uppercase tracking-widest text-accent">Artisan Blending</h3>
+                    <p class="text-sm text-primary/80">Every batch is individually blended, poured, and finished by skilled artisans, maintaining an unwavering standard of quality far beyond automated production.</p>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-xl font-medium uppercase tracking-widest text-accent">Personal Signature</h3>
+                    <p class="text-sm text-primary/80">With ten unique expressions, each designed with its own distinct feel and narrative, we ensure there is an Avira that perfectly complements your personal taste and spirit.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Product Showcase Section (Clean Grid) --><section id="collection" class="bg-primary py-20">
+        <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <h2 class="text-4xl playfair font-bold text-left mb-12 text-secondary animate-on-scroll">The Ten Expressions.</h2>
+
+            <div id="collection-grid-final" class="grid grid-cols-2 md:grid-cols-5 gap-6 w-full">
+                <!-- Product Cards are injected here by JavaScript --></div>
+
+        </div>
+    </section>
+
+    <!-- Footer / Contact Section (Minimalist Centered) --><footer id="contact" class="bg-secondary py-16 border-t border-primary/10 animate-on-scroll">
+        <div class="container mx-auto px-6 text-center max-w-4xl">
+            <h3 class="text-3xl playfair font-medium text-primary mb-6">Connect with the Avira Atelier</h3>
+            
+            <!-- UPDATED: Instagram Link --><div class="flex justify-center mb-8 text-sm text-primary">
+                <p class="font-medium">Follow Our Atelier: 
+                    <a href="https://www.instagram.com/avira_.official" target="_blank" class="hover:text-accent underline">@avira_.official (Instagram)</a>
+                </p>
+            </div>
+
+            <p class="text-xs text-primary/50 mt-10 tracking-widest inter uppercase">&copy; 2025 Avira Perfumes. Quality over volume. Enduring presence.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
