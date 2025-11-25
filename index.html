@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avira Perfumes - Editorial Luxury</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap');
+        
+        /* Define custom Tailwind configuration variables */
+        :root {
+            --color-primary: #1E1E1E; /* Very Dark Gray / Near Black */
+            --color-secondary: #F7F5F3; /* Warm Off-White / Cream */
+            --color-accent: #A38038; /* Richer Gold */
+        }
+
+        .playfair { font-family: 'Playfair Display', serif; }
+        .lora { font-family: 'Lora', serif; }
+        .inter { font-family: 'Inter', sans-serif; }
+
+        /* Editorial Button Style */
+        .editorial-btn {
+            border: 2px solid var(--color-primary);
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+        }
+        .editorial-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            transform: scale(1.02);
+        }
+        
+        /* Secondary Accent Button Style */
+        .accent-btn {
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            background-color: transparent;
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+        }
+        .accent-btn:hover {
+            background-color: var(--color-accent);
+            color: var(--color-secondary);
+            transform: scale(1.02);
+        }
+
+        /* Subtle Card Focus */
+        .card-focus {
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+        .card-focus:hover {
+            box-shadow: 0 0 0 2px var(--color-accent) inset;
+            transform: translateY(-2px); /* Subtle lift on hover */
+        }
+
+        /* --- Scroll Animation Classes --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Hero and Header Initial Animation --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-text {
+            opacity: 0;
+            animation: fadeInDown 1.5s ease-out 0.5s forwards;
+        }
+
+        .header-init {
+            opacity: 0;
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+        
+        /* Add smooth scrolling behavior globally */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Modal & Quiz Panel Styles */
+        .modal-overlay {
+            background-color: rgba(30, 30, 30, 0.9);
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Modal Content Animation */
+        .modal-content-animated {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-content-animated.is-open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* --- Hamburger Menu Sidebar Styles --- */
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 80vw; /* 80% screen width on mobile */
+            max-width: 300px;
+            height: 100vh;
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out;
+            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Hamburger Icon Animation */
+        .hamburger-icon span {
+            display: block;
+            height: 2px;
+            width: 24px;
+            background: var(--color-primary);
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+        }
+        .hamburger-icon span:last-child {
+            margin-bottom: 0;
+        }
+
+        .hamburger-icon.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-icon.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-icon.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        
+        .quiz-option-btn {
+            transition: all 0.2s ease;
+        }
+        .quiz-option-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .quiz-option-btn.selected {
+            border: 3px solid var(--color-accent) !important;
+            background-color: var(--color-accent) !important;
+            color: var(--color-secondary) !important;
+            font-weight: 600;
+        }
+        
+        /* --- Mobile Quiz Specific Adjustments --- */
+        /* Ensure the modal content doesn't get too wide on small screens */
+        #quiz-content {
+            max-width: 95vw; /* Use 95% of viewport width */
+            margin: 0 auto; /* Center it */
+        }
+
+        /* Adjust font sizes in result view for mobile */
+        @media (max-width: 640px) {
+            #quiz-content {
+                padding: 1.5rem; /* Smaller padding on small screens */
+            }
+            .quiz-result-name {
+                font-size: 2.5rem; /* Smaller than 5xl on mobile */
+            }
+            .quiz-result-intro {
+                font-size: 1.125rem; /* Smaller than 2xl on mobile */
+            }
+        }
+
+
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': 'var(--color-primary)',
+                        'secondary': 'var(--color-secondary)',
+                        'accent': 'var(--color-accent)',
+                    },
+                }
+            }
+        }
+
+        // --- Global State and Data ---
+        const imageMap = {
+            // Using "images/" prefix to point to the local images folder
+            "Cherry Blossom": "images/avira_.official_14040902_224003361.jpg",
+            "Cafe Date": "images/avira_.official_14040902_223924432.jpg",
+            "Mystic Santale": "images/avira_.official_14040902_223920104.jpg",
+            "Floral Specter": "images/avira_.official_14040902_223922400.jpg",
+            "After Hour": "images/avira_.official_14040904_155321718.jpg",
+            "Glacial Getaway": "images/avira_.official_14040904_154216336.jpg",
+            "Orion Hunt": "images/avira_.official_14040904_154223814.jpg",
+            "Midnight Swim": "images/avira_.official_14040904_154226872.jpg",
+            "Amber Malt": "images/avira_.official_14040904_155321718.jpg",
+            "Orchid": "images/avira_.official_14040904_154239914.jpg",
+        };
+
+        const perfumesData = [
+            { name: "Cherry Blossom", feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. Delicate dance of pink petals and cool air." },
+            { name: "Cafe Date", feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso with sweet vanilla and a hint of worn leather." },
+            { name: "Mystic Santale", feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and amber." },
+            { name: "Floral Specter", feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherwordly. A cold, pure white floral mixed with mineral notes and verdant moss." },
+            { name: "After Hour", feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. Rich, boozy blend of dark rum and cured tobacco leaf." },
+            { name: "Glacial Getaway", feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
+            { name: "Orion Hunt", feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
+            { name: "Midnight Swim", feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
+            { name: "Amber Malt", feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. Nutty, sweet warmth of malt liquor with deep earthiness of patchouli." },
+            { name: "Orchid", feel: "Velvety, Luxurious", notes: "Black Orchid, Velvet Woods, Vanilla Pod", description: "A fragrance of ultimate luxury and opulence. Black Orchid draped in rich, velvety woods and dark vanilla pod." }
+        ];
+
+        // --- Quiz Data Structure ---
+        const quizQuestions = [
+            {
+                id: 1,
+                question: "What time of day defines your energy and mood?",
+                options: [
+                    { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 2, "Cherry Blossom": 2 } },
+                    { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 2, "Floral Specter": 1 } },
+                    { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 2, "Amber Malt": 1 } },
+                    { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Midnight Swim": 2, "Orchid": 1 } }
+                ]
+            },
+            {
+                id: 2,
+                question: "Which environment best describes your ideal escape?",
+                options: [
+                    { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 2, "Mystic Santale": 1 } },
+                    { text: "A vibrant, metropolitan cafe.", score: { "Cafe Date": 2, "Orion Hunt": 1 } },
+                    { text: "An elegant, dimly lit cocktail bar.", score: { "After Hour": 2, "Amber Malt": 1 } },
+                    { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 2, "Floral Specter": 1 } }
+                ]
+            },
+            {
+                id: 3,
+                question: "What textile appeals most to you?",
+                options: [
+                    { text: "Crisp, white linen.", score: { "Cherry Blossom": 2, "Glacial Getaway": 1 } },
+                    { text: "Rich, aged suede or leather.", score: { "Cafe Date": 1, "Orion Hunt": 2 } },
+                    { text: "Heavy, dark velvet.", score: { "Orchid": 2, "After Hour": 1 } },
+                    { text: "Sheer, flowing silk.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }
+                ]
+            },
+            {
+                id: 4,
+                question: "Which scent note do you find most grounding?",
+                options: [
+                    { text: "Fresh, aromatic spices (Pepper, Cumin).", score: { "Orion Hunt": 2, "Mystic Santale": 1 } },
+                    { text: "Sweet, baked goods/vanilla.", score: { "Cafe Date": 1, "Amber Malt": 2 } },
+                    { text: "Clean, oceanic air and salt.", score: { "Midnight Swim": 2, "Glacial Getaway": 1 } },
+                    { text: "Deep, creamy woods (Sandalwood, Cedar).", score: { "Mystic Santale": 2, "Orchid": 1 } }
+                ]
+            },
+            {
+                id: 5,
+                question: "What is your preferred flower?",
+                options: [
+                    { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3 } },
+                    { text: "Intoxicating white flowers (Jasmine, Tuberose).", score: { "Floral Specter": 2, "Midnight Swim": 1 } },
+                    { text: "Exotic, dark, mysterious blooms (Orchid).", score: { "Orchid": 2, "After Hour": 1 } }
+                ]
+            }
+        ];
+
+        let quizState = {
+            currentStep: 0,
+            scores: {},
+            selectedAnswers: Array(quizQuestions.length).fill(null)
+        };
+
+
+        // --- Helper Functions ---
+        function setupScrollAnimations() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '0px', threshold: 0.1 });
+
+            elements.forEach(el => { observer.observe(el); });
+        }
+        
+        // --- Modal Control Functions ---
+        function showScentDetails(perfumeName) {
+            const scent = perfumesData.find(p => p.name === perfumeName);
+            if (!scent) return;
+
+            const imageUrl = imageMap[scent.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${scent.name.replace(/\s/g, '+')}`;
+            const modal = document.getElementById('scent-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            document.getElementById('modal-image').src = imageUrl;
+            document.getElementById('modal-image').alt = scent.name + " bottle";
+            document.getElementById('modal-name').textContent = scent.name;
+            document.getElementById('modal-feel').textContent = scent.feel;
+            document.getElementById('modal-notes').textContent = scent.notes;
+            document.getElementById('modal-description').textContent = scent.description;
+
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modalContent.classList.add('is-open');
+            });
+        }
+
+        function closeScentDetails() {
+            const modal = document.getElementById('scent-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            modalContent.classList.remove('is-open');
+
+            modalContent.addEventListener('transitionend', () => {
+                modal.classList.add('hidden');
+            }, { once: true });
+        }
+
+        // --- Hamburger Menu Control ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('hamburger-icon');
+            const isOpen = menu.classList.toggle('open');
+            icon.classList.toggle('open', isOpen);
+            
+            // Toggle body overflow to prevent scrolling behind the menu
+            document.body.classList.toggle('overflow-hidden', isOpen);
+        }
+
+        function closeMobileMenu(e) {
+            // Close menu and scroll to target if it's an anchor link
+            if (e.target.tagName === 'A' || e.target.id === 'quiz-button-mobile') {
+                toggleMobileMenu();
+            }
+        }
+
+        // --- Quiz Logic ---
+        function openQuiz() {
+            // Reset and start
+            quizState.currentStep = 0;
+            quizState.scores = {};
+            quizState.selectedAnswers = Array(quizQuestions.length).fill(null);
+            document.getElementById('quiz-modal').classList.remove('hidden');
+            document.getElementById('quiz-content').classList.add('is-open');
+            renderQuizStep();
+        }
+
+        function closeQuiz() {
+            const modal = document.getElementById('quiz-modal');
+            const modalContent = document.getElementById('quiz-content');
+
+            modalContent.classList.remove('is-open');
+
+            modalContent.addEventListener('transitionend', () => {
+                modal.classList.add('hidden');
+            }, { once: true });
+        }
+        
+        function selectAnswer(questionIndex, optionIndex) {
+            // Update selected answer for this question
+            quizState.selectedAnswers[questionIndex] = optionIndex;
+            renderQuizStep(); // Re-render to update selected state
+        }
+        
+        function navigateQuiz(direction) {
+            // Only proceed if an answer is selected for the current step
+            const currentQuestionIndex = quizState.currentStep;
+            const selectedOption = quizState.selectedAnswers[currentQuestionIndex];
+
+            if (direction === 1 && selectedOption === null) {
+                // Display error message or just prevent navigation
+                console.log("Please select an answer before proceeding.");
+                return;
+            }
+
+            quizState.currentStep += direction;
+
+            if (quizState.currentStep >= quizQuestions.length) {
+                calculateResult();
+            } else if (quizState.currentStep < 0) {
+                quizState.currentStep = 0; // Prevent going before step 0
+            } else {
+                renderQuizStep();
+            }
+        }
+
+        function renderQuizStep() {
+            const quizBody = document.getElementById('quiz-body');
+            const currentQuestionIndex = quizState.currentStep;
+
+            if (currentQuestionIndex < 0 || currentQuestionIndex >= quizQuestions.length) {
+                // Should not happen if logic is correct, but safe guard
+                return;
+            }
+
+            const q = quizQuestions[currentQuestionIndex];
+            const isAnswered = quizState.selectedAnswers[currentQuestionIndex] !== null;
+
+            let html = `
+                <div class="w-full"> <!-- Ensures content takes full width to center correctly -->
+                    <div class="text-center mb-8">
+                        <p class="text-sm uppercase tracking-widest text-accent mb-2">Question ${currentQuestionIndex + 1} of ${quizQuestions.length}</p>
+                        <h3 class="text-2xl playfair font-medium text-primary">${q.question}</h3>
+                    </div>
+                    <div class="space-y-4">
+            `;
+
+            q.options.forEach((option, index) => {
+                const isSelected = quizState.selectedAnswers[currentQuestionIndex] === index;
+                html += `
+                    <button class="quiz-option-btn w-full text-left p-4 rounded-lg border-2 border-primary/20 hover:bg-primary/5 hover:border-primary transition ${isSelected ? 'selected' : 'bg-secondary'}"
+                            onclick="selectAnswer(${currentQuestionIndex}, ${index})">
+                        ${option.text}
+                    </button>
+                `;
+            });
+
+            html += `</div></div>`; // Close the inner container
+            quizBody.innerHTML = html;
+
+            // Update footer buttons
+            const footer = document.getElementById('quiz-footer');
+            footer.innerHTML = `
+                <button onclick="closeQuiz()" class="px-4 py-2 text-sm uppercase font-medium editorial-btn rounded-none">Close</button>
+                <div class="flex space-x-2"> <!-- Reduced space-x to 2 for tighter mobile grouping -->
+                    <button onclick="navigateQuiz(-1)" 
+                        class="px-4 py-2 text-sm uppercase font-medium border border-primary/20 text-primary/70 rounded-none ${currentQuestionIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/10'}" 
+                        ${currentQuestionIndex === 0 ? 'disabled' : ''}>
+                        Previous
+                    </button>
+                    ${currentQuestionIndex < quizQuestions.length - 1 ? 
+                        `<button onclick="navigateQuiz(1)" 
+                            class="px-4 py-2 text-sm uppercase font-medium rounded-none ${isAnswered ? 'accent-btn !text-secondary !bg-accent' : 'editorial-btn opacity-50 cursor-not-allowed'}" 
+                            ${!isAnswered ? 'disabled' : ''}>
+                            Next
+                        </button>` 
+                        : 
+                        `<button onclick="calculateResult()" 
+                            class="px-4 py-2 text-sm uppercase font-medium rounded-none ${isAnswered ? 'accent-btn !text-secondary !bg-accent' : 'editorial-btn opacity-50 cursor-not-allowed'}"
+                            ${!isAnswered ? 'disabled' : ''}>
+                            See Result
+                        </button>`
+                    }
+                </div>
+            `;
+        }
+        
+        function calculateResult() {
+            quizState.scores = {}; // Reset scores
+            
+            // Calculate scores based on all selected answers
+            quizQuestions.forEach((q, qIndex) => {
+                const selectedOptionIndex = quizState.selectedAnswers[qIndex];
+                if (selectedOptionIndex !== null) {
+                    const selectedOption = q.options[selectedOptionIndex];
+                    // Aggregate scores for each perfume
+                    for (const perfumeName in selectedOption.score) {
+                        const points = selectedOption.score[perfumeName];
+                        quizState.scores[perfumeName] = (quizState.scores[perfumeName] || 0) + points;
+                    }
+                }
+            });
+
+            // Find the highest score(s)
+            let topScore = 0;
+            let topScents = [];
+            
+            for (const perfumeName in quizState.scores) {
+                const score = quizState.scores[perfumeName];
+                if (score > topScore) {
+                    topScore = score;
+                    topScents = [perfumeName];
+                } else if (score === topScore && score > 0) {
+                    topScents.push(perfumeName);
+                }
+            }
+            
+            // Handle tie-breaking or fallback if no score is generated
+            let finalScentName;
+            if (topScents.length === 1) {
+                finalScentName = topScents[0];
+            } else if (topScents.length > 1) {
+                // Simple tie-breaker: pick the first one in the list
+                finalScentName = topScents[0]; 
+            } else {
+                // Fallback to a neutral scent if no choices were made
+                finalScentName = "Mystic Santale"; 
+            }
+            
+            // Render result
+            renderQuizResult(finalScentName);
+        }
+        
+        function renderQuizResult(perfumeName) {
+            const scent = perfumesData.find(p => p.name === perfumeName);
+            if (!scent) return;
+
+            const quizBody = document.getElementById('quiz-body');
+            const imageUrl = imageMap[scent.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${scent.name.replace(/\s/g, '+')}`;
+            
+            quizBody.innerHTML = `
+                <div class="text-center animate-on-scroll is-visible w-full"> <!-- Added w-full here for centering -->
+                    <p class="text-xl playfair font-bold text-accent mb-2 quiz-result-intro">Your Scent Signature is:</p>
+                    <h3 class="text-5xl md:text-6xl playfair font-bold text-primary mb-8 quiz-result-name">${scent.name}</h3>
+                    
+                    <div class="w-36 h-36 mx-auto overflow-hidden rounded-full border-4 border-accent/70 shadow-xl mb-6">
+                        <img src="${imageUrl}" alt="${scent.name} Bottle" class="object-cover w-full h-full">
+                    </div>
+                    
+                    <p class="text-lg text-primary/80 mb-4 lora italic max-w-sm mx-auto">
+                        ${scent.description}
+                    </p>
+                    
+                    <p class="text-sm uppercase tracking-widest font-semibold text-primary/70">
+                        Key Notes: ${scent.notes}
+                    </p>
+                    
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button onclick="showScentDetails('${scent.name}'); closeQuiz();" class="px-6 py-3 text-sm uppercase font-medium accent-btn rounded-none">
+                            View Full Details
+                        </button>
+                        <button onclick="openQuiz()" class="px-6 py-3 text-sm uppercase font-medium editorial-btn rounded-none">
+                            Retake Quiz
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Hide navigation in the footer
+            // Modified to use consistent padding with other buttons
+            document.getElementById('quiz-footer').innerHTML = `
+                <button onclick="closeQuiz()" class="px-4 py-2 text-sm uppercase font-medium editorial-btn rounded-none">Close</button>
+            `;
+        }
+        
+        // --- DOM Event Listener Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Product Card Injection
+            const container = document.getElementById('collection-grid-final');
+            const cardTemplate = (perfume) => {
+                const imageUrl = imageMap[perfume.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${perfume.name.replace(/\s/g, '+')}`;
+                
+                return `
+                    <div class="bg-secondary p-5 card-focus rounded-lg flex flex-col items-center text-center space-y-3 cursor-pointer border border-primary/10 animate-on-scroll"
+                         onclick="showScentDetails('${perfume.name}')">
+                        <div class="w-32 h-32 overflow-hidden rounded-full border-2 border-accent/50 shadow-lg">
+                            <img src="${imageUrl}" alt="${perfume.name} Perfume" 
+                                 class="object-cover w-full h-full"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/150x150/1E1E1E/F7F5F3?text=${perfume.name.replace(/\s/g, '+')}'">
+                        </div>
+                        <p class="text-xs uppercase tracking-widest text-accent font-semibold pt-2">${perfume.feel}</p>
+                        <h3 class="text-xl playfair font-medium text-primary">${perfume.name}</h3>
+                        <p class="text-xs text-primary/70 italic max-w-[90%]">${perfume.notes}</p>
+                    </div>
+                `;
+            };
+            perfumesData.forEach(p => {
+                container.innerHTML += cardTemplate(p);
+            });
+
+            // Initialize scroll animations
+            setupScrollAnimations();
+            
+            // Setup modal close handler for overlay
+            document.getElementById('scent-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'scent-modal') {
+                    closeScentDetails();
+                }
+            });
+            
+            // Setup quiz modal close handler for overlay
+            document.getElementById('quiz-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'quiz-modal') {
+                    closeQuiz();
+                }
+            });
+            
+            // Set up mobile menu closing when clicking links
+            document.getElementById('mobile-menu').addEventListener('click', closeMobileMenu);
+        });
+    </script>
+</head>
+<body class="bg-secondary text-primary inter antialiased">
+
+    <!-- Scent Detail Modal (Initially Hidden) --><div id="scent-modal" class="fixed inset-0 hidden z-[100] flex items-center justify-center p-4 modal-overlay">
+        <div id="modal-content" class="bg-secondary w-full max-w-lg rounded-lg shadow-2xl p-8 relative border border-primary/10 modal-content-animated">
+            <!-- Close Button --><button onclick="closeScentDetails()" class="absolute top-4 right-4 text-primary hover:text-accent transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="flex flex-col items-center text-center space-y-6">
+                <!-- Image --><div class="w-40 h-40 overflow-hidden rounded-full border-4 border-accent shadow-xl">
+                    <img id="modal-image" src="" alt="Perfume bottle" class="object-cover w-full h-full">
+                </div>
+
+                <!-- Name and Feel --><h2 id="modal-name" class="text-4xl playfair font-bold text-primary"></h2>
+                <p class="text-lg uppercase tracking-widest text-accent font-semibold">
+                    Feel: <span id="modal-feel" class="font-normal italic"></span>
+                </p>
+
+                <!-- Notes --><div class="w-full border-t border-b border-primary/10 py-4">
+                    <h3 class="text-sm uppercase tracking-widest font-medium text-primary mb-2">Key Notes</h3>
+                    <p id="modal-notes" class="text-base text-primary/80 lora italic"></p>
+                </div>
+
+                <!-- Description --><p id="modal-description" class="text-base text-primary/70 leading-relaxed"></p>
+
+                <button onclick="closeScentDetails()" class="mt-4 px-8 py-2 text-sm uppercase font-medium editorial-btn rounded-none">
+                    Close Details
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Modal (Initially Hidden) --><div id="quiz-modal" class="fixed inset-0 hidden z-[90] flex items-center justify-center p-4 modal-overlay">
+        <!-- Adjusted max-w, added flex-col and responsive height to enable vertical content centering -->
+        <div id="quiz-content" class="bg-secondary w-full max-w-xl rounded-xl shadow-2xl p-8 relative border border-primary/10 modal-content-animated flex flex-col h-full max-h-[90vh]">
+            <!-- Title and Close Button --><div class="flex justify-between items-center pb-4 border-b border-primary/10 mb-6">
+                <h2 class="text-3xl playfair font-bold text-primary">Find Your Avira Scent</h2>
+                <button onclick="closeQuiz()" class="text-primary hover:text-accent transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Quiz Body (Steps/Result Rendered Here) -->
+            <!-- Changed min-h-[250px] to flex-grow to take up all available space, enabling proper vertical centering -->
+            <div id="quiz-body" class="flex-grow flex items-center justify-center">
+                <p>Loading Quiz...</p>
+            </div>
+
+            <!-- Quiz Footer (Navigation) -->
+            <!-- Note: The justify-between is causing the mobile layout issue. JS will handle inner spacing. -->
+            <div id="quiz-footer" class="flex justify-between items-center pt-4 border-t border-primary/10 mt-6">
+                <!-- Buttons are updated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Navigation Bar (Fixed Top) --><header class="bg-secondary border-b border-primary/10 sticky top-0 z-50 header-init">
+        <!-- MODIFIED: Added md:justify-center and md:space-x-12 to center logo and links on desktop -->
+        <div class="container mx-auto px-6 lg:px-12 py-5 flex justify-between items-center max-w-7xl md:justify-center md:space-x-12">
+            <a href="#" class="text-4xl font-bold playfair text-primary tracking-wider">AVIRA</a>
+            <!-- MODIFIED: Reduced space-x-8 to space-x-6 for a tighter centered look -->
+            <nav class="hidden md:flex space-x-6 text-sm uppercase tracking-widest font-medium">
+                <!-- Smooth scrolling links --><a href="#philosophy" class="text-primary hover:text-accent transition duration-200">Our Craft</a>
+                <a href="#collection" class="text-primary hover:text-accent transition duration-200">The Scents</a>
+                <a href="javascript:void(0)" onclick="openQuiz()" class="text-primary hover:text-accent transition duration-200 cursor-pointer">Scent Quiz</a>
+                <a href="#credits" class="text-primary hover:text-accent transition duration-200">Credits</a>
+                <a href="#contact" class="text-primary hover:text-accent transition duration-200">Atelier</a>
+            </nav>
+            <button onclick="toggleMobileMenu()" id="mobile-menu-toggle" class="md:hidden text-primary focus:outline-none p-2 relative z-50">
+                <div id="hamburger-icon" class="hamburger-icon flex flex-col justify-center items-center">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Mobile Navigation Sidebar -->
+    <div id="mobile-menu" class="bg-primary text-secondary p-8 pt-24 z-40"> 
+        <nav class="flex flex-col space-y-6 text-lg uppercase tracking-widest font-medium">
+            <a href="#philosophy" class="hover:text-accent transition duration-200">Our Craft</a>
+            <a href="#collection" class="hover:text-accent transition duration-200">The Scents</a>
+            <a href="javascript:void(0)" onclick="openQuiz()" id="quiz-button-mobile" class="hover:text-accent transition duration-200">Scent Quiz</a>
+            <a href="#credits" class="hover:text-accent transition duration-200">Credits</a>
+            <a href="#contact" class="hover:text-accent transition duration-200">Atelier</a>
+        </nav>
+        <div class="absolute bottom-10 left-8 text-xs text-secondary/50">
+            &copy; 2025 Avira Perfumes
+        </div>
+    </div>
+
+
+    <!-- Hero Section (High-Impact Headline) --><section class="h-[85vh] flex items-center justify-center text-center">
+        <div class="p-6 max-w-5xl hero-text">
+            <h1 class="text-6xl md:text-8xl font-thin playfair text-primary mb-6 leading-none">
+                <span class="text-accent italic font-light block mb-4 text-3xl">Avira:</span>
+                The Scent of Permanence
+            </h1>
+            <p class="text-xl md:text-2xl text-primary/80 mb-10 max-w-3xl mx-auto lora italic">
+                "We reject the fleeting, crafting fragrances that do not just project, but gracefully endure."
+            </p>
+            <!-- UPDATED: Buttons beside each other --><div class="flex justify-center space-x-4">
+                <a href="#collection" class="inline-block px-8 py-3 text-sm uppercase font-medium editorial-btn text-primary rounded-none">
+                    Explore The Collection
+                </a>
+                <button onclick="openQuiz()" class="inline-block px-8 py-3 text-sm uppercase font-medium accent-btn rounded-none">
+                    Find My Scent
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Philosophy Section (Two-Column Editorial Block) --><section id="philosophy" class="container mx-auto px-6 lg:px-12 py-24 max-w-7xl border-t border-primary/10 animate-on-scroll">
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+            
+            <div class="space-y-6">
+                <h2 class="text-5xl playfair font-medium text-primary mb-4">
+                    The Avira Commitment: Time is the True Measure.
+                </h2>
+                <p class="text-primary/70 text-lg leading-relaxed">
+                    Our difference is in the depth of our formulation. We are dedicated to creating perfumes that are hand-made and structured to last long, ensuring a sustained, evolving scent experience throughout the day. This is not about initial impact; it is about enduring quality.
+                </p>
+            </div>
+            
+            <div class="space-y-8 pl-0 md:pl-10 border-l border-primary/10">
+                <div class="space-y-2">
+                    <h3 class="text-xl font-medium uppercase tracking-widest text-accent">Artisan Blending</h3>
+                    <p class="text-sm text-primary/80">Every batch is individually blended, poured, and finished by skilled artisans, maintaining an unwavering standard of quality far beyond automated production.</p>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-xl font-medium uppercase tracking-widest text-accent">Personal Signature</h3>
+                    <p class="text-sm text-primary/80">With ten unique expressions, each designed with its own distinct feel and narrative, we ensure there is an Avira that perfectly complements your personal taste and spirit.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Product Showcase Section (Clean Grid) --><section id="collection" class="bg-primary py-20">
+        <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <h2 class="text-4xl playfair font-bold text-left mb-12 text-secondary animate-on-scroll">The Ten Expressions.</h2>
+
+            <div id="collection-grid-final" class="grid grid-cols-2 md:grid-cols-5 gap-6 w-full">
+                <!-- Product Cards are injected here by JavaScript --></div>
+
+        </div>
+    </section>
+    
+    <!-- Credits Section --><section id="credits" class="container mx-auto px-6 lg:px-12 py-24 max-w-7xl border-t border-primary/10 animate-on-scroll">
+        <h2 class="text-4xl playfair font-bold text-primary mb-12 text-center">The Avira Team: Creators of Permanence</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+            
+            <!-- Founders --><div class="space-y-4">
+                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Founders</h3>
+                <p class="text-lg font-semibold text-primary">ARCHIT</p>
+                <p class="text-lg font-semibold text-primary">MOHIT</p>
+            </div>
+
+            <!-- Finance --><div class="space-y-4">
+                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Finance</h3>
+                <p class="text-lg text-primary">Manas Ranjan Sahoo</p>
+                <p class="text-lg text-primary">Aurodeep Priyadarsan</p>
+            </div>
+
+            <!-- Marketing --><div class="space-y-4">
+                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Marketing</h3>
+                <p class="text-lg text-primary">Haraprasad Panighari</p>
+                <p class="text-lg text-primary">Ayush Sarkar</p>
+                <p class="text-lg text-primary">Pallab Mahana</p>
+                <p class="text-lg text-primary">Nishant Ratha</p>
+            </div>
+            
+            <!-- Design --><div class="space-y-4">
+                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Design</h3>
+                <p class="text-lg text-primary">Mohit Kumar Sahu</p>
+                <p class="text-lg text-primary">Ayush Tripathy</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer / Contact Section (Minimalist Centered) --><footer id="contact" class="bg-secondary py-16 border-t border-primary/10 animate-on-scroll">
+        <div class="container mx-auto px-6 text-center max-w-4xl">
+            <h3 class="text-3xl playfair font-medium text-primary mb-6">Connect with the Avira Atelier</h3>
+            
+            <!-- UPDATED: Instagram Link --><div class="flex justify-center mb-8 text-sm text-primary">
+                <p class="font-medium">Follow Our Atelier: 
+                    <a href="https://www.instagram.com/avira_.official" target="_blank" class="hover:text-accent underline">@avira_.official (Instagram)</a>
+                </p>
+            </div>
+
+            <p class="text-xs text-primary/50 mt-10 tracking-widest inter uppercase">&copy; 2025 Avira Perfumes. Quality over volume. Enduring presence.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Start the quiz at step 0 when the DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // ... existing DOMContentLoaded logic ...
+            
+            // Start the quiz at the first step
+            if (!document.getElementById('quiz-modal').classList.contains('hidden')) {
+                 renderQuizStep();
+            }
+        });
+    </script>
+</body>
+</html>
+
