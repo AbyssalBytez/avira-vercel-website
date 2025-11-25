@@ -164,23 +164,29 @@
         }
         
         /* --- Mobile Quiz Specific Adjustments --- */
-        /* Ensure the modal content doesn't get too wide on small screens */
         #quiz-content {
-            max-width: 95vw; /* Use 95% of viewport width */
-            margin: 0 auto; /* Center it */
+            max-width: 95vw;
+            margin: 0 auto;
         }
 
-        /* Adjust font sizes in result view for mobile */
+        /* TIGHTER TEXT SIZE FOR MAX MOBILE COMPATIBILITY */
         @media (max-width: 640px) {
             #quiz-content {
-                padding: 1.5rem; /* Smaller padding on small screens */
+                padding: 1.5rem;
             }
+            /* REDUCED FONT SIZE EVEN FURTHER FOR MOBILE RESULT NAME */
             .quiz-result-name {
-                font-size: 2.5rem; /* Smaller than 5xl on mobile */
+                font-size: 1.75rem; /* Reduced to 1.75rem (approx 28px) */
+                line-height: 1.1;
             }
             .quiz-result-intro {
-                font-size: 1.125rem; /* Smaller than 2xl on mobile */
+                font-size: 1rem;
             }
+        }
+        /* Ensure the quiz body is scrollable */
+        #quiz-body {
+            overflow-y: auto;
+            padding-bottom: 2rem; /* Add extra space below content before footer */
         }
 
 
@@ -217,7 +223,7 @@
             { name: "Cherry Blossom", feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. Delicate dance of pink petals and cool air." },
             { name: "Cafe Date", feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso with sweet vanilla and a hint of worn leather." },
             { name: "Mystic Santale", feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and amber." },
-            { name: "Floral Specter", feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherwordly. A cold, pure white floral mixed with mineral notes and verdant moss." },
+            { name: "Floral Specter", feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherwoldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
             { name: "After Hour", feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. Rich, boozy blend of dark rum and cured tobacco leaf." },
             { name: "Glacial Getaway", feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
             { name: "Orion Hunt", feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
@@ -319,6 +325,7 @@
             document.getElementById('modal-description').textContent = scent.description;
 
             modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // Disable body scroll when opening scent details
             requestAnimationFrame(() => {
                 modalContent.classList.add('is-open');
             });
@@ -332,6 +339,7 @@
 
             modalContent.addEventListener('transitionend', () => {
                 modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden'); // Re-enable body scroll when closing scent details
             }, { once: true });
         }
 
@@ -360,6 +368,7 @@
             quizState.scores = {};
             quizState.selectedAnswers = Array(quizQuestions.length).fill(null);
             document.getElementById('quiz-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // *** FIX: Disable body scroll when opening quiz ***
             document.getElementById('quiz-content').classList.add('is-open');
             renderQuizStep();
         }
@@ -372,6 +381,13 @@
 
             modalContent.addEventListener('transitionend', () => {
                 modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden'); // *** FIX: Re-enable body scroll when closing quiz ***
+                
+                // Ensure mobile menu overflow is only removed if the menu is also closed
+                if (document.getElementById('mobile-menu').classList.contains('open')) {
+                    document.body.classList.add('overflow-hidden');
+                }
+
             }, { once: true });
         }
         
@@ -399,6 +415,9 @@
             } else if (quizState.currentStep < 0) {
                 quizState.currentStep = 0; // Prevent going before step 0
             } else {
+                // Scroll quiz body to top on navigation to ensure question title is visible
+                const quizBody = document.getElementById('quiz-body');
+                if (quizBody) quizBody.scrollTop = 0;
                 renderQuizStep();
             }
         }
@@ -517,10 +536,14 @@
             const quizBody = document.getElementById('quiz-body');
             const imageUrl = imageMap[scent.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${scent.name.replace(/\s/g, '+')}`;
             
+            // The quiz-result-name class has specific media query styles now.
+            // Added pt-2 to the container to ensure the very top of the text isn't cut off by quiz-body padding/margins.
             quizBody.innerHTML = `
-                <div class="text-center animate-on-scroll is-visible w-full"> <!-- Added w-full here for centering -->
+                <div class="text-center animate-on-scroll is-visible w-full pt-2 pb-4"> 
                     <p class="text-xl playfair font-bold text-accent mb-2 quiz-result-intro">Your Scent Signature is:</p>
-                    <h3 class="text-5xl md:text-6xl playfair font-bold text-primary mb-8 quiz-result-name">${scent.name}</h3>
+                    <h3 class="text-5xl md:text-6xl playfair font-bold text-primary mb-10 quiz-result-name">
+                        ${scent.name}
+                    </h3>
                     
                     <div class="w-36 h-36 mx-auto overflow-hidden rounded-full border-4 border-accent/70 shadow-xl mb-6">
                         <img src="${imageUrl}" alt="${scent.name} Bottle" class="object-cover w-full h-full">
@@ -546,9 +569,8 @@
             `;
             
             // Hide navigation in the footer
-            // Modified to use consistent padding with other buttons
             document.getElementById('quiz-footer').innerHTML = `
-                <button onclick="closeQuiz()" class="px-4 py-2 text-sm uppercase font-medium editorial-btn rounded-none">Close</button>
+                <button onclick="closeQuiz()" class="mx-auto px-4 py-2 text-sm uppercase font-medium editorial-btn rounded-none">Close</button>
             `;
         }
         
@@ -596,6 +618,11 @@
             
             // Set up mobile menu closing when clicking links
             document.getElementById('mobile-menu').addEventListener('click', closeMobileMenu);
+            
+            // Start the quiz at the first step if it's visible (for refresh handling)
+            if (!document.getElementById('quiz-modal').classList.contains('hidden')) {
+                 renderQuizStep();
+            }
         });
     </script>
 </head>
@@ -632,9 +659,9 @@
     </div>
     
     <!-- Quiz Modal (Initially Hidden) --><div id="quiz-modal" class="fixed inset-0 hidden z-[90] flex items-center justify-center p-4 modal-overlay">
-        <!-- Adjusted max-w, added flex-col and responsive height to enable vertical content centering -->
-        <div id="quiz-content" class="bg-secondary w-full max-w-xl rounded-xl shadow-2xl p-8 relative border border-primary/10 modal-content-animated flex flex-col h-full max-h-[90vh]">
-            <!-- Title and Close Button --><div class="flex justify-between items-center pb-4 border-b border-primary/10 mb-6">
+        <!-- Added overflow-auto to the modal container to enable internal scrolling on long content -->
+        <div id="quiz-content" class="bg-secondary w-full max-w-xl rounded-xl shadow-2xl p-8 relative border border-primary/10 modal-content-animated flex flex-col h-full max-h-[90vh] overflow-auto">
+            <!-- Title and Close Button --><div class="flex justify-between items-center pb-4 border-b border-primary/10 mb-6 sticky top-0 bg-secondary z-10">
                 <h2 class="text-3xl playfair font-bold text-primary">Find Your Avira Scent</h2>
                 <button onclick="closeQuiz()" class="text-primary hover:text-accent transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -642,14 +669,12 @@
             </div>
             
             <!-- Quiz Body (Steps/Result Rendered Here) -->
-            <!-- Changed min-h-[250px] to flex-grow to take up all available space, enabling proper vertical centering -->
-            <div id="quiz-body" class="flex-grow flex items-center justify-center">
+            <div id="quiz-body" class="flex-grow flex flex-col items-center justify-start min-h-[250px] overflow-y-auto">
                 <p>Loading Quiz...</p>
             </div>
 
             <!-- Quiz Footer (Navigation) -->
-            <!-- Note: The justify-between is causing the mobile layout issue. JS will handle inner spacing. -->
-            <div id="quiz-footer" class="flex justify-between items-center pt-4 border-t border-primary/10 mt-6">
+            <div id="quiz-footer" class="flex justify-between items-center pt-4 border-t border-primary/10 mt-6 sticky bottom-0 bg-secondary z-10">
                 <!-- Buttons are updated by JavaScript -->
             </div>
         </div>
@@ -796,18 +821,6 @@
             <p class="text-xs text-primary/50 mt-10 tracking-widest inter uppercase">&copy; 2025 Avira Perfumes. Quality over volume. Enduring presence.</p>
         </div>
     </footer>
-
-    <script>
-        // Start the quiz at step 0 when the DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            // ... existing DOMContentLoaded logic ...
-            
-            // Start the quiz at the first step
-            if (!document.getElementById('quiz-modal').classList.contains('hidden')) {
-                 renderQuizStep();
-            }
-        });
-    </script>
 </body>
 </html>
 
