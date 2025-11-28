@@ -638,30 +638,35 @@
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- Navigation (FIXED FOR DESKTOP) -->
     <header class="glass-header sticky top-0 z-50 border-b border-primary/5 transition-all duration-300">
-        <div class="container mx-auto px-6 lg:px-12 py-4 flex justify-between items-center max-w-7xl md:justify-center relative">
+        <div class="container mx-auto px-6 lg:px-12 py-4 flex justify-between items-center max-w-7xl relative">
             
-            <!-- Mobile Toggle (Left on Mobile) -->
-            <div class="md:hidden w-10"></div> <!-- Spacer for center alignment -->
-            
-            <a href="#" class="text-3xl md:text-4xl font-bold playfair text-primary tracking-widest relative z-50">AVIRA</a>
-            
-            <nav class="hidden md:flex absolute right-0 lg:static lg:ml-12 items-center space-x-8 text-[11px] lg:text-xs uppercase tracking-[0.2em] font-medium text-primary/80">
+            <!-- Left Nav Links (Only on Desktop) -->
+            <nav class="hidden md:flex items-center space-x-8 text-[11px] lg:text-xs uppercase tracking-[0.2em] font-medium text-primary/80 w-1/3 justify-start">
                 <a href="#philosophy" class="hover:text-accent transition">Our Craft</a>
                 <a href="#collection" class="hover:text-accent transition">The Collection</a>
-                <a href="javascript:void(0)" onclick="openQuiz()" class="hover:text-accent transition">Scent Quiz</a>
-                <a href="#credits" class="hover:text-accent transition">Credits</a>
             </nav>
+            
+            <!-- Logo (Centered on Desktop, handles mobile) -->
+            <a href="#" class="text-3xl md:text-4xl font-bold playfair text-primary tracking-widest relative z-50 md:w-1/3 md:text-center">AVIRA</a>
+            
+            <!-- Right Nav Links & Mobile Toggle -->
+            <div class="flex items-center justify-end md:w-1/3">
+                <nav class="hidden md:flex items-center space-x-8 text-[11px] lg:text-xs uppercase tracking-[0.2em] font-medium text-primary/80">
+                    <a href="javascript:void(0)" onclick="openQuiz()" class="hover:text-accent transition">Scent Quiz</a>
+                    <a href="#credits" class="hover:text-accent transition">Credits</a>
+                </nav>
 
-            <!-- Hamburger (Right on Mobile) -->
-            <button onclick="toggleMobileMenu()" id="mobile-menu-toggle" class="md:hidden text-primary focus:outline-none p-2 relative z-[70]" aria-label="Toggle Menu">
-                <div id="hamburger-icon" class="hamburger-icon flex flex-col justify-center items-center">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </button>
+                <!-- Hamburger (Only on Mobile) -->
+                <button onclick="toggleMobileMenu()" id="mobile-menu-toggle" class="md:hidden text-primary focus:outline-none p-2 relative z-[70]" aria-label="Toggle Menu">
+                    <div id="hamburger-icon" class="hamburger-icon flex flex-col justify-center items-center">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+            </div>
         </div>
     </header>
     
