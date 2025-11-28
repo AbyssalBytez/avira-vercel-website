@@ -3,194 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Avira Perfumes - Hand-crafted, long-lasting luxury fragrances designed for the individual.">
     <title>Avira Perfumes - Editorial Luxury</title>
-    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Favicon Placeholder -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+
     <style>
-        /* Custom Font Import */
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap');
+        /* --- Typography Imports --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
         
-        /* Define custom Tailwind configuration variables */
+        /* --- CSS Variables --- */
         :root {
-            --color-primary: #1E1E1E; /* Very Dark Gray / Near Black */
-            --color-secondary: #F7F5F3; /* Warm Off-White / Cream */
-            --color-accent: #A38038; /* Richer Gold */
+            --color-primary: #1E1E1E;   /* Obsidian */
+            --color-secondary: #F7F5F3; /* Alabaster */
+            --color-accent: #A38038;    /* Burnished Gold */
         }
 
+        /* --- Utility Classes --- */
         .playfair { font-family: 'Playfair Display', serif; }
         .lora { font-family: 'Lora', serif; }
         .inter { font-family: 'Inter', sans-serif; }
 
-        /* Editorial Button Style */
-        .editorial-btn {
-            border: 2px solid var(--color-primary);
-            transition: all 0.3s ease;
+        html { scroll-behavior: smooth; }
+        
+        /* Glassmorphism Header */
+        .glass-header {
+            background-color: rgba(247, 245, 243, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        /* --- Button Styles --- */
+        .btn-base {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.875rem; /* 14px */
+        }
+
+        .editorial-btn {
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
         }
         .editorial-btn:hover {
             background-color: var(--color-primary);
             color: var(--color-secondary);
-            transform: scale(1.02);
+            transform: translateY(-1px);
         }
         
-        /* Secondary Accent Button Style */
         .accent-btn {
-            border: 2px solid var(--color-accent);
+            border: 1px solid var(--color-accent);
             color: var(--color-accent);
             background-color: transparent;
-            transition: all 0.3s ease;
-            letter-spacing: 0.1em;
         }
         .accent-btn:hover {
             background-color: var(--color-accent);
             color: var(--color-secondary);
-            transform: scale(1.02);
+            transform: translateY(-1px);
         }
 
-        /* Subtle Card Focus */
+        /* --- Card Interactions --- */
         .card-focus {
-            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-focus:hover {
-            box-shadow: 0 0 0 2px var(--color-accent) inset;
-            transform: translateY(-2px); /* Subtle lift on hover */
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- Scroll Animation Classes --- */
+        /* --- Animations --- */
         .animate-on-scroll {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
             will-change: opacity, transform;
         }
-
         .animate-on-scroll.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
         
-        /* --- Hero and Header Initial Animation --- */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-text {
+        .hero-animate {
             opacity: 0;
-            animation: fadeInDown 1.5s ease-out 0.5s forwards;
+            animation: fadeInDown 1.2s ease-out 0.2s forwards;
         }
 
-        .header-init {
-            opacity: 0;
-            animation: fadeInDown 0.8s ease-out forwards;
-        }
-        
-        /* Add smooth scrolling behavior globally */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Modal & Quiz Panel Styles */
+        /* --- UI Components --- */
         .modal-overlay {
-            background-color: rgba(30, 30, 30, 0.9);
+            background-color: rgba(30, 30, 30, 0.85);
             transition: opacity 0.3s ease;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
         }
 
-        /* Modal Content Animation */
         .modal-content-animated {
             opacity: 0;
-            transform: scale(0.95) translateY(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: scale(0.95) translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal-content-animated.is-open {
             opacity: 1;
             transform: scale(1) translateY(0);
         }
 
-        /* --- Hamburger Menu Sidebar Styles --- */
+        /* Mobile Menu - Increased Z-Index to cover Sticky Header */
         #mobile-menu {
             position: fixed;
             top: 0;
             right: 0;
-            width: 80vw; /* 80% screen width on mobile */
-            max-width: 300px;
+            width: 100vw; /* Full width for immersive feel */
+            max-width: 400px;
             height: 100vh;
             transform: translateX(100%);
-            transition: transform 0.4s ease-in-out;
-            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+            z-index: 60; /* Higher than header (50) */
         }
-
         #mobile-menu.open {
             transform: translateX(0);
         }
 
-        /* Hamburger Icon Animation */
+        /* Hamburger Icon Animation & Color Switching */
         .hamburger-icon span {
             display: block;
             height: 2px;
             width: 24px;
-            background: var(--color-primary);
+            background: var(--color-primary); /* Dark initially */
             transition: all 0.3s ease;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            transform-origin: center;
         }
-        .hamburger-icon span:last-child {
-            margin-bottom: 0;
-        }
+        .hamburger-icon span:last-child { margin-bottom: 0; }
+        
+        /* Transform to X */
+        .hamburger-icon.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger-icon.open span:nth-child(2) { opacity: 0; }
+        .hamburger-icon.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-        .hamburger-icon.open span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-
-        .hamburger-icon.open span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger-icon.open span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
+        /* CRITICAL FIX: Turn lines white when menu is open (bg is dark) */
+        .hamburger-icon.open span {
+            background-color: var(--color-secondary); 
         }
         
+        /* Quiz Styling */
         .quiz-option-btn {
             transition: all 0.2s ease;
         }
         .quiz-option-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            border-color: var(--color-accent);
+            background-color: rgba(163, 128, 56, 0.05);
         }
         .quiz-option-btn.selected {
-            border: 3px solid var(--color-accent) !important;
+            border-color: var(--color-accent) !important;
             background-color: var(--color-accent) !important;
             color: var(--color-secondary) !important;
-            font-weight: 600;
-        }
-        
-        /* --- Mobile Quiz Specific Adjustments --- */
-        #quiz-content {
-            max-width: 95vw;
-            margin: 0 auto;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(163, 128, 56, 0.2);
         }
 
-        /* TIGHTER TEXT SIZE FOR MAX MOBILE COMPATIBILITY */
+        /* Mobile Optimizations */
         @media (max-width: 640px) {
-            #quiz-content {
-                padding: 1.5rem;
-            }
-            /* REDUCED FONT SIZE EVEN FURTHER FOR MOBILE RESULT NAME */
-            .quiz-result-name {
-                font-size: 1.75rem; /* Reduced to 1.75rem (approx 28px) */
-                line-height: 1.1;
-            }
-            .quiz-result-intro {
-                font-size: 1rem;
-            }
+            .quiz-result-name { font-size: 2rem; line-height: 1.1; }
+            .hero-title { font-size: 3.5rem; }
         }
-        /* Ensure the quiz body is scrollable */
-        #quiz-body {
-            overflow-y: auto;
-            padding-bottom: 2rem; /* Add extra space below content before footer */
-        }
-
-
     </style>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -200,13 +184,18 @@
                         'secondary': 'var(--color-secondary)',
                         'accent': 'var(--color-accent)',
                     },
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'lora': ['Lora', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
                 }
             }
         }
 
-        // --- Global State and Data ---
+        // --- Data ---
+        // Note: Using placeholder images for demonstration if local files are missing.
         const imageMap = {
-            // Using "images/" prefix to point to the local images folder
             "Cherry Blossom": "images/avira_.official_14040902_224003361.jpg",
             "Cafe Date": "images/avira_.official_14040902_223924432.jpg",
             "Mystic Santale": "images/avira_.official_14040902_223920104.jpg",
@@ -220,23 +209,22 @@
         };
 
         const perfumesData = [
-            { name: "Cherry Blossom", feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. Delicate dance of pink petals and cool air." },
-            { name: "Cafe Date", feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso with sweet vanilla and a hint of worn leather." },
-            { name: "Mystic Santale", feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and amber." },
-            { name: "Floral Specter", feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherwoldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
-            { name: "After Hour", feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. Rich, boozy blend of dark rum and cured tobacco leaf." },
+            { name: "Cherry Blossom", feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air." },
+            { name: "Cafe Date", feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather." },
+            { name: "Mystic Santale", feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber." },
+            { name: "Floral Specter", feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
+            { name: "After Hour", feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf." },
             { name: "Glacial Getaway", feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
             { name: "Orion Hunt", feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
             { name: "Midnight Swim", feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
-            { name: "Amber Malt", feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. Nutty, sweet warmth of malt liquor with deep earthiness of patchouli." },
+            { name: "Amber Malt", feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
             { name: "Orchid", feel: "Velvety, Luxurious", notes: "Black Orchid, Velvet Woods, Vanilla Pod", description: "A fragrance of ultimate luxury and opulence. Black Orchid draped in rich, velvety woods and dark vanilla pod." }
         ];
 
-        // --- Quiz Data Structure ---
         const quizQuestions = [
             {
                 id: 1,
-                question: "What time of day defines your energy and mood?",
+                question: "What time of day defines your energy?",
                 options: [
                     { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 2, "Cherry Blossom": 2 } },
                     { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 2, "Floral Specter": 1 } },
@@ -246,7 +234,7 @@
             },
             {
                 id: 2,
-                question: "Which environment best describes your ideal escape?",
+                question: "Your ideal escape looks like...",
                 options: [
                     { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 2, "Mystic Santale": 1 } },
                     { text: "A vibrant, metropolitan cafe.", score: { "Cafe Date": 2, "Orion Hunt": 1 } },
@@ -256,7 +244,7 @@
             },
             {
                 id: 3,
-                question: "What textile appeals most to you?",
+                question: "Which texture appeals most to you?",
                 options: [
                     { text: "Crisp, white linen.", score: { "Cherry Blossom": 2, "Glacial Getaway": 1 } },
                     { text: "Rich, aged suede or leather.", score: { "Cafe Date": 1, "Orion Hunt": 2 } },
@@ -266,21 +254,21 @@
             },
             {
                 id: 4,
-                question: "Which scent note do you find most grounding?",
+                question: "Which scent note grounds you?",
                 options: [
-                    { text: "Fresh, aromatic spices (Pepper, Cumin).", score: { "Orion Hunt": 2, "Mystic Santale": 1 } },
+                    { text: "Fresh, aromatic spices.", score: { "Orion Hunt": 2, "Mystic Santale": 1 } },
                     { text: "Sweet, baked goods/vanilla.", score: { "Cafe Date": 1, "Amber Malt": 2 } },
                     { text: "Clean, oceanic air and salt.", score: { "Midnight Swim": 2, "Glacial Getaway": 1 } },
-                    { text: "Deep, creamy woods (Sandalwood, Cedar).", score: { "Mystic Santale": 2, "Orchid": 1 } }
+                    { text: "Deep, creamy woods.", score: { "Mystic Santale": 2, "Orchid": 1 } }
                 ]
             },
             {
                 id: 5,
-                question: "What is your preferred flower?",
+                question: "Pick a floral inspiration:",
                 options: [
                     { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3 } },
-                    { text: "Intoxicating white flowers (Jasmine, Tuberose).", score: { "Floral Specter": 2, "Midnight Swim": 1 } },
-                    { text: "Exotic, dark, mysterious blooms (Orchid).", score: { "Orchid": 2, "After Hour": 1 } }
+                    { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } },
+                    { text: "Exotic, dark, mysterious blooms.", score: { "Orchid": 2, "After Hour": 1 } }
                 ]
             }
         ];
@@ -291,11 +279,10 @@
             selectedAnswers: Array(quizQuestions.length).fill(null)
         };
 
+        // --- Logic ---
 
-        // --- Helper Functions ---
         function setupScrollAnimations() {
             const elements = document.querySelectorAll('.animate-on-scroll');
-            
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -304,396 +291,371 @@
                     }
                 });
             }, { rootMargin: '0px', threshold: 0.1 });
-
-            elements.forEach(el => { observer.observe(el); });
+            elements.forEach(el => observer.observe(el));
         }
-        
-        // --- Modal Control Functions ---
+
+        // --- Image Fallback Logic ---
+        function getImageUrl(name) {
+            // Returns local path if exists in map, or fallback styling
+            return imageMap[name] || `https://placehold.co/400x400/1E1E1E/F7F5F3?text=${encodeURIComponent(name)}`;
+        }
+
+        function handleImageError(img, name) {
+            // If local image fails, swap to clean placeholder
+            img.onerror = null; // prevent infinite loop
+            img.src = `https://placehold.co/400x400/F7F5F3/A38038?text=${encodeURIComponent(name)}`;
+        }
+
+        // --- Modal Functions ---
         function showScentDetails(perfumeName) {
             const scent = perfumesData.find(p => p.name === perfumeName);
             if (!scent) return;
 
-            const imageUrl = imageMap[scent.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${scent.name.replace(/\s/g, '+')}`;
             const modal = document.getElementById('scent-modal');
             const modalContent = document.getElementById('modal-content');
-
-            document.getElementById('modal-image').src = imageUrl;
-            document.getElementById('modal-image').alt = scent.name + " bottle";
+            
+            // Populate Data
+            const imgEl = document.getElementById('modal-image');
+            imgEl.src = getImageUrl(scent.name);
+            imgEl.onerror = function() { handleImageError(this, scent.name) };
+            
             document.getElementById('modal-name').textContent = scent.name;
             document.getElementById('modal-feel').textContent = scent.feel;
             document.getElementById('modal-notes').textContent = scent.notes;
             document.getElementById('modal-description').textContent = scent.description;
 
+            // Show
             modal.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden'); // Disable body scroll when opening scent details
-            requestAnimationFrame(() => {
-                modalContent.classList.add('is-open');
-            });
+            document.body.classList.add('overflow-hidden');
+            requestAnimationFrame(() => modalContent.classList.add('is-open'));
         }
 
         function closeScentDetails() {
             const modal = document.getElementById('scent-modal');
             const modalContent = document.getElementById('modal-content');
-
+            
             modalContent.classList.remove('is-open');
-
             modalContent.addEventListener('transitionend', () => {
                 modal.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden'); // Re-enable body scroll when closing scent details
+                document.body.classList.remove('overflow-hidden');
             }, { once: true });
         }
 
-        // --- Hamburger Menu Control ---
+        // --- Menu Functions ---
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('hamburger-icon');
             const isOpen = menu.classList.toggle('open');
-            icon.classList.toggle('open', isOpen);
             
-            // Toggle body overflow to prevent scrolling behind the menu
+            icon.classList.toggle('open', isOpen);
             document.body.classList.toggle('overflow-hidden', isOpen);
         }
 
         function closeMobileMenu(e) {
-            // Close menu and scroll to target if it's an anchor link
-            if (e.target.tagName === 'A' || e.target.id === 'quiz-button-mobile') {
-                toggleMobileMenu();
+            // Close if clicking link or specific buttons
+            if (e.target.tagName === 'A' || e.target.closest('a') || e.target.id === 'quiz-button-mobile') {
+                const menu = document.getElementById('mobile-menu');
+                if (menu.classList.contains('open')) toggleMobileMenu();
             }
         }
 
         // --- Quiz Logic ---
         function openQuiz() {
-            // Reset and start
             quizState.currentStep = 0;
             quizState.scores = {};
             quizState.selectedAnswers = Array(quizQuestions.length).fill(null);
-            document.getElementById('quiz-modal').classList.remove('hidden');
-            document.body.classList.add('overflow-hidden'); // *** FIX: Disable body scroll when opening quiz ***
+            
+            const modal = document.getElementById('quiz-modal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
             document.getElementById('quiz-content').classList.add('is-open');
             renderQuizStep();
         }
 
         function closeQuiz() {
             const modal = document.getElementById('quiz-modal');
-            const modalContent = document.getElementById('quiz-content');
-
-            modalContent.classList.remove('is-open');
-
-            modalContent.addEventListener('transitionend', () => {
+            const content = document.getElementById('quiz-content');
+            
+            content.classList.remove('is-open');
+            content.addEventListener('transitionend', () => {
                 modal.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden'); // *** FIX: Re-enable body scroll when closing quiz ***
-                
-                // Ensure mobile menu overflow is only removed if the menu is also closed
+                document.body.classList.remove('overflow-hidden');
                 if (document.getElementById('mobile-menu').classList.contains('open')) {
                     document.body.classList.add('overflow-hidden');
                 }
-
             }, { once: true });
         }
-        
-        function selectAnswer(questionIndex, optionIndex) {
-            // Update selected answer for this question
-            quizState.selectedAnswers[questionIndex] = optionIndex;
-            renderQuizStep(); // Re-render to update selected state
+
+        function selectAnswer(qIndex, optIndex) {
+            quizState.selectedAnswers[qIndex] = optIndex;
+            renderQuizStep();
         }
-        
-        function navigateQuiz(direction) {
-            // Only proceed if an answer is selected for the current step
-            const currentQuestionIndex = quizState.currentStep;
-            const selectedOption = quizState.selectedAnswers[currentQuestionIndex];
 
-            if (direction === 1 && selectedOption === null) {
-                // Display error message or just prevent navigation
-                console.log("Please select an answer before proceeding.");
-                return;
-            }
-
-            quizState.currentStep += direction;
-
+        function navigateQuiz(dir) {
+            const current = quizState.currentStep;
+            
+            if (dir === 1 && quizState.selectedAnswers[current] === null) return;
+            
+            quizState.currentStep += dir;
+            
             if (quizState.currentStep >= quizQuestions.length) {
                 calculateResult();
             } else if (quizState.currentStep < 0) {
-                quizState.currentStep = 0; // Prevent going before step 0
+                quizState.currentStep = 0;
             } else {
-                // Scroll quiz body to top on navigation to ensure question title is visible
-                const quizBody = document.getElementById('quiz-body');
-                if (quizBody) quizBody.scrollTop = 0;
+                const body = document.getElementById('quiz-body');
+                if (body) body.scrollTop = 0;
                 renderQuizStep();
             }
         }
 
         function renderQuizStep() {
-            const quizBody = document.getElementById('quiz-body');
-            const currentQuestionIndex = quizState.currentStep;
+            const current = quizState.currentStep;
+            const q = quizQuestions[current];
+            const isAnswered = quizState.selectedAnswers[current] !== null;
 
-            if (currentQuestionIndex < 0 || currentQuestionIndex >= quizQuestions.length) {
-                // Should not happen if logic is correct, but safe guard
-                return;
-            }
-
-            const q = quizQuestions[currentQuestionIndex];
-            const isAnswered = quizState.selectedAnswers[currentQuestionIndex] !== null;
-
-            let html = `
-                <div class="w-full"> <!-- Ensures content takes full width to center correctly -->
+            const html = `
+                <div class="w-full animate-on-scroll is-visible">
                     <div class="text-center mb-8">
-                        <p class="text-sm uppercase tracking-widest text-accent mb-2">Question ${currentQuestionIndex + 1} of ${quizQuestions.length}</p>
-                        <h3 class="text-2xl playfair font-medium text-primary">${q.question}</h3>
+                        <p class="text-xs uppercase tracking-[0.2em] text-accent mb-3 font-medium">
+                            Step ${current + 1} / ${quizQuestions.length}
+                        </p>
+                        <h3 class="text-2xl md:text-3xl playfair font-medium text-primary leading-tight">
+                            ${q.question}
+                        </h3>
                     </div>
-                    <div class="space-y-4">
+                    <div class="space-y-3">
+                        ${q.options.map((opt, idx) => {
+                            const isSelected = quizState.selectedAnswers[current] === idx;
+                            return `
+                                <button onclick="selectAnswer(${current}, ${idx})"
+                                    class="quiz-option-btn w-full text-left p-4 rounded border ${isSelected ? 'selected' : 'border-primary/20 bg-white/50'}">
+                                    <span class="inter text-sm md:text-base">${opt.text}</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
             `;
 
-            q.options.forEach((option, index) => {
-                const isSelected = quizState.selectedAnswers[currentQuestionIndex] === index;
-                html += `
-                    <button class="quiz-option-btn w-full text-left p-4 rounded-lg border-2 border-primary/20 hover:bg-primary/5 hover:border-primary transition ${isSelected ? 'selected' : 'bg-secondary'}"
-                            onclick="selectAnswer(${currentQuestionIndex}, ${index})">
-                        ${option.text}
-                    </button>
-                `;
-            });
-
-            html += `</div></div>`; // Close the inner container
-            quizBody.innerHTML = html;
-
-            // Update footer buttons
+            document.getElementById('quiz-body').innerHTML = html;
+            
+            // Footer Buttons
             const footer = document.getElementById('quiz-footer');
+            const prevDisabled = current === 0;
+            const nextDisabled = !isAnswered;
+            
+            // Button markup
+            const prevBtn = `
+                <button onclick="navigateQuiz(-1)" 
+                    class="btn-base px-5 py-2 border border-transparent text-primary/60 hover:text-primary ${prevDisabled ? 'opacity-0 pointer-events-none' : ''}">
+                    Back
+                </button>
+            `;
+            
+            const nextBtnText = current < quizQuestions.length - 1 ? "Next Step" : "Reveal Scent";
+            const nextBtn = `
+                <button onclick="${current < quizQuestions.length - 1 ? 'navigateQuiz(1)' : 'calculateResult()'}" 
+                    class="btn-base px-6 py-2 ${nextDisabled ? 'opacity-50 cursor-not-allowed border border-primary/20 text-primary/50' : 'accent-btn !text-white !bg-[#A38038] border-none shadow-md'}"
+                    ${nextDisabled ? 'disabled' : ''}>
+                    ${nextBtnText}
+                </button>
+            `;
+
             footer.innerHTML = `
-                <button onclick="closeQuiz()" class="px-4 py-2 text-sm uppercase font-medium editorial-btn rounded-none">Close</button>
-                <div class="flex space-x-2"> <!-- Reduced space-x to 2 for tighter mobile grouping -->
-                    <button onclick="navigateQuiz(-1)" 
-                        class="px-4 py-2 text-sm uppercase font-medium border border-primary/20 text-primary/70 rounded-none ${currentQuestionIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/10'}" 
-                        ${currentQuestionIndex === 0 ? 'disabled' : ''}>
-                        Previous
-                    </button>
-                    ${currentQuestionIndex < quizQuestions.length - 1 ? 
-                        `<button onclick="navigateQuiz(1)" 
-                            class="px-4 py-2 text-sm uppercase font-medium rounded-none ${isAnswered ? 'accent-btn !text-secondary !bg-accent' : 'editorial-btn opacity-50 cursor-not-allowed'}" 
-                            ${!isAnswered ? 'disabled' : ''}>
-                            Next
-                        </button>` 
-                        : 
-                        `<button onclick="calculateResult()" 
-                            class="px-4 py-2 text-sm uppercase font-medium rounded-none ${isAnswered ? 'accent-btn !text-secondary !bg-accent' : 'editorial-btn opacity-50 cursor-not-allowed'}"
-                            ${!isAnswered ? 'disabled' : ''}>
-                            See Result
-                        </button>`
-                    }
+                <div class="flex w-full justify-between items-center">
+                    ${prevBtn}
+                    ${nextBtn}
                 </div>
             `;
         }
-        
+
         function calculateResult() {
-            quizState.scores = {}; // Reset scores
+            quizState.scores = {};
             
-            // Calculate scores based on all selected answers
-            quizQuestions.forEach((q, qIndex) => {
-                const selectedOptionIndex = quizState.selectedAnswers[qIndex];
-                if (selectedOptionIndex !== null) {
-                    const selectedOption = q.options[selectedOptionIndex];
-                    // Aggregate scores for each perfume
-                    for (const perfumeName in selectedOption.score) {
-                        const points = selectedOption.score[perfumeName];
-                        quizState.scores[perfumeName] = (quizState.scores[perfumeName] || 0) + points;
+            quizQuestions.forEach((q, idx) => {
+                const answerIdx = quizState.selectedAnswers[idx];
+                if (answerIdx !== null) {
+                    const scores = q.options[answerIdx].score;
+                    for (const [scent, pts] of Object.entries(scores)) {
+                        quizState.scores[scent] = (quizState.scores[scent] || 0) + pts;
                     }
                 }
             });
 
-            // Find the highest score(s)
+            // Determine winner
             let topScore = 0;
-            let topScents = [];
-            
-            for (const perfumeName in quizState.scores) {
-                const score = quizState.scores[perfumeName];
+            let winners = [];
+            for (const [scent, score] of Object.entries(quizState.scores)) {
                 if (score > topScore) {
                     topScore = score;
-                    topScents = [perfumeName];
-                } else if (score === topScore && score > 0) {
-                    topScents.push(perfumeName);
+                    winners = [scent];
+                } else if (score === topScore) {
+                    winners.push(scent);
                 }
             }
             
-            // Handle tie-breaking or fallback if no score is generated
-            let finalScentName;
-            if (topScents.length === 1) {
-                finalScentName = topScents[0];
-            } else if (topScents.length > 1) {
-                // Simple tie-breaker: pick the first one in the list
-                finalScentName = topScents[0]; 
-            } else {
-                // Fallback to a neutral scent if no choices were made
-                finalScentName = "Mystic Santale"; 
-            }
-            
-            // Render result
-            renderQuizResult(finalScentName);
+            const result = winners.length > 0 ? winners[0] : "Mystic Santale";
+            renderQuizResult(result);
         }
-        
-        function renderQuizResult(perfumeName) {
-            const scent = perfumesData.find(p => p.name === perfumeName);
+
+        function renderQuizResult(name) {
+            const scent = perfumesData.find(p => p.name === name);
             if (!scent) return;
 
-            const quizBody = document.getElementById('quiz-body');
-            const imageUrl = imageMap[scent.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${scent.name.replace(/\s/g, '+')}`;
-            
-            // The quiz-result-name class has specific media query styles now.
-            // Added pt-2 to the container to ensure the very top of the text isn't cut off by quiz-body padding/margins.
-            quizBody.innerHTML = `
-                <div class="text-center animate-on-scroll is-visible w-full pt-2 pb-4"> 
-                    <p class="text-xl playfair font-bold text-accent mb-2 quiz-result-intro">Your Scent Signature is:</p>
-                    <h3 class="text-5xl md:text-6xl playfair font-bold text-primary mb-10 quiz-result-name">
+            const imgUrl = getImageUrl(name);
+
+            const html = `
+                <div class="text-center animate-on-scroll is-visible w-full pt-4 pb-6">
+                    <p class="text-sm uppercase tracking-widest text-primary/60 mb-3">Your Signature Scent</p>
+                    <h3 class="quiz-result-name playfair font-bold text-primary mb-8 text-4xl md:text-5xl text-[#A38038]">
                         ${scent.name}
                     </h3>
                     
-                    <div class="w-36 h-36 mx-auto overflow-hidden rounded-full border-4 border-accent/70 shadow-xl mb-6">
-                        <img src="${imageUrl}" alt="${scent.name} Bottle" class="object-cover w-full h-full">
+                    <div class="w-40 h-40 mx-auto overflow-hidden rounded-full border-2 border-[#A38038]/30 p-1 mb-6 shadow-xl bg-white">
+                        <img src="${imgUrl}" alt="${scent.name}" 
+                             class="w-full h-full rounded-full object-cover"
+                             onerror="handleImageError(this, '${scent.name}')">
                     </div>
                     
-                    <p class="text-lg text-primary/80 mb-4 lora italic max-w-sm mx-auto">
-                        ${scent.description}
+                    <p class="lora italic text-lg text-primary/80 mb-6 max-w-sm mx-auto leading-relaxed">
+                        "${scent.description}"
                     </p>
                     
-                    <p class="text-sm uppercase tracking-widest font-semibold text-primary/70">
-                        Key Notes: ${scent.notes}
-                    </p>
-                    
-                    <div class="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                        <button onclick="showScentDetails('${scent.name}'); closeQuiz();" class="px-6 py-3 text-sm uppercase font-medium accent-btn rounded-none">
-                            View Full Details
+                    <div class="inline-block border-y border-primary/10 py-3 px-6 mb-8">
+                         <p class="text-xs uppercase tracking-widest font-semibold text-primary/70">
+                            Notes: ${scent.notes}
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="showScentDetails('${scent.name}'); closeQuiz();" class="btn-base px-6 py-3 accent-btn">
+                            View Details
                         </button>
-                        <button onclick="openQuiz()" class="px-6 py-3 text-sm uppercase font-medium editorial-btn rounded-none">
+                        <button onclick="openQuiz()" class="btn-base px-6 py-3 editorial-btn">
                             Retake Quiz
                         </button>
                     </div>
                 </div>
             `;
             
-            // Hide navigation in the footer
-            document.getElementById('quiz-footer').innerHTML = `
-                <button onclick="closeQuiz()" class="mx-auto px-4 py-2 text-sm uppercase font-medium editorial-btn rounded-none">Close</button>
-            `;
+            document.getElementById('quiz-body').innerHTML = html;
+            document.getElementById('quiz-footer').innerHTML = ''; // Clear footer logic
         }
-        
-        // --- DOM Event Listener Setup ---
+
+        // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Product Card Injection
-            const container = document.getElementById('collection-grid-final');
-            const cardTemplate = (perfume) => {
-                const imageUrl = imageMap[perfume.name] || `https://placehold.co/150x150/1E1E1E/F7F5F3?text=${perfume.name.replace(/\s/g, '+')}`;
-                
-                return `
-                    <div class="bg-secondary p-5 card-focus rounded-lg flex flex-col items-center text-center space-y-3 cursor-pointer border border-primary/10 animate-on-scroll"
-                         onclick="showScentDetails('${perfume.name}')">
-                        <div class="w-32 h-32 overflow-hidden rounded-full border-2 border-accent/50 shadow-lg">
-                            <img src="${imageUrl}" alt="${perfume.name} Perfume" 
-                                 class="object-cover w-full h-full"
-                                 onerror="this.onerror=null;this.src='https://placehold.co/150x150/1E1E1E/F7F5F3?text=${perfume.name.replace(/\s/g, '+')}'">
+            const grid = document.getElementById('collection-grid-final');
+            
+            // Render Grid
+            perfumesData.forEach(p => {
+                const safeName = p.name.replace(/'/g, "\\'"); // simple escape
+                grid.innerHTML += `
+                    <div class="bg-secondary p-6 card-focus rounded-xl flex flex-col items-center text-center space-y-4 cursor-pointer border border-primary/5 animate-on-scroll h-full"
+                         onclick="showScentDetails('${safeName}')">
+                        <div class="w-32 h-32 rounded-full overflow-hidden border border-primary/10 shadow-sm bg-white p-1">
+                            <img src="${getImageUrl(p.name)}" 
+                                 alt="${p.name}" 
+                                 class="object-cover w-full h-full rounded-full"
+                                 onerror="handleImageError(this, '${safeName}')">
                         </div>
-                        <p class="text-xs uppercase tracking-widest text-accent font-semibold pt-2">${perfume.feel}</p>
-                        <h3 class="text-xl playfair font-medium text-primary">${perfume.name}</h3>
-                        <p class="text-xs text-primary/70 italic max-w-[90%]">${perfume.notes}</p>
+                        <div class="flex-grow flex flex-col justify-between w-full">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-[0.2em] text-accent font-bold mb-1">${p.feel}</p>
+                                <h3 class="text-xl playfair font-semibold text-primary">${p.name}</h3>
+                            </div>
+                            <p class="text-xs text-primary/60 italic mt-2 lora truncate px-2">${p.notes}</p>
+                        </div>
                     </div>
                 `;
-            };
-            perfumesData.forEach(p => {
-                container.innerHTML += cardTemplate(p);
             });
 
-            // Initialize scroll animations
             setupScrollAnimations();
-            
-            // Setup modal close handler for overlay
-            document.getElementById('scent-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'scent-modal') {
-                    closeScentDetails();
-                }
+
+            // Event Listeners
+            document.getElementById('scent-modal').addEventListener('click', e => {
+                if(e.target.id === 'scent-modal') closeScentDetails();
             });
             
-            // Setup quiz modal close handler for overlay
-            document.getElementById('quiz-modal').addEventListener('click', (e) => {
-                if (e.target.id === 'quiz-modal') {
-                    closeQuiz();
-                }
+            document.getElementById('quiz-modal').addEventListener('click', e => {
+                if(e.target.id === 'quiz-modal') closeQuiz();
             });
             
-            // Set up mobile menu closing when clicking links
             document.getElementById('mobile-menu').addEventListener('click', closeMobileMenu);
-            
-            // Start the quiz at the first step if it's visible (for refresh handling)
-            if (!document.getElementById('quiz-modal').classList.contains('hidden')) {
-                 renderQuizStep();
-            }
         });
     </script>
 </head>
-<body class="bg-secondary text-primary inter antialiased">
+<body class="bg-[#FDFCFB] text-primary inter antialiased">
 
-    <!-- Scent Detail Modal (Initially Hidden) --><div id="scent-modal" class="fixed inset-0 hidden z-[100] flex items-center justify-center p-4 modal-overlay">
-        <div id="modal-content" class="bg-secondary w-full max-w-lg rounded-lg shadow-2xl p-8 relative border border-primary/10 modal-content-animated">
-            <!-- Close Button --><button onclick="closeScentDetails()" class="absolute top-4 right-4 text-primary hover:text-accent transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Scent Detail Modal -->
+    <div id="scent-modal" class="fixed inset-0 hidden z-[100] flex items-center justify-center p-4 modal-overlay">
+        <div id="modal-content" class="bg-[#FDFCFB] w-full max-w-lg rounded-xl shadow-2xl p-8 md:p-10 relative modal-content-animated border border-white/20">
+            <button onclick="closeScentDetails()" class="absolute top-4 right-4 p-2 text-primary/50 hover:text-accent transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
             <div class="flex flex-col items-center text-center space-y-6">
-                <!-- Image --><div class="w-40 h-40 overflow-hidden rounded-full border-4 border-accent shadow-xl">
-                    <img id="modal-image" src="" alt="Perfume bottle" class="object-cover w-full h-full">
+                <div class="w-48 h-48 overflow-hidden rounded-full border-4 border-[#A38038]/20 shadow-lg p-1 bg-white">
+                    <img id="modal-image" src="" alt="Perfume Detail" class="object-cover w-full h-full rounded-full">
                 </div>
 
-                <!-- Name and Feel --><h2 id="modal-name" class="text-4xl playfair font-bold text-primary"></h2>
-                <p class="text-lg uppercase tracking-widest text-accent font-semibold">
-                    Feel: <span id="modal-feel" class="font-normal italic"></span>
-                </p>
+                <div>
+                    <h2 id="modal-name" class="text-4xl md:text-5xl playfair font-bold text-primary mb-2"></h2>
+                    <p class="text-sm uppercase tracking-[0.15em] text-accent font-medium" id="modal-feel"></p>
+                </div>
 
-                <!-- Notes --><div class="w-full border-t border-b border-primary/10 py-4">
-                    <h3 class="text-sm uppercase tracking-widest font-medium text-primary mb-2">Key Notes</h3>
+                <div class="w-full border-y border-primary/5 py-5 bg-primary/5 rounded-lg">
                     <p id="modal-notes" class="text-base text-primary/80 lora italic"></p>
                 </div>
 
-                <!-- Description --><p id="modal-description" class="text-base text-primary/70 leading-relaxed"></p>
+                <p id="modal-description" class="text-lg text-primary/70 leading-relaxed font-light"></p>
 
-                <button onclick="closeScentDetails()" class="mt-4 px-8 py-2 text-sm uppercase font-medium editorial-btn rounded-none">
-                    Close Details
+                <button onclick="closeScentDetails()" class="mt-2 btn-base px-8 py-3 editorial-btn w-full md:w-auto">
+                    Close
                 </button>
             </div>
         </div>
     </div>
     
-    <!-- Quiz Modal (Initially Hidden) --><div id="quiz-modal" class="fixed inset-0 hidden z-[90] flex items-center justify-center p-4 modal-overlay">
-        <!-- Added overflow-auto to the modal container to enable internal scrolling on long content -->
-        <div id="quiz-content" class="bg-secondary w-full max-w-xl rounded-xl shadow-2xl p-8 relative border border-primary/10 modal-content-animated flex flex-col h-full max-h-[90vh] overflow-auto">
-            <!-- Title and Close Button --><div class="flex justify-between items-center pb-4 border-b border-primary/10 mb-6 sticky top-0 bg-secondary z-10">
-                <h2 class="text-3xl playfair font-bold text-primary">Find Your Avira Scent</h2>
-                <button onclick="closeQuiz()" class="text-primary hover:text-accent transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="fixed inset-0 hidden z-[90] flex items-center justify-center p-4 modal-overlay">
+        <div id="quiz-content" class="bg-[#FDFCFB] w-full max-w-xl rounded-2xl shadow-2xl p-6 md:p-8 relative flex flex-col h-full max-h-[85vh] modal-content-animated overflow-hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center pb-4 border-b border-primary/5 bg-[#FDFCFB] shrink-0 z-10">
+                <h2 class="text-2xl playfair font-bold text-primary">The Scent Finder</h2>
+                <button onclick="closeQuiz()" class="text-primary/50 hover:text-accent p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             
-            <!-- Quiz Body (Steps/Result Rendered Here) -->
-            <div id="quiz-body" class="flex-grow flex flex-col items-center justify-start min-h-[250px] overflow-y-auto">
-                <p>Loading Quiz...</p>
+            <!-- Body -->
+            <div id="quiz-body" class="flex-grow overflow-y-auto py-6 px-1">
+                <p>Loading...</p>
             </div>
 
-            <!-- Quiz Footer (Navigation) -->
-            <div id="quiz-footer" class="flex justify-between items-center pt-4 border-t border-primary/10 mt-6 sticky bottom-0 bg-secondary z-10">
-                <!-- Buttons are updated by JavaScript -->
-            </div>
+            <!-- Footer -->
+            <div id="quiz-footer" class="pt-4 border-t border-primary/5 bg-[#FDFCFB] shrink-0 z-10"></div>
         </div>
     </div>
 
-
-    <!-- Navigation Bar (Fixed Top) --><header class="bg-secondary border-b border-primary/10 sticky top-0 z-50 header-init">
-        <!-- MODIFIED: Added md:justify-center and md:space-x-12 to center logo and links on desktop -->
-        <div class="container mx-auto px-6 lg:px-12 py-5 flex justify-between items-center max-w-7xl md:justify-center md:space-x-12">
-            <a href="#" class="text-4xl font-bold playfair text-primary tracking-wider">AVIRA</a>
-            <!-- MODIFIED: Reduced space-x-8 to space-x-6 for a tighter centered look -->
-            <nav class="hidden md:flex space-x-6 text-sm uppercase tracking-widest font-medium">
-                <!-- Smooth scrolling links --><a href="#philosophy" class="text-primary hover:text-accent transition duration-200">Our Craft</a>
-                <a href="#collection" class="text-primary hover:text-accent transition duration-200">The Scents</a>
-                <a href="javascript:void(0)" onclick="openQuiz()" class="text-primary hover:text-accent transition duration-200 cursor-pointer">Scent Quiz</a>
-                <a href="#credits" class="text-primary hover:text-accent transition duration-200">Credits</a>
-                <a href="#contact" class="text-primary hover:text-accent transition duration-200">Atelier</a>
+    <!-- Navigation -->
+    <header class="glass-header sticky top-0 z-50 border-b border-primary/5 transition-all duration-300">
+        <div class="container mx-auto px-6 lg:px-12 py-4 flex justify-between items-center max-w-7xl md:justify-center relative">
+            
+            <!-- Mobile Toggle (Left on Mobile) -->
+            <div class="md:hidden w-10"></div> <!-- Spacer for center alignment -->
+            
+            <a href="#" class="text-3xl md:text-4xl font-bold playfair text-primary tracking-widest relative z-50">AVIRA</a>
+            
+            <nav class="hidden md:flex absolute right-0 lg:static lg:ml-12 items-center space-x-8 text-[11px] lg:text-xs uppercase tracking-[0.2em] font-medium text-primary/80">
+                <a href="#philosophy" class="hover:text-accent transition">Our Craft</a>
+                <a href="#collection" class="hover:text-accent transition">The Collection</a>
+                <a href="javascript:void(0)" onclick="openQuiz()" class="hover:text-accent transition">Scent Quiz</a>
+                <a href="#credits" class="hover:text-accent transition">Credits</a>
             </nav>
-            <button onclick="toggleMobileMenu()" id="mobile-menu-toggle" class="md:hidden text-primary focus:outline-none p-2 relative z-50">
+
+            <!-- Hamburger (Right on Mobile) -->
+            <button onclick="toggleMobileMenu()" id="mobile-menu-toggle" class="md:hidden text-primary focus:outline-none p-2 relative z-[70]" aria-label="Toggle Menu">
                 <div id="hamburger-icon" class="hamburger-icon flex flex-col justify-center items-center">
                     <span></span>
                     <span></span>
@@ -703,122 +665,143 @@
         </div>
     </header>
     
-    <!-- Mobile Navigation Sidebar -->
-    <div id="mobile-menu" class="bg-primary text-secondary p-8 pt-24 z-40"> 
-        <nav class="flex flex-col space-y-6 text-lg uppercase tracking-widest font-medium">
-            <a href="#philosophy" class="hover:text-accent transition duration-200">Our Craft</a>
-            <a href="#collection" class="hover:text-accent transition duration-200">The Scents</a>
-            <a href="javascript:void(0)" onclick="openQuiz()" id="quiz-button-mobile" class="hover:text-accent transition duration-200">Scent Quiz</a>
-            <a href="#credits" class="hover:text-accent transition duration-200">Credits</a>
-            <a href="#contact" class="hover:text-accent transition duration-200">Atelier</a>
+    <!-- Mobile Menu Sidebar -->
+    <div id="mobile-menu" class="bg-primary text-secondary p-10 pt-32 flex flex-col justify-between"> 
+        
+        <!-- Added explicit Close button at the top of the mobile menu panel -->
+        <button onclick="toggleMobileMenu()" class="absolute top-8 left-8 text-secondary/60 hover:text-white uppercase tracking-widest text-xs font-bold border border-white/20 px-3 py-2 rounded">
+            Close
+        </button>
+
+        <nav class="flex flex-col space-y-8 text-xl uppercase tracking-widest font-light">
+            <a href="#philosophy" class="hover:text-accent transition-colors duration-300">Our Craft</a>
+            <a href="#collection" class="hover:text-accent transition-colors duration-300">The Scents</a>
+            <a href="javascript:void(0)" onclick="openQuiz()" id="quiz-button-mobile" class="hover:text-accent transition-colors duration-300 text-accent">Take The Quiz</a>
+            <a href="#credits" class="hover:text-accent transition-colors duration-300">Credits</a>
+            <a href="#contact" class="hover:text-accent transition-colors duration-300">Atelier</a>
         </nav>
-        <div class="absolute bottom-10 left-8 text-xs text-secondary/50">
-            &copy; 2025 Avira Perfumes
+        <div class="text-[10px] text-secondary/30 uppercase tracking-[0.3em]">
+            &copy; 2025 Avira Atelier
         </div>
     </div>
 
-
-    <!-- Hero Section (High-Impact Headline) --><section class="h-[85vh] flex items-center justify-center text-center">
-        <div class="p-6 max-w-5xl hero-text">
-            <h1 class="text-6xl md:text-8xl font-thin playfair text-primary mb-6 leading-none">
-                <span class="text-accent italic font-light block mb-4 text-3xl">Avira:</span>
-                The Scent of Permanence
+    <!-- Hero -->
+    <section class="min-h-[80vh] flex items-center justify-center text-center relative overflow-hidden px-4">
+        <!-- Abstract Background Circle -->
+        <div class="absolute w-[500px] h-[500px] bg-[#A38038]/5 rounded-full blur-3xl -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+        
+        <div class="max-w-4xl hero-animate mt-10">
+            <h1 class="hero-title text-5xl md:text-7xl lg:text-8xl font-normal playfair text-primary mb-8 leading-[0.9]">
+                <span class="block text-2xl md:text-3xl text-accent lora italic mb-4 font-light tracking-normal">The Essence of Permanence</span>
+                AVIRA
             </h1>
-            <p class="text-xl md:text-2xl text-primary/80 mb-10 max-w-3xl mx-auto lora italic">
-                "We reject the fleeting, crafting fragrances that do not just project, but gracefully endure."
+            <p class="text-lg md:text-xl text-primary/70 mb-12 max-w-2xl mx-auto lora italic leading-relaxed">
+                "We reject the fleeting. We craft fragrances that do not just project, but gracefully endure the passage of time."
             </p>
-            <!-- UPDATED: Buttons beside each other --><div class="flex justify-center space-x-4">
-                <a href="#collection" class="inline-block px-8 py-3 text-sm uppercase font-medium editorial-btn text-primary rounded-none">
-                    Explore The Collection
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#collection" class="btn-base px-8 py-4 editorial-btn bg-transparent">
+                    Explore Collection
                 </a>
-                <button onclick="openQuiz()" class="inline-block px-8 py-3 text-sm uppercase font-medium accent-btn rounded-none">
+                <button onclick="openQuiz()" class="btn-base px-8 py-4 accent-btn bg-transparent">
                     Find My Scent
                 </button>
             </div>
         </div>
     </section>
     
-    <!-- Philosophy Section (Two-Column Editorial Block) --><section id="philosophy" class="container mx-auto px-6 lg:px-12 py-24 max-w-7xl border-t border-primary/10 animate-on-scroll">
-        <div class="grid md:grid-cols-2 gap-16 items-start">
-            
-            <div class="space-y-6">
-                <h2 class="text-5xl playfair font-medium text-primary mb-4">
-                    The Avira Commitment: Time is the True Measure.
+    <!-- Philosophy -->
+    <section id="philosophy" class="container mx-auto px-6 lg:px-12 py-24 max-w-6xl border-t border-primary/5 animate-on-scroll">
+        <div class="grid md:grid-cols-2 gap-16 lg:gap-24 items-start">
+            <div class="space-y-8">
+                <h2 class="text-4xl md:text-5xl playfair font-medium text-primary leading-tight">
+                    Time is the <span class="italic text-accent">True Measure</span>.
                 </h2>
-                <p class="text-primary/70 text-lg leading-relaxed">
-                    Our difference is in the depth of our formulation. We are dedicated to creating perfumes that are hand-made and structured to last long, ensuring a sustained, evolving scent experience throughout the day. This is not about initial impact; it is about enduring quality.
+                <p class="text-primary/70 text-lg leading-relaxed font-light">
+                    Our difference lies in the depth of our formulation. We are dedicated to creating perfumes that are hand-made and structured to last, ensuring a sustained, evolving scent experience.
                 </p>
             </div>
             
-            <div class="space-y-8 pl-0 md:pl-10 border-l border-primary/10">
-                <div class="space-y-2">
-                    <h3 class="text-xl font-medium uppercase tracking-widest text-accent">Artisan Blending</h3>
-                    <p class="text-sm text-primary/80">Every batch is individually blended, poured, and finished by skilled artisans, maintaining an unwavering standard of quality far beyond automated production.</p>
+            <div class="space-y-10 pt-4 md:border-l md:border-primary/10 md:pl-12">
+                <div>
+                    <h3 class="text-sm font-bold uppercase tracking-[0.2em] text-accent mb-3">Artisan Blending</h3>
+                    <p class="text-base text-primary/70 leading-relaxed">Every batch is individually blended and poured by skilled artisans, maintaining an unwavering standard of quality far beyond automated production.</p>
                 </div>
-                <div class="space-y-2">
-                    <h3 class="text-xl font-medium uppercase tracking-widest text-accent">Personal Signature</h3>
-                    <p class="text-sm text-primary/80">With ten unique expressions, each designed with its own distinct feel and narrative, we ensure there is an Avira that perfectly complements your personal taste and spirit.</p>
+                <div>
+                    <h3 class="text-sm font-bold uppercase tracking-[0.2em] text-accent mb-3">Personal Signature</h3>
+                    <p class="text-base text-primary/70 leading-relaxed">With ten unique expressions, each designed with its own distinct narrative, we ensure there is an Avira that perfectly complements your spirit.</p>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- Product Showcase Section (Clean Grid) --><section id="collection" class="bg-primary py-20">
+    <!-- Collection -->
+    <section id="collection" class="bg-[#F2F0EE] py-24 relative">
         <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
-            <h2 class="text-4xl playfair font-bold text-left mb-12 text-secondary animate-on-scroll">The Ten Expressions.</h2>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 animate-on-scroll">
+                <h2 class="text-4xl md:text-5xl playfair font-bold text-primary">The Ten Expressions.</h2>
+                <p class="text-sm uppercase tracking-widest text-primary/50 mt-4 md:mt-0">Scroll to explore</p>
+            </div>
 
-            <div id="collection-grid-final" class="grid grid-cols-2 md:grid-cols-5 gap-6 w-full">
-                <!-- Product Cards are injected here by JavaScript --></div>
-
+            <div id="collection-grid-final" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 w-full">
+                <!-- Javascript Injection -->
+            </div>
         </div>
     </section>
     
-    <!-- Credits Section --><section id="credits" class="container mx-auto px-6 lg:px-12 py-24 max-w-7xl border-t border-primary/10 animate-on-scroll">
-        <h2 class="text-4xl playfair font-bold text-primary mb-12 text-center">The Avira Team: Creators of Permanence</h2>
+    <!-- Credits -->
+    <section id="credits" class="container mx-auto px-6 lg:px-12 py-24 max-w-6xl animate-on-scroll">
+        <div class="text-center mb-16">
+            <span class="text-accent uppercase tracking-[0.3em] text-xs font-bold">The Artisans</span>
+            <h2 class="text-3xl md:text-4xl playfair font-bold text-primary mt-4">Creators of Permanence</h2>
+        </div>
         
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center md:text-left">
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-primary border-b border-accent/30 pb-3">Founders</h3>
+                <p class="text-lg text-primary/80 lora italic">Archit</p>
+                <p class="text-lg text-primary/80 lora italic">Mohit</p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-primary border-b border-accent/30 pb-3">Finance</h3>
+                <p class="text-base text-primary/70">Manas Ranjan Sahoo</p>
+                <p class="text-base text-primary/70">Aurodeep Priyadarsan</p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-primary border-b border-accent/30 pb-3">Marketing</h3>
+                <ul class="space-y-2 text-base text-primary/70">
+                    <li>Haraprasad Panighari</li>
+                    <li>Ayush Sarkar</li>
+                    <li>Pallab Mahana</li>
+                    <li>Nishant Ratha</li>
+                </ul>
+            </div>
             
-            <!-- Founders --><div class="space-y-4">
-                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Founders</h3>
-                <p class="text-lg font-semibold text-primary">ARCHIT</p>
-                <p class="text-lg font-semibold text-primary">MOHIT</p>
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-primary border-b border-accent/30 pb-3">Design</h3>
+                <p class="text-base text-primary/70">Mohit Kumar Sahu</p>
+                <p class="text-base text-primary/70">Ayush Tripathy</p>
             </div>
-
-            <!-- Finance --><div class="space-y-4">
-                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Finance</h3>
-                <p class="text-lg text-primary">Manas Ranjan Sahoo</p>
-                <p class="text-lg text-primary">Aurodeep Priyadarsan</p>
-            </div>
-
-            <!-- Marketing --><div class="space-y-4">
-                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Marketing</h3>
-                <p class="text-lg text-primary">Haraprasad Panighari</p>
-                <p class="text-lg text-primary">Ayush Sarkar</p>
-                <p class="text-lg text-primary">Pallab Mahana</p>
-                <p class="text-lg text-primary">Nishant Ratha</p>
-            </div>
-            
-            <!-- Design --><div class="space-y-4">
-                <h3 class="text-2xl font-medium uppercase tracking-widest text-accent border-b border-accent/50 pb-2">Design</h3>
-                <p class="text-lg text-primary">Mohit Kumar Sahu</p>
-                <p class="text-lg text-primary">Ayush Tripathy</p>
-            </div>
-
         </div>
     </section>
 
-    <!-- Footer / Contact Section (Minimalist Centered) --><footer id="contact" class="bg-secondary py-16 border-t border-primary/10 animate-on-scroll">
-        <div class="container mx-auto px-6 text-center max-w-4xl">
-            <h3 class="text-3xl playfair font-medium text-primary mb-6">Connect with the Avira Atelier</h3>
+    <!-- Footer -->
+    <footer id="contact" class="bg-[#1a1a1a] text-[#F7F5F3] py-20 animate-on-scroll">
+        <div class="container mx-auto px-6 text-center max-w-3xl">
+            <h3 class="text-3xl playfair font-medium mb-8">Connect with the Avira Atelier</h3>
             
-            <!-- UPDATED: Instagram Link --><div class="flex justify-center mb-8 text-sm text-primary">
-                <p class="font-medium">Follow Our Atelier: 
-                    <a href="https://www.instagram.com/avira_.official" target="_blank" class="hover:text-accent underline">@avira_.official (Instagram)</a>
-                </p>
+            <div class="flex justify-center mb-12">
+                <a href="https://www.instagram.com/avira_.official" target="_blank" 
+                   class="flex items-center space-x-2 text-sm uppercase tracking-widest hover:text-[#A38038] transition-colors border-b border-transparent hover:border-[#A38038] pb-1">
+                    <span>Follow @avira_.official</span>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
             </div>
 
-            <p class="text-xs text-primary/50 mt-10 tracking-widest inter uppercase">&copy; 2025 Avira Perfumes. Quality over volume. Enduring presence.</p>
+            <p class="text-[10px] text-white/30 tracking-[0.3em] uppercase">
+                &copy; 2025 Avira Perfumes. Quality over volume.
+            </p>
         </div>
     </footer>
 </body>
