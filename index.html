@@ -20,8 +20,8 @@
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Exact Logo Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='50' cy='50' r='5' fill='%23A38038' stroke='none'/%3E%3Ccircle cx='50' cy='50' r='12' /%3E%3Cpath d='M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38' /%3E%3Cpath d='M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62' /%3E%3Cpath d='M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50' /%3E%3Cpath d='M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50' /%3E%3Cpath d='M50 32 Q 45 22 50 12 Q 55 22 50 32' stroke-width='2' fill='none'/%3E%3Cpath d='M50 68 Q 45 78 50 88 Q 55 78 50 68' stroke-width='2' fill='none'/%3E%3Cpath d='M68 50 Q 78 45 88 50 Q 78 55 68 50' stroke-width='2' fill='none'/%3E%3Cpath d='M32 50 Q 22 45 12 50 Q 22 55 32 50' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+    <!-- Generic Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3'%3E%3Ctext y='.9em' font-size='90'%3E✨%3C/text%3E%3C/svg%3E">
 
     <script>
         tailwind.config = {
@@ -150,6 +150,7 @@
             width: 100%;
             outline: none;
             transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            font-size: 1rem;
         }
         .input-glass:focus {
             background: rgba(125, 125, 125, 0.1);
@@ -176,6 +177,12 @@
         .btn-liquid:hover { border-color: var(--color-gold); color: var(--bg-canvas); transform: scale(1.02); }
         .btn-liquid:active { transform: scale(0.95); }
         .btn-liquid:hover::before { opacity: 1; transform: scaleX(1); }
+        
+        .btn-liquid:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
         /* Ambient Background */
         .ambient-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; will-change: transform; }
@@ -188,8 +195,10 @@
         @keyframes moveOrb2 { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 100% { transform: translate(-60px, -40px) scale(0.9) rotate(-10deg); } }
         @keyframes moveOrb3 { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-30px, 40px) scale(1.1); } 100% { transform: translate(30px, -30px) scale(1); } }
 
-        .reveal-node { opacity: 0; transform: translateY(40px); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform; }
-        .reveal-node.is-visible { opacity: 1; transform: translateY(0); }
+        /* Reveal System - Default Visible for safety */
+        .reveal-node { opacity: 1; transform: translateY(0); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform; }
+        .js-reveal-hidden { opacity: 0; transform: translateY(40px); } /* Applied by JS */
+        
         .blur-enter { opacity: 0; filter: blur(10px); transform: translateY(20px); animation: blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes blurIn { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
 
@@ -231,20 +240,8 @@
                 <a href="#philosophy" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Craft</a>
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
-                <a href="#" class="group flex items-center gap-2 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
-                    <!-- LOGO SVG -->
-                    <svg class="w-8 h-8 text-avira-text" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/>
-                        <circle cx="50" cy="50" r="12" />
-                        <path d="M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38" />
-                        <path d="M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62" />
-                        <path d="M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50" />
-                        <path d="M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50" />
-                        <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
-                        <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
-                        <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
-                        <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
-                    </svg>
+                <a href="#" class="group flex items-center gap-3 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
+                    <!-- TEXT LOGO ONLY -->
                     <span class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
                 </a>
             </div>
@@ -264,7 +261,6 @@
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <!-- Added overflow-y-auto to allow scrolling on short screens -->
     <div id="mobile-menu" class="fixed inset-0 z-[100] transform -translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) glass-menu flex flex-col justify-center items-center space-y-8 overflow-y-auto">
         <button onclick="toggleMobileMenu()" class="absolute top-8 right-8 p-4 rounded-full border border-avira-textMuted text-avira-text hover:rotate-90 transition-transform duration-500 z-[101] cursor-pointer bg-transparent focus:outline-none active:scale-90" aria-label="Close Menu">
             <i data-lucide="x" class="w-8 h-8"></i>
@@ -280,19 +276,7 @@
     <section class="min-h-screen flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
         <div class="z-10 max-w-5xl mx-auto perspective-1000">
             <div class="blur-enter" style="animation-delay: 0.1s;">
-                <!-- HERO LOGO -->
-                <svg class="w-24 h-24 text-avira-text mx-auto mb-8 animate-pulse-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
-                    <circle cx="50" cy="50" r="16" />
-                    <path d="M50 34 Q70 30 50 5 Q30 30 50 34" />
-                    <path d="M50 66 Q70 70 50 95 Q30 70 50 66" />
-                    <path d="M66 50 Q70 30 95 50 Q70 70 66 50" />
-                    <path d="M34 50 Q30 30 5 50 Q30 70 34 50" />
-                    <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
-                    <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
-                    <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
-                    <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
-                </svg>
+                <!-- Removed Hero Logo Image -->
                 <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
                     Editorial Luxury
                 </span>
@@ -401,64 +385,60 @@
         </div>
     </section>
 
-    <!-- Cart Modal (Fixed Scrolling) -->
+    <!-- Cart Modal (Scrollable Fix) -->
     <div id="cart-modal" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
-        <div id="cart-content" class="glass-panel w-full sm:max-w-md max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
-            
-            <!-- Header (Fixed) -->
+        <div id="cart-content" class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
-                <h2 class="text-2xl font-playfair text-avira-text">Your Selection</h2>
+                <h2 class="text-3xl font-playfair text-avira-text">Your Selection</h2>
                 <button onclick="closeCart()" class="text-avira-textMuted hover:text-avira-text transition-colors duration-300">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            
-            <!-- Scrollable Body -->
+            <!-- Scrollable Area -->
             <div class="flex-grow overflow-y-auto flex flex-col">
                 <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
                 
                 <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
-                    <div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">₹0.00</span></div>
+                    <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">₹0.00</span></div>
                 </div>
                 
-                <p class="text-[10px] text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
+                <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
 
                 <div id="cart-actions" class="shrink-0">
-                    <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
+                    <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-sm font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
                 </div>
                 
-                <!-- Billing Form (Inside Scrollable Area) -->
-                <div id="billing-form" class="hidden flex-col gap-4 animate-[fadeIn_0.5s_cubic-bezier(0.2,0.8,0.2,1)] relative pb-4">
-                    <!-- SUCCESS OVERLAY -->
+                <!-- Billing Form -->
+                <div id="billing-form" class="hidden flex-col gap-5 animate-[fadeIn_0.5s_cubic-bezier(0.2,0.8,0.2,1)] relative pb-4">
                     <div id="order-success-overlay" class="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 rounded-xl flex flex-col items-center justify-center text-center p-6 hidden">
                         <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 text-green-500 animate-pulse">
                             <i data-lucide="check" class="w-8 h-8"></i>
                         </div>
-                        <h3 class="text-xl font-playfair text-avira-text mb-2">Order Sent!</h3>
-                        <p class="text-xs text-avira-textMuted">Thank you. We will contact you shortly.</p>
+                        <h3 class="text-2xl font-playfair text-avira-text mb-2">Order Sent!</h3>
+                        <p class="text-sm text-avira-textMuted">Thank you. We will contact you shortly.</p>
                     </div>
 
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-avira-gold mb-2">Checkout Details</h3>
-                    <input type="text" id="bill-name" placeholder="Full Name" class="input-glass text-sm">
-                    <input type="email" id="bill-email" placeholder="Email" class="input-glass text-sm">
-                    <input type="text" id="bill-address" placeholder="Shipping Address" class="input-glass text-sm">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-avira-gold mb-2">Checkout Details</h3>
+                    <input type="text" id="bill-name" placeholder="Full Name" class="input-glass text-base">
+                    <input type="email" id="bill-email" placeholder="Email" class="input-glass text-base">
+                    <input type="text" id="bill-address" placeholder="Shipping Address" class="input-glass text-base">
                     <div class="mt-2">
-                        <p class="text-[10px] uppercase tracking-widest text-avira-textMuted mb-2">Payment Method</p>
+                        <p class="text-xs uppercase tracking-widest text-avira-textMuted mb-3">Payment Method</p>
                         <div class="flex gap-4">
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="payment" value="UPI" class="hidden peer" checked>
-                                <div class="glass-panel p-3 rounded-xl text-center text-xs font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">UPI</div>
+                                <div class="glass-panel p-4 rounded-xl text-center text-sm font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">UPI</div>
                             </label>
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="payment" value="COD" class="hidden peer">
-                                <div class="glass-panel p-3 rounded-xl text-center text-xs font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">Cash on Delivery</div>
+                                <div class="glass-panel p-4 rounded-xl text-center text-sm font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">COD</div>
                             </label>
                         </div>
                     </div>
-                    <div class="flex gap-4 mt-4">
-                        <button onclick="hideCheckout()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors duration-300">Back</button>
-                        <button onclick="submitOrder()" id="btn-submit-order" class="flex-grow btn-liquid bg-avira-gold py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95">
+                    <div class="flex gap-4 mt-6">
+                        <button onclick="hideCheckout()" class="text-sm uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors duration-300 px-4">Back</button>
+                        <button onclick="submitOrder()" id="btn-submit-order" class="flex-grow btn-liquid bg-avira-gold py-4 rounded-xl text-sm font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95">
                             <span>Place Request</span>
                         </button>
                     </div>
@@ -467,7 +447,7 @@
         </div>
     </div>
 
-    <!-- Scent Detail Modal (Scrollable Text) -->
+    <!-- Scent Detail Modal -->
     <div id="scent-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-700 ease-in-out opacity-0" id="scent-backdrop"></div>
         <div id="scent-content" class="glass-panel w-full max-w-5xl max-h-[90vh] rounded-[3rem] overflow-hidden relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
@@ -478,7 +458,7 @@
                 <img id="modal-image" src="" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent md:bg-gradient-to-r"></div>
             </div>
-            <!-- Added overflow-y-auto here for scrollable text -->
+            <!-- Added overflow-y-auto to text area -->
             <div class="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-avira-text/5 backdrop-blur-xl overflow-y-auto">
                 <div class="mb-auto">
                     <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold mb-4"></p>
@@ -503,7 +483,7 @@
         </div>
     </div>
 
-    <!-- Quiz Modal (Scrollable) -->
+    <!-- Quiz Modal -->
     <div id="quiz-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-500 opacity-0" id="quiz-backdrop"></div>
         <div id="quiz-content" class="glass-panel w-full max-w-2xl max-h-[85vh] rounded-[2rem] p-8 md:p-12 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
@@ -514,19 +494,8 @@
     
     <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 backdrop-blur-md mt-0">
         <div class="max-w-6xl mx-auto text-center">
-            <!-- Footer Logo -->
-            <svg class="w-16 h-16 text-avira-text mx-auto mb-6 animate-pulse-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/>
-                <circle cx="50" cy="50" r="12" />
-                <path d="M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38" />
-                <path d="M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62" />
-                <path d="M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50" />
-                <path d="M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50" />
-                <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
-                <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
-                <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
-                <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
-            </svg>
+            <!-- Replaced Logo with Generic Gem Icon -->
+            <i data-lucide="gem" class="w-16 h-16 text-avira-text mx-auto mb-6 animate-pulse-slow"></i>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
                 <div>
@@ -690,7 +659,6 @@
             const billingForm = document.getElementById('billing-form');
             if (billingForm) billingForm.scrollIntoView({behavior: "smooth", block: "end"});
         }
-        
         function hideCheckout() {
             document.getElementById('cart-actions').style.display = 'block';
             document.getElementById('billing-form').style.display = 'none';
@@ -804,6 +772,11 @@ Total Amount: ₹${finalTotal}
                     </div>`;
             });
             lucide.createIcons();
+            
+            // Initialize "Visible by default, hidden by JS" strategy
+            const revealElements = document.querySelectorAll('.reveal-node');
+            revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
+            
             setupScrollReveal();
 
             document.addEventListener('mousemove', e => {
@@ -848,7 +821,13 @@ Total Amount: ₹${finalTotal}
 
         function setupScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }});
+                entries.forEach(entry => { 
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.remove('js-reveal-hidden');
+                        entry.target.classList.add('is-visible'); 
+                        observer.unobserve(entry.target); 
+                    }
+                });
             }, { threshold: 0.1 });
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
