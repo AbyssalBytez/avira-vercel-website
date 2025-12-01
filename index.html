@@ -20,8 +20,8 @@
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Generic Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3'%3E%3Ctext y='.9em' font-size='90'%3E?%3C/text%3E%3C/svg%3E">
+    <!-- Generic Favicon (Fixed: Switched from Emoji to Geometric Shape) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 50 L50 90 L10 50 Z' fill='none' stroke='%23bfa05a' stroke-width='5'/%3E%3C/svg%3E">
 
     <script>
         tailwind.config = {
@@ -459,7 +459,7 @@
             </div>
             
             <div class="text-center reveal-node">
-                 <p class="text-3xl md:text-5xl font-playfair text-avira-text italic leading-tight">"We don’t sell perfumes, <br>we sell personality."</p>
+                 <p class="text-3xl md:text-5xl font-playfair text-avira-text italic leading-tight">"We don't sell perfumes, <br>we sell personality."</p>
                  <div class="w-12 h-px bg-avira-gold mx-auto my-8"></div>
                  <p class="text-sm font-bold uppercase tracking-[0.3em] text-avira-gold">Avira</p>
             </div>
@@ -483,7 +483,7 @@
                     <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
                     
                     <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
-                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">?0.00</span></div>
+                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">\u20B90.00</span></div>
                     </div>
                     
                     <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
@@ -514,7 +514,7 @@
                     <div class="checkout-box mb-6 flex justify-between items-center">
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-[#888] mb-1">Total Amount</p>
-                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">?0.00</p>
+                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">\u20B90.00</p>
                         </div>
                         <button onclick="hideCheckout()" class="text-xs text-avira-gold hover:text-white hover:underline transition-colors">Edit Cart</button>
                     </div>
@@ -752,7 +752,7 @@
                 checkoutBtn.style.opacity = '0.3'; 
                 checkoutBtn.style.cursor = 'not-allowed';
                 
-                summaryEl.innerHTML = `<div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">?0.00</span></div>`;
+                summaryEl.innerHTML = `<div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">\u20B90.00</span></div>`;
             } else {
                 checkoutBtn.disabled = false;
                 checkoutBtn.style.opacity = '1';
@@ -763,7 +763,7 @@
                         <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
                             <div class="flex items-center gap-3">
                                 <img src="${getImageUrl(item.name)}" class="w-12 h-12 rounded-lg object-cover">
-                                <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">?${item.price} x ${item.qty}</p></div>
+                                <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">\u20B9${item.price} x ${item.qty}</p></div>
                             </div>
                             <div class="flex items-center gap-2">
                                 <button onclick="changeCartQty(${idx}, -1)" class="qty-btn text-xs">-</button>
@@ -775,11 +775,11 @@
                 
                 let summaryHTML = '';
                 if (discount > 0) {
-                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>?${subtotal}</span></div>
-                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[8px] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-?${discount}</span></div>`;
+                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>\u20B9${subtotal}</span></div>
+                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[8px] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
                 }
-                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">?69</span> ?${deliveryFee}</span></div>`;
-                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>?${finalTotal}</span></div>`;
+                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B969</span> \u20B9${deliveryFee}</span></div>`;
+                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>\u20B9${finalTotal}</span></div>`;
                 summaryEl.innerHTML = summaryHTML;
             }
         }
@@ -803,7 +803,7 @@
                 billingForm.style.opacity = '1';
                 
                 const { finalTotal } = calculateTotals();
-                document.getElementById('checkout-total-display').innerText = `?${finalTotal}`;
+                document.getElementById('checkout-total-display').innerText = `\u20B9${finalTotal}`;
             }, 300);
             
             lucide.createIcons();
@@ -887,7 +887,7 @@
 
             const { subtotal, discount, deliveryFee, finalTotal } = calculateTotals();
             let paymentMsg = paymentOption === "UPI" ? "UPI" : "Cash on Delivery";
-            let orderItems = cart.map(i => `${i.qty}x ${i.name} (?${i.price})`).join('\n');
+            let orderItems = cart.map(i => `${i.qty}x ${i.name} (\u20B9${i.price})`).join('\n');
             
             let generatedOrderBody = `
 Customer Name: ${name}
@@ -898,10 +898,10 @@ Delivery Address: ${address}
 Items Ordered:
 ${orderItems}
 
-Subtotal: ?${subtotal}
-Discount: -?${discount}
-Delivery Fee: ?${deliveryFee}
-Total Amount: ?${finalTotal}
+Subtotal: \u20B9${subtotal}
+Discount: -\u20B9${discount}
+Delivery Fee: \u20B9${deliveryFee}
+Total Amount: \u20B9${finalTotal}
             `;
 
             if (typeof emailjs === 'undefined') {
@@ -1054,7 +1054,7 @@ Total Amount: ?${finalTotal}
             if (!currentScent) return;
             modalQty = 1; document.getElementById('modal-qty').innerText = modalQty;
             document.getElementById('modal-name').textContent = currentScent.name;
-            document.getElementById('modal-price').textContent = '?' + currentScent.price;
+            document.getElementById('modal-price').textContent = '\u20B9' + currentScent.price;
             document.getElementById('modal-feel').textContent = currentScent.feel;
             document.getElementById('modal-notes').textContent = currentScent.notes;
             document.getElementById('modal-description').textContent = currentScent.description;
@@ -1106,20 +1106,78 @@ Total Amount: ?${finalTotal}
             document.getElementById('quiz-body').innerHTML = html;
         }
         function calculateResult() {
-            quizState.scores = {};
+            // New "Vibe Profile" logic
+            let profiles = { "Fresh": 0, "Dark": 0, "Warm": 0, "Luxurious": 0 };
+            
+            // Map scents to archetypes
+            const scentArchetypes = {
+                "Glacial Getaway": "Fresh",
+                "Cherry Blossom": "Fresh", 
+                "Midnight Swim": "Fresh",
+                "Crystal Bloom": "Fresh",
+                "Floral Specter": "Fresh",
+                "Rebel Night": "Dark",
+                "After Hour": "Dark",
+                "Orion Hunt": "Dark",
+                "Mystic Santale": "Warm",
+                "Cafe Date": "Warm",
+                "Amber Creme": "Warm",
+                "Avira Signature": "Luxurious"
+            };
+
+            // Calculate scores
+            let scores = {};
             quizQuestions.forEach((q, qIdx) => {
                 const ansIdx = quizState.selected[qIdx];
                 const points = q.options[ansIdx].score;
-                for (const [scent, val] of Object.entries(points)) { quizState.scores[scent] = (quizState.scores[scent] || 0) + val; }
+                for (const [scent, val] of Object.entries(points)) { 
+                    scores[scent] = (scores[scent] || 0) + val;
+                    // Add to archetype score
+                    if(scentArchetypes[scent]) {
+                        profiles[scentArchetypes[scent]] += val;
+                    }
+                }
             });
+
+            // Find winner
             let max = 0; let winners = [];
-            for (const [scent, score] of Object.entries(quizState.scores)) { if (score > max) { max = score; winners = [scent]; } else if (score === max) winners.push(scent); }
-            const result = winners.length > 0 ? winners[Math.floor(Math.random() * winners.length)] : "Mystic Santale";
-            showResult(result);
+            for (const [scent, score] of Object.entries(scores)) { 
+                if (score > max) { max = score; winners = [scent]; } 
+                else if (score === max) winners.push(scent); 
+            }
+            
+            // Tie-breaking using archetype strength if needed
+            let result = winners[0];
+            if (winners.length > 1) {
+                // If tie, pick the one whose archetype is strongest overall
+                result = winners.sort((a,b) => profiles[scentArchetypes[b]] - profiles[scentArchetypes[a]])[0];
+            }
+
+            // Show "Analyzing" state before result
+            const container = document.getElementById('quiz-body');
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-64 animate-[fadeIn_0.5s_ease]">
+                    <div class="w-16 h-16 border-4 border-avira-text/10 border-t-avira-gold rounded-full animate-spin mb-6"></div>
+                    <p class="text-avira-text font-playfair text-2xl animate-pulse">Analyzing your persona...</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                showResult(result, scentArchetypes[result]);
+            }, 1500);
         }
-        function showResult(name) {
+
+        function showResult(name, vibe) {
             const scent = perfumesData.find(p => p.name === name);
-            const html = `<div class="text-center animate-[fadeIn_0.8s_ease-out] py-4"><p class="text-xs uppercase tracking-[0.3em] text-avira-gold mb-4">Your Signature</p><h2 class="text-5xl md:text-6xl font-playfair text-avira-text mb-6 drop-shadow-sm">${scent.name}</h2><div class="w-56 h-56 mx-auto rounded-full p-1 border border-avira-gold/30 mb-8 relative group"><div class="absolute inset-0 bg-avira-gold/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-1000"></div><img src="${getImageUrl(name)}" class="w-full h-full object-cover rounded-full relative z-10 shadow-2xl" onerror="handleImageError(this, '${name}')"></div><p class="font-cormorant italic text-xl text-avira-textMuted mb-10 max-w-md mx-auto leading-relaxed">"${scent.description}"</p><div class="flex gap-6 justify-center"><button onclick="closeQuiz(); showScentDetails('${name}')" class="btn-liquid px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text border-avira-text/20 hover:bg-avira-text/5"><span>View Details</span></button><button onclick="openQuiz()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text px-4 transition-colors">Retake</button></div></div>`;
+            
+            // Dynamic text based on vibe
+            let vibeText = "";
+            if(vibe === "Fresh") vibeText = "You embody clarity and light.";
+            else if(vibe === "Dark") vibeText = "You possess a magnetic, mysterious allure.";
+            else if(vibe === "Warm") vibeText = "You radiate comfort and grounded energy.";
+            else vibeText = "You value bold elegance and timeless luxury.";
+
+            const html = `<div class="text-center animate-[fadeIn_0.8s_ease-out] py-4"><p class="text-xs uppercase tracking-[0.3em] text-avira-gold mb-2">Your Signature Scent</p><h2 class="text-5xl md:text-6xl font-playfair text-avira-text mb-4 drop-shadow-sm">${scent.name}</h2><p class="text-sm font-inter text-avira-textMuted mb-8 tracking-wide">${vibeText}</p><div class="w-56 h-56 mx-auto rounded-full p-1 border border-avira-gold/30 mb-8 relative group"><div class="absolute inset-0 bg-avira-gold/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-1000"></div><img src="${getImageUrl(name)}" class="w-full h-full object-cover rounded-full relative z-10 shadow-2xl" onerror="handleImageError(this, '${name}')"></div><p class="font-cormorant italic text-xl text-avira-textMuted mb-10 max-w-md mx-auto leading-relaxed">"${scent.description}"</p><div class="flex gap-6 justify-center"><button onclick="closeQuiz(); showScentDetails('${name}')" class="btn-liquid px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text border-avira-text/20 hover:bg-avira-text/5"><span>View Details</span></button><button onclick="openQuiz()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text px-4 transition-colors">Retake</button></div></div>`;
             document.getElementById('quiz-body').innerHTML = html;
         }
         window.addEventListener('scroll', () => {
@@ -1130,14 +1188,77 @@ Total Amount: ?${finalTotal}
             orbs.forEach((orb, index) => { const speed = (index + 1) * 0.1; orb.style.transform = `translateY(${window.scrollY * speed}px)`; });
         });
 
+        // REBALANCED QUIZ LOGIC FOR NEW SCENTS
         const quizQuestions = [
-            { id: 1, question: "What time of day defines your energy?", options: [ { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 2, "Cherry Blossom": 2 } }, { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 2, "Floral Specter": 1 } }, { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 2, "Amber Creme": 1 } }, { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Midnight Swim": 2, "Rebel Night": 1 } } ] },
-            { id: 2, question: "Your ideal escape looks like...", options: [ { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 2, "Mystic Santale": 1 } }, { text: "A vibrant, metropolitan cafe.", score: { "Cafe Date": 2, "Orion Hunt": 1 } }, { text: "An elegant, dimly lit cocktail bar.", score: { "After Hour": 2, "Amber Creme": 1 } }, { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 2, "Floral Specter": 1 } } ] },
-            { id: 3, question: "Which texture appeals most to you?", options: [ { text: "Crisp, white linen.", score: { "Cherry Blossom": 2, "Glacial Getaway": 1 } }, { text: "Rich, aged suede or leather.", score: { "Cafe Date": 1, "Orion Hunt": 2 } }, { text: "Heavy, dark velvet.", score: { "Rebel Night": 2, "After Hour": 1 } }, { text: "Sheer, flowing silk.", score: { "Floral Specter": 2, "Midnight Swim": 1 } } ] },
-            { id: 4, question: "Which scent note grounds you?", options: [ { text: "Fresh, aromatic spices.", score: { "Orion Hunt": 2, "Mystic Santale": 1 } }, { text: "Sweet, baked goods/vanilla.", score: { "Cafe Date": 1, "Amber Creme": 2 } }, { text: "Clean, oceanic air and salt.", score: { "Midnight Swim": 2, "Glacial Getaway": 1 } }, { text: "Deep, creamy woods.", score: { "Mystic Santale": 2, "Rebel Night": 1 } } ] },
-            { id: 5, question: "Ideally, a perfume should...", options: [ { text: "Whisper politely.", score: { "Cherry Blossom": 3, "Glacial Getaway": 2 } }, { text: "Announce my arrival.", score: { "Orion Hunt": 2, "Rebel Night": 2, "After Hour": 1 } }, { text: "Comfort me like a hug.", score: { "Amber Creme": 3, "Cafe Date": 2 } }, { text: "Intrigue those close to me.", score: { "Mystic Santale": 2, "Midnight Swim": 2, "Floral Specter": 2 } } ] },
-            { id: 6, question: "Pick a material:", options: [ { text: "Cool Marble.", score: { "Floral Specter": 2, "Glacial Getaway": 2 } }, { text: "Warm Velvet.", score: { "Rebel Night": 2, "Amber Creme": 2 } }, { text: "Worn Leather.", score: { "Cafe Date": 2, "Orion Hunt": 2 } }, { text: "Fresh Cotton.", score: { "Cherry Blossom": 2, "Midnight Swim": 2 } } ] },
-            { id: 7, question: "Pick a floral inspiration:", options: [ { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3 } }, { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }, { text: "Exotic, dark, mysterious blooms.", score: { "Rebel Night": 2, "After Hour": 1 } } ] }
+            { 
+                id: 1, 
+                question: "What time of day defines your energy?", 
+                options: [ 
+                    { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 3, "Cherry Blossom": 2, "Crystal Bloom": 2 } }, 
+                    { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 3, "Floral Specter": 1, "Avira Signature": 2 } }, 
+                    { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 3, "Amber Creme": 2, "Mystic Santale": 1 } }, 
+                    { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Rebel Night": 3, "Midnight Swim": 2 } } 
+                ] 
+            },
+            { 
+                id: 2, 
+                question: "Your ideal escape looks like...", 
+                options: [ 
+                    { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 3, "Mystic Santale": 1, "Crystal Bloom": 1 } }, 
+                    { text: "A vibrant, metropolitan rooftop.", score: { "Avira Signature": 3, "Orion Hunt": 2, "Rebel Night": 1 } }, 
+                    { text: "A warm, rustic cabin by the fire.", score: { "Amber Creme": 3, "Cafe Date": 2, "Mystic Santale": 2 } }, 
+                    { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 3, "Floral Specter": 2, "After Hour": 1 } } 
+                ] 
+            },
+            { 
+                id: 3, 
+                question: "Which texture appeals most to you?", 
+                options: [ 
+                    { text: "Crisp, white linen.", score: { "Cherry Blossom": 3, "Crystal Bloom": 2, "Glacial Getaway": 1 } }, 
+                    { text: "Rich, worn leather.", score: { "Rebel Night": 3, "Orion Hunt": 2, "After Hour": 2 } }, 
+                    { text: "Soft, warm cashmere.", score: { "Amber Creme": 3, "Cafe Date": 2, "Mystic Santale": 1 } }, 
+                    { text: "Sheer, flowing silk.", score: { "Floral Specter": 3, "Midnight Swim": 2, "Avira Signature": 1 } } 
+                ] 
+            },
+            { 
+                id: 4, 
+                question: "Which scent note grounds you?", 
+                options: [ 
+                    { text: "Smoky woods and spices.", score: { "Rebel Night": 3, "Orion Hunt": 2, "Avira Signature": 2 } }, 
+                    { text: "Sweet vanilla or caramel.", score: { "Cafe Date": 2, "Amber Creme": 3, "Avira Signature": 1 } }, 
+                    { text: "Clean ocean air.", score: { "Midnight Swim": 3, "Glacial Getaway": 2, "Crystal Bloom": 1 } }, 
+                    { text: "Earthy, creamy sandalwood.", score: { "Mystic Santale": 3, "Amber Creme": 1, "Rebel Night": 1 } } 
+                ] 
+            },
+            { 
+                id: 5, 
+                question: "Ideally, a perfume should...", 
+                options: [ 
+                    { text: "Whisper politely.", score: { "Cherry Blossom": 3, "Crystal Bloom": 3, "Glacial Getaway": 1 } }, 
+                    { text: "Announce my arrival.", score: { "Avira Signature": 3, "Rebel Night": 2, "Orion Hunt": 2 } }, 
+                    { text: "Comfort me like a hug.", score: { "Amber Creme": 3, "Cafe Date": 3, "Mystic Santale": 1 } }, 
+                    { text: "Intrigue those close to me.", score: { "Midnight Swim": 2, "After Hour": 3, "Floral Specter": 2 } } 
+                ] 
+            },
+            { 
+                id: 6, 
+                question: "Pick a material:", 
+                options: [ 
+                    { text: "Polished Glass.", score: { "Crystal Bloom": 3, "Glacial Getaway": 2, "Floral Specter": 1 } }, 
+                    { text: "Dark Velvet.", score: { "Rebel Night": 2, "After Hour": 3, "Avira Signature": 2 } }, 
+                    { text: "Aged Wood.", score: { "Mystic Santale": 3, "Orion Hunt": 2, "Amber Creme": 1 } }, 
+                    { text: "Fresh Petals.", score: { "Cherry Blossom": 3, "Floral Specter": 2, "Midnight Swim": 1 } } 
+                ] 
+            },
+            { 
+                id: 7, 
+                question: "Pick a floral inspiration:", 
+                options: [ 
+                    { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3, "Crystal Bloom": 2 } }, 
+                    { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }, 
+                    { text: "Exotic, dark, mysterious blooms.", score: { "Rebel Night": 2, "After Hour": 1 } } 
+                ] 
+            }
         ];
     </script>
 </body>
