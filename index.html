@@ -20,7 +20,7 @@
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Generic Favicon (Fixed: Switched from Emoji to Geometric Shape) -->
+    <!-- Generic Favicon -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 50 L50 90 L10 50 Z' fill='none' stroke='%23bfa05a' stroke-width='5'/%3E%3C/svg%3E">
 
     <script>
@@ -52,8 +52,6 @@
                         'blur-in': 'blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                        'toast-in': 'toastIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-                        'toast-out': 'toastOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards', // Added forwards to keep state
                     },
                     keyframes: {
                         float: {
@@ -78,14 +76,6 @@
                             '0%': { transform: 'scale(1)' },
                             '50%': { transform: 'scale(1.2)' },
                             '100%': { transform: 'scale(1)' }
-                        },
-                        toastIn: {
-                            '0%': { transform: 'translateY(-100%)', opacity: 0 },
-                            '100%': { transform: 'translateY(0)', opacity: 1 }
-                        },
-                        toastOut: {
-                            '0%': { transform: 'translateY(0)', opacity: 1 },
-                            '100%': { transform: 'translateY(-20px)', opacity: 0 }
                         }
                     }
                 }
@@ -302,9 +292,6 @@
     </style>
 </head>
 <body class="antialiased selection:bg-avira-gold selection:text-black">
-
-    <!-- Toast Container -->
-    <div id="toast-container" class="fixed top-24 right-0 left-0 z-[110] pointer-events-none flex flex-col items-center gap-2 px-4" aria-live="polite"></div>
 
     <!-- Ambient Liquid Background -->
     <div class="ambient-layer">
@@ -674,7 +661,7 @@
             "Glacial Getaway": "images/glacial_gataway.jpg",
             "Orion Hunt": "images/orion_hunt.jpg",
             "Midnight Swim": "images/midnight_swim.jpg",
-            "Amber Creme": "images/amber_creme.jpg",
+            "Amber Creme": "images/amber_malt.jpg",
             "Rebel Night": "images/rebel_night.jpg",
             "Crystal Bloom": "images/crystal_bloom.jpg",
             "Avira Signature": "images/avira_signature.jpg"
@@ -827,29 +814,6 @@
             }, 300);
         }
 
-        // --- Toast System ---
-        function showToast(message, type = 'error') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            
-            // Icon based on type
-            const icon = type === 'success' 
-                ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><polyline points="20 6 9 17 4 12"></polyline></svg>' 
-                : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-
-            const bgClass = type === 'success' ? 'bg-white text-black border-green-500/20' : 'bg-white text-black border-red-500/20';
-
-            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border shadow-xl backdrop-blur-md animate-toast-in pointer-events-auto ${bgClass}`;
-            toast.innerHTML = `${icon}<span class="text-xs font-bold uppercase tracking-wide">${message}</span>`;
-
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.animation = 'toast-out 0.5s forwards';
-                toast.addEventListener('animationend', () => toast.remove());
-            }, 3000);
-        }
-
         function submitOrder() {
             const name = document.getElementById('bill-name').value.trim();
             const address = document.getElementById('bill-address').value.trim();
@@ -869,7 +833,7 @@
                 if(!email) document.getElementById('bill-email').style.borderColor = '#ef4444';
                 if(!address) document.getElementById('bill-address').style.borderColor = '#ef4444';
                 
-                showToast("Please fill all fields", "error");
+                alert("Please fill all fields");
 
                 setTimeout(() => {
                     document.querySelectorAll('.checkout-input').forEach(el => el.style.borderColor = 'rgba(255, 255, 255, 0.1)');
@@ -906,7 +870,7 @@ Total Amount: \u20B9${finalTotal}
             `;
 
             if (typeof emailjs === 'undefined') {
-                showToast("Email service unavailable", "error");
+                alert("Error: Email service not loaded. Please check your internet connection.");
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
                 return;
@@ -933,7 +897,7 @@ Total Amount: \u20B9${finalTotal}
                 }, 2500);
             }, (error) => {
                 console.error("EmailJS Error:", error);
-                showToast("Failed to place order", "error");
+                alert('Failed to send order. Please try again.');
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
             });
