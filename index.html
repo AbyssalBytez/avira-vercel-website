@@ -140,22 +140,45 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Inputs */
+        /* Inputs & Forms */
+        .input-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
         .input-glass {
             background: rgba(125, 125, 125, 0.05);
             border: 1px solid var(--glass-border);
             color: var(--color-text);
-            padding: 14px 20px;
-            border-radius: 14px;
+            padding: 16px 20px 6px; /* Added top padding for label */
+            border-radius: 12px;
             width: 100%;
             outline: none;
             transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             font-size: 1rem;
+            min-height: 56px;
         }
-        .input-glass:focus {
+        .input-glass:focus, .input-glass:not(:placeholder-shown) {
             background: rgba(125, 125, 125, 0.1);
             border-color: var(--color-gold);
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+        .input-label {
+            position: absolute;
+            left: 20px;
+            top: 18px;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .input-glass:focus ~ .input-label,
+        .input-glass:not(:placeholder-shown) ~ .input-label {
+            top: 6px;
+            font-size: 0.65rem;
+            color: var(--color-gold);
+            font-weight: 700;
         }
 
         /* Buttons */
@@ -214,6 +237,22 @@
         
         .qty-btn { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); background: rgba(125,125,125,0.1); cursor: pointer; transition: all 0.2s; }
         .qty-btn:hover { background: var(--color-gold); color: black; border-color: var(--color-gold); }
+        
+        /* Payment Card Styling */
+        .payment-card {
+            border: 1px solid var(--glass-border);
+            background: rgba(125,125,125,0.05);
+            transition: all 0.3s ease;
+        }
+        .payment-radio:checked + .payment-card {
+            background: rgba(191, 160, 90, 0.1);
+            border-color: var(--color-gold);
+            box-shadow: 0 0 15px rgba(191, 160, 90, 0.15);
+        }
+        .payment-radio:checked + .payment-card .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -241,7 +280,6 @@
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
                 <a href="#" class="group flex items-center gap-3 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
-                    <!-- TEXT LOGO ONLY -->
                     <span class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
                 </a>
             </div>
@@ -276,7 +314,6 @@
     <section class="min-h-screen flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
         <div class="z-10 max-w-5xl mx-auto perspective-1000">
             <div class="blur-enter" style="animation-delay: 0.1s;">
-                <!-- Removed Hero Logo Image -->
                 <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
                     Editorial Luxury
                 </span>
@@ -390,58 +427,107 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
         <div id="cart-content" class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
-                <h2 class="text-3xl font-playfair text-avira-text">Your Selection</h2>
+                <h2 class="text-3xl font-playfair text-avira-text" id="cart-title">Your Selection</h2>
                 <button onclick="closeCart()" class="text-avira-textMuted hover:text-avira-text transition-colors duration-300">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <!-- Scrollable Area -->
-            <div class="flex-grow overflow-y-auto flex flex-col">
-                <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
-                
-                <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
-                    <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">₹0.00</span></div>
+            
+            <!-- Items View -->
+            <div id="cart-view" class="flex-grow flex flex-col overflow-hidden transition-all duration-500">
+                <!-- Scrollable Area -->
+                <div class="flex-grow overflow-y-auto flex flex-col">
+                    <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
+                    
+                    <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
+                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">₹0.00</span></div>
+                    </div>
+                    
+                    <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
                 </div>
-                
-                <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
-
-                <div id="cart-actions" class="shrink-0">
+                <div id="cart-actions" class="shrink-0 mt-auto">
                     <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-sm font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
                 </div>
-                
-                <!-- Billing Form -->
-                <div id="billing-form" class="hidden flex-col gap-5 animate-[fadeIn_0.5s_cubic-bezier(0.2,0.8,0.2,1)] relative pb-4">
-                    <div id="order-success-overlay" class="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 rounded-xl flex flex-col items-center justify-center text-center p-6 hidden">
-                        <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 text-green-500 animate-pulse">
-                            <i data-lucide="check" class="w-8 h-8"></i>
+            </div>
+
+            <!-- Checkout Form View (Hidden by default) -->
+            <div id="billing-form" class="hidden flex-col h-full relative transition-all duration-500">
+                <div id="order-success-overlay" class="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 rounded-xl flex flex-col items-center justify-center text-center p-6 hidden">
+                    <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6 text-green-500 animate-pulse">
+                        <i data-lucide="check" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-3xl font-playfair text-avira-text mb-2">Order Confirmed</h3>
+                    <p class="text-sm text-avira-textMuted max-w-xs mx-auto">We have received your request. Our artisan will contact you shortly.</p>
+                </div>
+
+                <div class="overflow-y-auto flex-grow pr-2 pb-4">
+                     <!-- Mini Summary -->
+                    <div class="bg-avira-text/5 rounded-xl p-4 mb-6 flex justify-between items-center border border-avira-text/10">
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-avira-textMuted mb-1">Total Amount</p>
+                            <p class="text-xl font-playfair font-bold text-avira-text" id="checkout-total-display">₹0.00</p>
                         </div>
-                        <h3 class="text-2xl font-playfair text-avira-text mb-2">Order Sent!</h3>
-                        <p class="text-sm text-avira-textMuted">Thank you. We will contact you shortly.</p>
+                        <button onclick="hideCheckout()" class="text-xs text-avira-gold underline hover:text-avira-text">Edit Cart</button>
                     </div>
 
-                    <h3 class="text-sm font-bold uppercase tracking-widest text-avira-gold mb-2">Checkout Details</h3>
-                    <input type="text" id="bill-name" placeholder="Full Name" class="input-glass text-base">
-                    <input type="email" id="bill-email" placeholder="Email" class="input-glass text-base">
-                    <input type="text" id="bill-address" placeholder="Shipping Address" class="input-glass text-base">
-                    <div class="mt-2">
-                        <p class="text-xs uppercase tracking-widest text-avira-textMuted mb-3">Payment Method</p>
-                        <div class="flex gap-4">
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="payment" value="UPI" class="hidden peer" checked>
-                                <div class="glass-panel p-4 rounded-xl text-center text-sm font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">UPI</div>
+                    <form onsubmit="event.preventDefault();" class="space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-4 flex items-center gap-2">
+                            <i data-lucide="user" class="w-4 h-4"></i> Contact Information
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="input-group">
+                                <input type="text" id="bill-name" placeholder=" " class="input-glass peer">
+                                <label for="bill-name" class="input-label">Full Name</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" id="bill-email" placeholder=" " class="input-glass peer">
+                                <label for="bill-email" class="input-label">Email Address</label>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-4 mt-6 flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i> Shipping
+                        </h3>
+                        <div class="input-group">
+                            <input type="text" id="bill-address" placeholder=" " class="input-glass peer">
+                            <label for="bill-address" class="input-label">Delivery Address</label>
+                        </div>
+
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-4 mt-6 flex items-center gap-2">
+                            <i data-lucide="credit-card" class="w-4 h-4"></i> Payment Method
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="cursor-pointer relative group">
+                                <input type="radio" name="payment" value="UPI" class="hidden payment-radio peer" checked>
+                                <div class="payment-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 h-full group-hover:border-avira-gold/50">
+                                    <i data-lucide="smartphone" class="w-6 h-6 text-avira-textMuted peer-checked:text-avira-gold"></i>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-avira-text">UPI</span>
+                                    <div class="check-icon absolute top-2 right-2 text-avira-gold opacity-0 transform scale-50 transition-all duration-300">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
                             </label>
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="payment" value="COD" class="hidden peer">
-                                <div class="glass-panel p-4 rounded-xl text-center text-sm font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">COD</div>
+                            <label class="cursor-pointer relative group">
+                                <input type="radio" name="payment" value="COD" class="hidden payment-radio peer">
+                                <div class="payment-card rounded-xl p-5 flex flex-col items-center justify-center gap-2 h-full group-hover:border-avira-gold/50">
+                                    <i data-lucide="banknote" class="w-6 h-6 text-avira-textMuted peer-checked:text-avira-gold"></i>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-avira-text">Cash</span>
+                                    <div class="check-icon absolute top-2 right-2 text-avira-gold opacity-0 transform scale-50 transition-all duration-300">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
                             </label>
                         </div>
-                    </div>
-                    <div class="flex gap-4 mt-6">
-                        <button onclick="hideCheckout()" class="text-sm uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors duration-300 px-4">Back</button>
-                        <button onclick="submitOrder()" id="btn-submit-order" class="flex-grow btn-liquid bg-avira-gold py-4 rounded-xl text-sm font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95">
-                            <span>Place Request</span>
-                        </button>
-                    </div>
+                    </form>
+                </div>
+
+                <div class="flex gap-4 mt-4 shrink-0 border-t border-avira-text/10 pt-4">
+                    <button onclick="hideCheckout()" class="px-6 py-4 rounded-xl border border-avira-text/20 text-avira-textMuted hover:text-avira-text hover:border-avira-text transition-all uppercase tracking-widest text-xs font-bold">
+                        Back
+                    </button>
+                    <button onclick="submitOrder()" id="btn-submit-order" class="flex-grow btn-liquid bg-avira-gold py-4 rounded-xl text-sm font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-avira-gold/10">
+                        <span id="pay-btn-text">Place Request</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -494,9 +580,7 @@
     
     <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 backdrop-blur-md mt-0">
         <div class="max-w-6xl mx-auto text-center">
-            <!-- Replaced Logo with Generic Gem Icon -->
-            <i data-lucide="gem" class="w-16 h-16 text-avira-text mx-auto mb-6 animate-pulse-slow"></i>
-
+            
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
                 <div>
                     <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">Founders</h3>
@@ -654,14 +738,23 @@
 
         // Checkout Logic
         function showCheckout() {
-            document.getElementById('cart-actions').style.display = 'none';
-            document.getElementById('billing-form').style.display = 'flex';
-            const billingForm = document.getElementById('billing-form');
-            if (billingForm) billingForm.scrollIntoView({behavior: "smooth", block: "end"});
+            document.getElementById('cart-view').classList.add('hidden');
+            document.getElementById('billing-form').classList.remove('hidden');
+            document.getElementById('billing-form').classList.add('flex');
+            document.getElementById('cart-title').innerText = "Checkout";
+            
+            // Update Mini Summary
+            const { finalTotal } = calculateTotals();
+            document.getElementById('checkout-total-display').innerText = `₹${finalTotal}`;
+            document.getElementById('pay-btn-text').innerText = `Pay ₹${finalTotal}`;
+            
+            lucide.createIcons();
         }
         function hideCheckout() {
-            document.getElementById('cart-actions').style.display = 'block';
-            document.getElementById('billing-form').style.display = 'none';
+            document.getElementById('cart-view').classList.remove('hidden');
+            document.getElementById('billing-form').classList.add('hidden');
+            document.getElementById('billing-form').classList.remove('flex');
+            document.getElementById('cart-title').innerText = "Your Selection";
         }
 
         function submitOrder() {
@@ -670,12 +763,27 @@
             const email = document.getElementById('bill-email').value;
             const paymentOption = document.querySelector('input[name="payment"]:checked').value;
 
-            if(!name || !address || !email) { alert("Please complete all shipping details."); return; }
+            if(!name || !address || !email) { 
+                const btn = document.getElementById('btn-submit-order');
+                btn.classList.add('animate-shake');
+                setTimeout(()=> btn.classList.remove('animate-shake'), 500);
+                // Highlight empty fields
+                if(!name) document.getElementById('bill-name').classList.add('border-red-500');
+                if(!email) document.getElementById('bill-email').classList.add('border-red-500');
+                if(!address) document.getElementById('bill-address').classList.add('border-red-500');
+                setTimeout(() => {
+                    document.querySelectorAll('.input-glass').forEach(el => el.classList.remove('border-red-500'));
+                }, 2000);
+                return; 
+            }
 
             const btn = document.getElementById('btn-submit-order');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Sending...`;
+            const originalContent = document.getElementById('pay-btn-text').innerText;
+            const btnSpan = document.getElementById('pay-btn-text');
+            
+            btnSpan.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-2"></i> Processing...`;
             btn.disabled = true;
+            lucide.createIcons();
 
             const { subtotal, discount, deliveryFee, finalTotal } = calculateTotals();
             let paymentMsg = paymentOption === "UPI" ? "UPI" : "Cash on Delivery";
@@ -710,14 +818,14 @@ Total Amount: ₹${finalTotal}
                     document.getElementById('bill-name').value = '';
                     document.getElementById('bill-email').value = '';
                     document.getElementById('bill-address').value = '';
-                    btn.innerHTML = originalContent;
+                    btnSpan.innerText = originalContent;
                     btn.disabled = false;
                     overlay.classList.add('hidden');
                     hideCheckout();
-                }, 2000);
+                }, 2500);
             }, (error) => {
                 alert('Failed to send order. Error: ' + JSON.stringify(error));
-                btn.innerHTML = originalContent;
+                btnSpan.innerText = originalContent;
                 btn.disabled = false;
             });
         }
