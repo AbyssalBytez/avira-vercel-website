@@ -42,6 +42,7 @@
                         'playfair': ['Playfair Display', 'serif'],
                         'cormorant': ['Cormorant Garamond', 'serif'],
                         'inter': ['Inter', 'sans-serif'],
+                        'currency': ['Inter', 'sans-serif', 'Arial', 'Helvetica'], 
                     },
                     animation: {
                         'float': 'float 12s ease-in-out infinite',
@@ -52,7 +53,7 @@
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                         'toast-in': 'toastIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-                        'toast-out': 'toastOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                        'toast-out': 'toastOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards', // Added forwards to keep state
                     },
                     keyframes: {
                         float: {
@@ -1102,7 +1103,7 @@ Total Amount: \u20B9${finalTotal}
         function renderQuiz() {
             const q = quizQuestions[quizState.step];
             const currentSelected = quizState.selected[quizState.step];
-            const html = `<div class="animate-[fadeIn_0.6s_ease-out]"><p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${quizState.step + 1} / ${quizQuestions.length}</p><h3 class="text-3xl md:text-4xl font-playfair text-avira-text text-center mb-10 leading-tight">${q.question}</h3><div class="space-y-4 mb-10">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${quizState.step}, ${idx})" class="w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${currentSelected === idx ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/5 border-avira-text/5 text-avira-textMuted hover:bg-avira-text/10 hover:border-avira-text/20'}"><span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>${currentSelected === idx ? '<span class="text-black font-bold">?</span>' : ''}</button>`).join('')}</div><div class="flex justify-between items-center"><button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${quizState.step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button><button onclick="nextStep()" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${currentSelected !== null ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/10 text-avira-text/30 cursor-not-allowed border-avira-text/5'}">${quizState.step === quizQuestions.length - 1 ? 'Reveal' : 'Next'}</button></div></div>`;
+            const html = `<div class="animate-[fadeIn_0.6s_ease-out]"><p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${quizState.step + 1} / ${quizQuestions.length}</p><h3 class="text-3xl md:text-4xl font-playfair text-avira-text text-center mb-10 leading-tight">${q.question}</h3><div class="space-y-4 mb-10">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${quizState.step}, ${idx})" class="w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${currentSelected === idx ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/5 border-avira-text/5 text-avira-textMuted hover:bg-avira-text/10 hover:border-avira-text/20'}"><span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>${currentSelected === idx ? '<span class="text-black font-bold">●</span>' : ''}</button>`).join('')}</div><div class="flex justify-between items-center"><button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${quizState.step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button><button onclick="nextStep()" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${currentSelected !== null ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/10 text-avira-text/30 cursor-not-allowed border-avira-text/5'}">${quizState.step === quizQuestions.length - 1 ? 'Reveal' : 'Next'}</button></div></div>`;
             document.getElementById('quiz-body').innerHTML = html;
         }
         function calculateResult() {
@@ -1244,12 +1245,7 @@ Total Amount: \u20B9${finalTotal}
                 id: 6, 
                 question: "Pick a material:", 
                 options: [ 
-                    { text: "Polished Glass.", score: { "Crystal Bloom": 3, "Glacial Getaway": 2, "Floral Specter": 1 } }, 
-                    { text: "Dark Velvet.", score: { "Rebel Night": 2, "After Hour": 3, "Avira Signature": 2 } }, 
-                    { text: "Aged Wood.", score: { "Mystic Santale": 3, "Orion Hunt": 2, "Amber Creme": 1 } }, 
-                    { text: "Fresh Petals.", score: { "Cherry Blossom": 3, "Floral Specter": 2, "Midnight Swim": 1 } } 
-                ] 
-            },
+                    { text: "Cool Marble.", score: { "Floral Specter": 2, "Glacial Getaway": 2 } }, { text: "Warm Velvet.", score: { "Rebel Night": 2, "Amber Creme": 2 } }, { text: "Worn Leather.", score: { "Cafe Date": 2, "Orion Hunt": 2 } }, { text: "Fresh Cotton.", score: { "Cherry Blossom": 2, "Midnight Swim": 2 } } ] },
             { 
                 id: 7, 
                 question: "Pick a floral inspiration:", 
