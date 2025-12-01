@@ -6,22 +6,22 @@
     <meta name="description" content="Avira Perfumes - Hand-crafted, long-lasting luxury fragrances designed for the individual.">
     <title>Avira Perfumes | Liquid Glass Edition</title>
     
-    <!-- Load Tailwind CSS -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Load EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- EmailJS SDK (Deferred) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+    
+    <!-- Lucide Icons (Deferred) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Generic Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3'%3E%3Ctext y='.9em' font-size='90'%3E✨%3C/text%3E%3C/svg%3E">
+    <!-- Exact Logo Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='50' cy='50' r='6' fill='%23A38038' stroke='none'/%3E%3Ccircle cx='50' cy='50' r='16' /%3E%3Cpath d='M50 34 Q70 30 50 5 Q30 30 50 34' /%3E%3Cpath d='M50 66 Q70 70 50 95 Q30 70 50 66' /%3E%3Cpath d='M66 50 Q70 30 95 50 Q70 70 66 50' /%3E%3Cpath d='M34 50 Q30 30 5 50 Q30 70 34 50' /%3E%3Ccircle cx='50' cy='15' r='2' fill='%23A38038' stroke='none'/%3E%3Ccircle cx='50' cy='85' r='2' fill='%23A38038' stroke='none'/%3E%3Ccircle cx='15' cy='50' r='2' fill='%23A38038' stroke='none'/%3E%3Ccircle cx='85' cy='50' r='2' fill='%23A38038' stroke='none'/%3E%3C/svg%3E">
 
     <script>
         tailwind.config = {
@@ -45,7 +45,6 @@
                         'shimmer': 'shimmer 4s infinite linear',
                         'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'spin-slow': 'spin 3s linear infinite',
-                        'blur-in': 'blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                     },
                     keyframes: {
                         float: {
@@ -55,10 +54,6 @@
                         shimmer: {
                             '0%': { transform: 'translateX(-100%) skewX(-15deg)' },
                             '100%': { transform: 'translateX(200%) skewX(-15deg)' },
-                        },
-                        blurIn: {
-                            '0%': { opacity: '0', filter: 'blur(10px)', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', filter: 'blur(0)', transform: 'translateY(0)' }
                         }
                     }
                 }
@@ -67,7 +62,7 @@
     </script>
 
     <style>
-        /* --- Dynamic Theming Variables --- */
+        /* --- Theming --- */
         :root {
             --bg-canvas: #f2f4f7;
             --glass-bg: rgba(255, 255, 255, 0.7);
@@ -105,7 +100,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Glass Components */
+        /* --- Glass Components --- */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(24px) saturate(180%);
@@ -123,6 +118,7 @@
             z-index: 10;
         }
 
+        /* Mobile Menu */
         .glass-menu {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(50px) saturate(200%);
@@ -130,15 +126,6 @@
             border-bottom: 1px solid var(--glass-border);
         }
         [data-theme="dark"] .glass-menu { background: rgba(5, 5, 5, 0.95); }
-
-        .glass-nav {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(200%);
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
 
         /* Inputs */
         .input-glass {
@@ -176,12 +163,6 @@
         .btn-liquid:hover { border-color: var(--color-gold); color: var(--bg-canvas); transform: scale(1.02); }
         .btn-liquid:active { transform: scale(0.95); }
         .btn-liquid:hover::before { opacity: 1; transform: scaleX(1); }
-        
-        .btn-liquid:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
 
         /* Ambient Background */
         .ambient-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; will-change: transform; }
@@ -194,10 +175,19 @@
         @keyframes moveOrb2 { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 100% { transform: translate(-60px, -40px) scale(0.9) rotate(-10deg); } }
         @keyframes moveOrb3 { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-30px, 40px) scale(1.1); } 100% { transform: translate(30px, -30px) scale(1); } }
 
-        .reveal-node { opacity: 0; transform: translateY(40px); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform; }
-        .reveal-node.is-visible { opacity: 1; transform: translateY(0); }
-        .blur-enter { opacity: 0; filter: blur(10px); transform: translateY(20px); animation: blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        @keyframes blurIn { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+        /* Reveal System (FIXED: Default Visible, JS Hides it) */
+        .reveal-node {
+            /* Default visible to prevent empty page on JS error */
+            opacity: 1; 
+            transform: translateY(0);
+            transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        /* This class is applied by JS to start the animation state */
+        .js-reveal-hidden {
+            opacity: 0;
+            transform: translateY(40px);
+        }
 
         /* Components */
         .theme-toggle { width: 52px; height: 30px; border-radius: 20px; background: rgba(125,125,125,0.1); border: 1px solid var(--glass-border); position: relative; cursor: pointer; transition: background 0.4s ease; }
@@ -238,6 +228,19 @@
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
                 <a href="#" class="group flex items-center gap-2 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
+                    <!-- Exact Avira Logo (SVG) -->
+                    <svg class="w-8 h-8 text-avira-text" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
+                        <circle cx="50" cy="50" r="16" />
+                        <path d="M50 34 Q70 30 50 5 Q30 30 50 34" />
+                        <path d="M50 66 Q70 70 50 95 Q30 70 50 66" />
+                        <path d="M66 50 Q70 30 95 50 Q70 70 66 50" />
+                        <path d="M34 50 Q30 30 5 50 Q30 70 34 50" />
+                        <circle cx="50" cy="15" r="2" fill="currentColor" stroke="none"/>
+                        <circle cx="50" cy="85" r="2" fill="currentColor" stroke="none"/>
+                        <circle cx="15" cy="50" r="2" fill="currentColor" stroke="none"/>
+                        <circle cx="85" cy="50" r="2" fill="currentColor" stroke="none"/>
+                    </svg>
                     <span class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
                 </a>
             </div>
@@ -271,18 +274,31 @@
     <!-- Hero Section -->
     <section class="min-h-screen flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
         <div class="z-10 max-w-5xl mx-auto perspective-1000">
-            <div class="blur-enter" style="animation-delay: 0.1s;">
+            <div class="reveal-node mb-8" style="transition-delay: 0.1s;">
+                <!-- HERO LOGO -->
+                <svg class="w-24 h-24 text-avira-text mx-auto mb-8 animate-pulse-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
+                    <circle cx="50" cy="50" r="16" />
+                    <path d="M50 34 Q70 30 50 5 Q30 30 50 34" />
+                    <path d="M50 66 Q70 70 50 95 Q30 70 50 66" />
+                    <path d="M66 50 Q70 30 95 50 Q70 70 66 50" />
+                    <path d="M34 50 Q30 30 5 50 Q30 70 34 50" />
+                    <circle cx="50" cy="15" r="2" fill="currentColor" stroke="none"/>
+                    <circle cx="50" cy="85" r="2" fill="currentColor" stroke="none"/>
+                    <circle cx="15" cy="50" r="2" fill="currentColor" stroke="none"/>
+                    <circle cx="85" cy="50" r="2" fill="currentColor" stroke="none"/>
+                </svg>
                 <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
                     Editorial Luxury
                 </span>
             </div>
-            <h1 class="blur-enter text-6xl md:text-8xl lg:text-9xl font-playfair text-avira-text mb-8 leading-[0.9] drop-shadow-sm" style="animation-delay: 0.3s;">
+            <h1 class="reveal-node text-6xl md:text-8xl lg:text-9xl font-playfair text-avira-text mb-8 leading-[0.9] drop-shadow-sm" style="transition-delay: 0.3s;">
                 AVIRA
             </h1>
-            <p class="blur-enter text-xl md:text-2xl font-cormorant italic text-avira-textMuted max-w-2xl mx-auto mb-14 leading-relaxed" style="animation-delay: 0.5s;">
+            <p class="reveal-node text-xl md:text-2xl font-cormorant italic text-avira-textMuted max-w-2xl mx-auto mb-14 leading-relaxed" style="transition-delay: 0.5s;">
                 "We reject the fleeting. We craft fragrances that do not just project, but gracefully endure the passage of time."
             </p>
-            <div class="blur-enter flex flex-col sm:flex-row justify-center gap-6" style="animation-delay: 0.7s;">
+            <div class="reveal-node flex flex-col sm:flex-row justify-center gap-6" style="transition-delay: 0.7s;">
                 <a href="#collection" class="btn-liquid px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text group">
                     <span>Explore Collection</span>
                 </a>
@@ -383,61 +399,55 @@
     <!-- Cart Modal -->
     <div id="cart-modal" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
-        <div id="cart-content" class="glass-panel w-full sm:max-w-md h-[85vh] sm:h-auto sm:rounded-[2rem] rounded-t-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
+        <div id="cart-content" class="glass-panel w-full sm:max-w-md h-[85vh] sm:h-auto sm:rounded-[2rem] rounded-t-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10">
                 <h2 class="text-2xl font-playfair text-avira-text">Your Selection</h2>
                 <button onclick="closeCart()" class="text-avira-textMuted hover:text-avira-text transition-colors duration-300">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <!-- Scrollable content area with max-height to prevent overflow -->
-            <div class="flex-grow overflow-y-auto flex flex-col">
-                <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
-                
-                <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
-                    <div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">₹0.00</span></div>
+            <div id="cart-items" class="flex-grow overflow-y-auto space-y-4 mb-6 pr-2"></div>
+            <div class="border-t border-avira-text/10 pt-4 mb-6" id="cart-summary">
+                <div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">₹0.00</span></div>
+            </div>
+            <p class="text-[10px] text-avira-textMuted mb-6 text-center uppercase tracking-widest">Shipping calculated at checkout</p>
+            <div id="cart-actions">
+                <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
+            </div>
+            
+            <!-- Billing Form -->
+            <div id="billing-form" class="hidden flex-col gap-4 animate-[fadeIn_0.5s_cubic-bezier(0.2,0.8,0.2,1)] relative">
+                <!-- SUCCESS OVERLAY -->
+                <div id="order-success-overlay" class="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 rounded-xl flex flex-col items-center justify-center text-center p-6 hidden">
+                    <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 text-green-500 animate-pulse">
+                        <i data-lucide="check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-playfair text-avira-text mb-2">Order Sent!</h3>
+                    <p class="text-xs text-avira-textMuted">Thank you. We will contact you shortly.</p>
                 </div>
-                
-                <p class="text-[10px] text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
 
-                <div id="cart-actions" class="shrink-0">
-                    <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-avira-gold mb-2">Checkout Details</h3>
+                <input type="text" id="bill-name" placeholder="Full Name" class="input-glass text-sm">
+                <input type="email" id="bill-email" placeholder="Email" class="input-glass text-sm">
+                <input type="text" id="bill-address" placeholder="Shipping Address" class="input-glass text-sm">
+                <div class="mt-2">
+                    <p class="text-[10px] uppercase tracking-widest text-avira-textMuted mb-2">Payment Method</p>
+                    <div class="flex gap-4">
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="payment" value="UPI" class="hidden peer" checked>
+                            <div class="glass-panel p-3 rounded-xl text-center text-xs font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">UPI</div>
+                        </label>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="payment" value="COD" class="hidden peer">
+                            <div class="glass-panel p-3 rounded-xl text-center text-xs font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">Cash on Delivery</div>
+                        </label>
+                    </div>
                 </div>
-                
-                <!-- Billing Form inside scrollable area -->
-                <div id="billing-form" class="hidden flex-col gap-4 animate-[fadeIn_0.5s_cubic-bezier(0.2,0.8,0.2,1)] relative pb-4">
-                    <!-- SUCCESS OVERLAY -->
-                    <div id="order-success-overlay" class="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 rounded-xl flex flex-col items-center justify-center text-center p-6 hidden">
-                        <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mb-4 text-green-500 animate-pulse">
-                            <i data-lucide="check" class="w-8 h-8"></i>
-                        </div>
-                        <h3 class="text-xl font-playfair text-avira-text mb-2">Order Sent!</h3>
-                        <p class="text-xs text-avira-textMuted">Thank you. We will contact you shortly.</p>
-                    </div>
-
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-avira-gold mb-2">Checkout Details</h3>
-                    <input type="text" id="bill-name" placeholder="Full Name" class="input-glass text-sm">
-                    <input type="email" id="bill-email" placeholder="Email" class="input-glass text-sm">
-                    <input type="text" id="bill-address" placeholder="Shipping Address" class="input-glass text-sm">
-                    <div class="mt-2">
-                        <p class="text-[10px] uppercase tracking-widest text-avira-textMuted mb-2">Payment Method</p>
-                        <div class="flex gap-4">
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="payment" value="UPI" class="hidden peer" checked>
-                                <div class="glass-panel p-3 rounded-xl text-center text-xs font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">UPI</div>
-                            </label>
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="payment" value="COD" class="hidden peer">
-                                <div class="glass-panel p-3 rounded-xl text-center text-xs font-bold uppercase tracking-widest text-avira-textMuted peer-checked:text-avira-text peer-checked:border-avira-gold peer-checked:bg-avira-gold/10 transition-all border border-transparent">Cash on Delivery</div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex gap-4 mt-4">
-                        <button onclick="hideCheckout()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors duration-300">Back</button>
-                        <button onclick="submitOrder()" id="btn-submit-order" class="flex-grow btn-liquid bg-avira-gold py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95">
-                            <span>Place Request</span>
-                        </button>
-                    </div>
+                <div class="flex gap-4 mt-4">
+                    <button onclick="hideCheckout()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors duration-300">Back</button>
+                    <button onclick="submitOrder()" id="btn-submit-order" class="flex-grow btn-liquid bg-avira-gold py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95">
+                        <span>Place Request</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -489,7 +499,19 @@
     
     <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 backdrop-blur-md mt-0">
         <div class="max-w-6xl mx-auto text-center">
-            <i data-lucide="gem" class="w-12 h-12 text-avira-text mx-auto mb-6 animate-pulse-slow"></i>
+            <!-- Footer Logo -->
+            <svg class="w-16 h-16 text-avira-text mx-auto mb-6 animate-pulse-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/>
+                <circle cx="50" cy="50" r="12" />
+                <path d="M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38" />
+                <path d="M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62" />
+                <path d="M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50" />
+                <path d="M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50" />
+                <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
+                <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
+                <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
+                <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
+            </svg>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
                 <div>
@@ -768,6 +790,11 @@ Total Amount: ₹${finalTotal}
                     </div>`;
             });
             lucide.createIcons();
+            
+            // Initialize "Visible by default, hidden by JS" strategy
+            const revealElements = document.querySelectorAll('.reveal-node');
+            revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
+            
             setupScrollReveal();
 
             document.addEventListener('mousemove', e => {
@@ -812,7 +839,13 @@ Total Amount: ₹${finalTotal}
 
         function setupScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }});
+                entries.forEach(entry => { 
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.remove('js-reveal-hidden');
+                        entry.target.classList.add('is-visible'); 
+                        observer.unobserve(entry.target); 
+                    }
+                });
             }, { threshold: 0.1 });
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
