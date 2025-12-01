@@ -20,8 +20,8 @@
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Generic Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3'%3E%3Ctext y='.9em' font-size='90'%3E✨%3C/text%3E%3C/svg%3E">
+    <!-- Exact Logo Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='50' cy='50' r='5' fill='%23A38038' stroke='none'/%3E%3Ccircle cx='50' cy='50' r='12' /%3E%3Cpath d='M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38' /%3E%3Cpath d='M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62' /%3E%3Cpath d='M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50' /%3E%3Cpath d='M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50' /%3E%3Cpath d='M50 32 Q 45 22 50 12 Q 55 22 50 32' stroke-width='2' fill='none'/%3E%3Cpath d='M50 68 Q 45 78 50 88 Q 55 78 50 68' stroke-width='2' fill='none'/%3E%3Cpath d='M68 50 Q 78 45 88 50 Q 78 55 68 50' stroke-width='2' fill='none'/%3E%3Cpath d='M32 50 Q 22 45 12 50 Q 22 55 32 50' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 
     <script>
         tailwind.config = {
@@ -176,12 +176,6 @@
         .btn-liquid:hover { border-color: var(--color-gold); color: var(--bg-canvas); transform: scale(1.02); }
         .btn-liquid:active { transform: scale(0.95); }
         .btn-liquid:hover::before { opacity: 1; transform: scaleX(1); }
-        
-        .btn-liquid:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
 
         /* Ambient Background */
         .ambient-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; will-change: transform; }
@@ -238,7 +232,19 @@
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
                 <a href="#" class="group flex items-center gap-2 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
-                    <!-- LOGO TEXT -->
+                    <!-- LOGO SVG -->
+                    <svg class="w-8 h-8 text-avira-text" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/>
+                        <circle cx="50" cy="50" r="12" />
+                        <path d="M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38" />
+                        <path d="M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62" />
+                        <path d="M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50" />
+                        <path d="M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50" />
+                        <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
+                        <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
+                        <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
+                        <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
+                    </svg>
                     <span class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
                 </a>
             </div>
@@ -258,7 +264,8 @@
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-[100] transform -translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) glass-menu flex flex-col justify-center items-center space-y-8">
+    <!-- Added overflow-y-auto to allow scrolling on short screens -->
+    <div id="mobile-menu" class="fixed inset-0 z-[100] transform -translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) glass-menu flex flex-col justify-center items-center space-y-8 overflow-y-auto">
         <button onclick="toggleMobileMenu()" class="absolute top-8 right-8 p-4 rounded-full border border-avira-textMuted text-avira-text hover:rotate-90 transition-transform duration-500 z-[101] cursor-pointer bg-transparent focus:outline-none active:scale-90" aria-label="Close Menu">
             <i data-lucide="x" class="w-8 h-8"></i>
         </button>
@@ -273,6 +280,19 @@
     <section class="min-h-screen flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
         <div class="z-10 max-w-5xl mx-auto perspective-1000">
             <div class="blur-enter" style="animation-delay: 0.1s;">
+                <!-- HERO LOGO -->
+                <svg class="w-24 h-24 text-avira-text mx-auto mb-8 animate-pulse-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
+                    <circle cx="50" cy="50" r="16" />
+                    <path d="M50 34 Q70 30 50 5 Q30 30 50 34" />
+                    <path d="M50 66 Q70 70 50 95 Q30 70 50 66" />
+                    <path d="M66 50 Q70 30 95 50 Q70 70 66 50" />
+                    <path d="M34 50 Q30 30 5 50 Q30 70 34 50" />
+                    <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
+                    <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
+                    <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
+                    <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
+                </svg>
                 <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
                     Editorial Luxury
                 </span>
@@ -381,17 +401,20 @@
         </div>
     </section>
 
-    <!-- Cart Modal -->
+    <!-- Cart Modal (Fixed Scrolling) -->
     <div id="cart-modal" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
-        <div id="cart-content" class="glass-panel w-full sm:max-w-md h-[85vh] sm:h-auto sm:rounded-[2rem] rounded-t-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
+        <div id="cart-content" class="glass-panel w-full sm:max-w-md max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
+            
+            <!-- Header (Fixed) -->
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
                 <h2 class="text-2xl font-playfair text-avira-text">Your Selection</h2>
                 <button onclick="closeCart()" class="text-avira-textMuted hover:text-avira-text transition-colors duration-300">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <!-- Scrollable content area with max-height to prevent overflow -->
+            
+            <!-- Scrollable Body -->
             <div class="flex-grow overflow-y-auto flex flex-col">
                 <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
                 
@@ -405,7 +428,7 @@
                     <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
                 </div>
                 
-                <!-- Billing Form inside scrollable area -->
+                <!-- Billing Form (Inside Scrollable Area) -->
                 <div id="billing-form" class="hidden flex-col gap-4 animate-[fadeIn_0.5s_cubic-bezier(0.2,0.8,0.2,1)] relative pb-4">
                     <!-- SUCCESS OVERLAY -->
                     <div id="order-success-overlay" class="absolute inset-0 z-50 bg-white/95 dark:bg-black/95 rounded-xl flex flex-col items-center justify-center text-center p-6 hidden">
@@ -444,18 +467,19 @@
         </div>
     </div>
 
-    <!-- Scent Detail Modal -->
+    <!-- Scent Detail Modal (Scrollable Text) -->
     <div id="scent-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-700 ease-in-out opacity-0" id="scent-backdrop"></div>
-        <div id="scent-content" class="glass-panel w-full max-w-5xl rounded-[3rem] overflow-hidden relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row h-auto max-h-[90vh]">
+        <div id="scent-content" class="glass-panel w-full max-w-5xl max-h-[90vh] rounded-[3rem] overflow-hidden relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
             <button onclick="closeScentDetails()" class="absolute top-6 right-6 z-20 bg-white/20 hover:bg-white/40 p-3 rounded-full text-white backdrop-blur-xl transition-all border border-white/20 shadow-lg hover:rotate-90">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="w-full md:w-1/2 h-64 md:h-auto relative bg-black/10">
+            <div class="w-full md:w-1/2 h-64 md:h-auto relative bg-black/10 shrink-0">
                 <img id="modal-image" src="" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent md:bg-gradient-to-r"></div>
             </div>
-            <div class="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center overflow-y-auto bg-avira-text/5 backdrop-blur-xl">
+            <!-- Added overflow-y-auto here for scrollable text -->
+            <div class="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-avira-text/5 backdrop-blur-xl overflow-y-auto">
                 <div class="mb-auto">
                     <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold mb-4"></p>
                     <h2 id="modal-name" class="text-5xl md:text-6xl font-playfair text-avira-text mb-4"></h2>
@@ -467,7 +491,7 @@
                     </div>
                     <p id="modal-description" class="font-inter text-avira-textMuted leading-loose text-lg mb-8"></p>
                 </div>
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 mt-6">
                     <div class="flex items-center border border-avira-text/20 rounded-xl bg-avira-text/5">
                         <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(-1)">-</button>
                         <span id="modal-qty" class="font-inter text-sm font-bold w-4 text-center">1</span>
@@ -479,19 +503,30 @@
         </div>
     </div>
 
-    <!-- Quiz Modal -->
+    <!-- Quiz Modal (Scrollable) -->
     <div id="quiz-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-500 opacity-0" id="quiz-backdrop"></div>
-        <div id="quiz-content" class="glass-panel w-full max-w-2xl rounded-[2.5rem] p-8 md:p-12 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl">
+        <div id="quiz-content" class="glass-panel w-full max-w-2xl max-h-[85vh] rounded-[2rem] p-8 md:p-12 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
             <button onclick="closeQuiz()" class="absolute top-6 right-6 text-avira-textMuted hover:text-avira-text p-2 rounded-full hover:bg-avira-text/5 transition-colors z-20"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <div id="quiz-body" class="relative z-10 min-h-[400px] flex flex-col justify-center"></div>
+            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col justify-center overflow-y-auto"></div>
         </div>
     </div>
     
     <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 backdrop-blur-md mt-0">
         <div class="max-w-6xl mx-auto text-center">
-            <!-- Footer Logo (Generic Gem) -->
-            <i data-lucide="gem" class="w-12 h-12 text-avira-text mx-auto mb-6 animate-pulse-slow"></i>
+            <!-- Footer Logo -->
+            <svg class="w-16 h-16 text-avira-text mx-auto mb-6 animate-pulse-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/>
+                <circle cx="50" cy="50" r="12" />
+                <path d="M50 38 C 35 35 35 10 50 2 C 65 10 65 35 50 38" />
+                <path d="M50 62 C 35 65 35 90 50 98 C 65 90 65 65 50 62" />
+                <path d="M62 50 C 65 35 90 35 98 50 C 90 65 65 65 62 50" />
+                <path d="M38 50 C 35 35 10 35 2 50 C 10 65 35 65 38 50" />
+                <path d="M50 32 Q 45 22 50 12 Q 55 22 50 32" stroke-width="2" fill="none"/>
+                <path d="M50 68 Q 45 78 50 88 Q 55 78 50 68" stroke-width="2" fill="none"/>
+                <path d="M68 50 Q 78 45 88 50 Q 78 55 68 50" stroke-width="2" fill="none"/>
+                <path d="M32 50 Q 22 45 12 50 Q 22 55 32 50" stroke-width="2" fill="none"/>
+            </svg>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
                 <div>
@@ -652,7 +687,6 @@
         function showCheckout() {
             document.getElementById('cart-actions').style.display = 'none';
             document.getElementById('billing-form').style.display = 'flex';
-            // Ensure the billing form scrolls into view or is visible
             const billingForm = document.getElementById('billing-form');
             if (billingForm) billingForm.scrollIntoView({behavior: "smooth", block: "end"});
         }
@@ -770,11 +804,6 @@ Total Amount: ₹${finalTotal}
                     </div>`;
             });
             lucide.createIcons();
-            
-            // Initialize "Visible by default, hidden by JS" strategy
-            const revealElements = document.querySelectorAll('.reveal-node');
-            revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
-            
             setupScrollReveal();
 
             document.addEventListener('mousemove', e => {
@@ -819,13 +848,7 @@ Total Amount: ₹${finalTotal}
 
         function setupScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { 
-                    if (entry.isIntersecting) { 
-                        entry.target.classList.remove('js-reveal-hidden');
-                        entry.target.classList.add('is-visible'); 
-                        observer.unobserve(entry.target); 
-                    }
-                });
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }});
             }, { threshold: 0.1 });
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
