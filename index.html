@@ -266,9 +266,22 @@
             transform: scale(1);
         }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--color-text-muted); border-radius: 10px; opacity: 0.2; }
+        /* ---------------------------------------------------- */
+        /* HIDDEN SCROLLBARS (BUT SCROLLABLE)                   */
+        /* ---------------------------------------------------- */
+        
+        /* For Webkit (Chrome, Safari, Edge, Opera) */
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            background: transparent;
+        }
+        
+        /* For Firefox and IE/Edge (Legacy) */
+        * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE 10+ */
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-avira-gold selection:text-black">
