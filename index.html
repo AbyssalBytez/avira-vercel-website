@@ -238,6 +238,7 @@
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
                 <a href="#" class="group flex items-center gap-2 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
+                    <!-- LOGO TEXT -->
                     <span class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
                 </a>
             </div>
@@ -489,6 +490,7 @@
     
     <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 backdrop-blur-md mt-0">
         <div class="max-w-6xl mx-auto text-center">
+            <!-- Footer Logo (Generic Gem) -->
             <i data-lucide="gem" class="w-12 h-12 text-avira-text mx-auto mb-6 animate-pulse-slow"></i>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
@@ -768,6 +770,11 @@ Total Amount: ₹${finalTotal}
                     </div>`;
             });
             lucide.createIcons();
+            
+            // Initialize "Visible by default, hidden by JS" strategy
+            const revealElements = document.querySelectorAll('.reveal-node');
+            revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
+            
             setupScrollReveal();
 
             document.addEventListener('mousemove', e => {
@@ -812,7 +819,13 @@ Total Amount: ₹${finalTotal}
 
         function setupScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }});
+                entries.forEach(entry => { 
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.remove('js-reveal-hidden');
+                        entry.target.classList.add('is-visible'); 
+                        observer.unobserve(entry.target); 
+                    }
+                });
             }, { threshold: 0.1 });
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
