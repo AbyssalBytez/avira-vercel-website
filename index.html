@@ -50,6 +50,7 @@
                         'spin-slow': 'spin 3s linear infinite',
                         'blur-in': 'blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                     },
                     keyframes: {
                         float: {
@@ -69,6 +70,11 @@
                             '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
                             '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
                             '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        pop: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                            '100%': { transform: 'scale(1)' }
                         }
                     }
                 }
@@ -167,12 +173,14 @@
         .checkout-input:focus {
             border-color: var(--color-gold);
             background: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 0 0 1px var(--color-gold);
         }
         .checkout-input::placeholder {
             color: #666;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.1em;
+            font-weight: 500;
         }
         
         .checkout-label {
@@ -270,17 +278,15 @@
         /* HIDDEN SCROLLBARS (BUT SCROLLABLE)                   */
         /* ---------------------------------------------------- */
         
-        /* For Webkit (Chrome, Safari, Edge, Opera) */
         ::-webkit-scrollbar {
             width: 0px;
             height: 0px;
             background: transparent;
         }
         
-        /* For Firefox and IE/Edge (Legacy) */
         * {
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE 10+ */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
     </style>
 </head>
@@ -312,7 +318,7 @@
                 <div class="theme-toggle scale-90 md:scale-100" onclick="toggleTheme()" title="Switch Mode">
                     <div class="toggle-knob"></div>
                 </div>
-                <button onclick="openCart()" class="relative p-2 rounded-full hover:bg-avira-text/5 transition-colors duration-300 focus:outline-none active:scale-90 transition-transform" aria-label="Cart">
+                <button onclick="openCart()" id="main-cart-btn" class="relative p-2 rounded-full hover:bg-avira-text/5 transition-colors duration-300 focus:outline-none active:scale-90 transition-transform" aria-label="Cart">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-avira-text"></i>
                     <span id="cart-count" class="cart-badge">0</span>
                 </button>
@@ -452,7 +458,7 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
         <div id="cart-content" class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
-                <h2 class="text-3xl font-playfair text-avira-text" id="cart-title">Your Selection</h2>
+                <h2 class="text-3xl font-playfair text-avira-text transition-all duration-300" id="cart-title">Your Selection</h2>
                 <button onclick="closeCart()" class="text-avira-textMuted hover:text-avira-text transition-colors duration-300">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
@@ -474,8 +480,8 @@
                 </div>
             </div>
 
-            <!-- Checkout Form View (Dark Themed as per Request) -->
-            <div id="billing-form" class="hidden flex-col h-full relative transition-all duration-500 bg-[#050505] absolute inset-0 rounded-[2rem] p-8 z-20 overflow-hidden">
+            <!-- Checkout Form View -->
+            <div id="billing-form" class="hidden flex-col h-full relative transition-all duration-500 bg-[#050505] absolute inset-0 rounded-[2rem] p-8 z-20 overflow-hidden opacity-0">
                 
                 <div class="flex justify-between items-center mb-6 pb-2 border-b border-[#333]">
                     <h2 class="text-3xl font-playfair text-[#f5f5f7]">Checkout</h2>
@@ -666,9 +672,7 @@
             { name: "Orchid", price: 499, feel: "Velvety, Luxurious", notes: "Black Orchid, Velvet Woods, Vanilla Pod", description: "A fragrance of ultimate luxury and opulence. Black Orchid draped in rich, velvety woods and dark vanilla pod." }
         ];
         
-        // Helper: Totals Calculation
         function calculateTotals() {
-            // FIX: If cart is empty, return ALL ZEROS immediately.
             if (cart.length === 0) {
                 return { totalItems: 0, subtotal: 0, discount: 0, deliveryFee: 0, finalTotal: 0 };
             }
@@ -681,7 +685,6 @@
             return { totalItems, subtotal, discount, deliveryFee, finalTotal };
         }
 
-        // Cart Functions
         function changeModalQty(delta) {
             modalQty += delta;
             if (modalQty < 1) modalQty = 1;
@@ -693,11 +696,14 @@
             const existingItem = cart.find(item => item.name === currentScent.name);
             if (existingItem) existingItem.qty += modalQty;
             else cart.push({ ...currentScent, qty: modalQty });
+            
+            const cartBtn = document.getElementById('main-cart-btn');
+            cartBtn.classList.remove('animate-pop');
+            void cartBtn.offsetWidth; // trigger reflow
+            cartBtn.classList.add('animate-pop');
+            
             updateCartUI();
             closeScentDetails();
-            const btn = document.querySelector('[onclick="openCart()"]');
-            btn.classList.add('scale-125');
-            setTimeout(() => btn.classList.remove('scale-125'), 200);
         }
 
         function changeCartQty(index, delta) {
@@ -720,12 +726,10 @@
             itemsEl.innerHTML = '';
             if (cart.length === 0) {
                 itemsEl.innerHTML = '<p class="text-center text-avira-textMuted italic py-10">Your collection is empty.</p>';
-                // FIX: Strictly disable button and gray it out
                 checkoutBtn.disabled = true;
                 checkoutBtn.style.opacity = '0.3'; 
                 checkoutBtn.style.cursor = 'not-allowed';
                 
-                // Show 0.00 for totals if empty
                 summaryEl.innerHTML = `<div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">₹0.00</span></div>`;
             } else {
                 checkoutBtn.disabled = false;
@@ -758,34 +762,46 @@
             }
         }
 
-        // Checkout Logic
         function showCheckout() {
-            // FIX: Double check to prevent opening empty checkout via console or glitches
             if(cart.length === 0) return; 
 
             const cartView = document.getElementById('cart-view');
             const billingForm = document.getElementById('billing-form');
             const title = document.getElementById('cart-title');
 
-            // Force dark theme on checkout by ensuring wrapper is visible
-            cartView.style.display = 'none';
-            billingForm.classList.remove('hidden');
-            billingForm.classList.add('flex');
+            cartView.style.opacity = '0';
             
-            // Recalculate to ensure display is correct
-            const { finalTotal } = calculateTotals();
-            document.getElementById('checkout-total-display').innerText = `₹${finalTotal}`;
+            setTimeout(() => {
+                cartView.style.display = 'none';
+                billingForm.classList.remove('hidden');
+                billingForm.classList.add('flex');
+                
+                void billingForm.offsetWidth;
+                
+                billingForm.style.opacity = '1';
+                
+                const { finalTotal } = calculateTotals();
+                document.getElementById('checkout-total-display').innerText = `₹${finalTotal}`;
+            }, 300);
             
             lucide.createIcons();
         }
+        
         function hideCheckout() {
             const cartView = document.getElementById('cart-view');
             const billingForm = document.getElementById('billing-form');
             const title = document.getElementById('cart-title');
 
-            cartView.style.display = 'flex';
-            billingForm.classList.remove('flex');
-            billingForm.classList.add('hidden');
+            billingForm.style.opacity = '0';
+            
+            setTimeout(() => {
+                billingForm.classList.remove('flex');
+                billingForm.classList.add('hidden');
+                
+                cartView.style.display = 'flex';
+                void cartView.offsetWidth;
+                cartView.style.opacity = '1';
+            }, 300);
         }
 
         function submitOrder() {
@@ -874,12 +890,11 @@ Total Amount: ₹${finalTotal}
             });
         }
 
-        // Modals & UI
         function openCart() {
             const modal = document.getElementById('cart-modal');
             const content = document.getElementById('cart-content');
             const backdrop = document.getElementById('cart-backdrop');
-            hideCheckout(); // Ensure we start at list view
+            hideCheckout(); 
             modal.classList.remove('hidden'); modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
             requestAnimationFrame(() => { backdrop.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); });
@@ -896,7 +911,6 @@ Total Amount: ₹${finalTotal}
         function getImageUrl(name) { return imageMap[name] || `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
         function handleImageError(img, name) { img.onerror = null; img.src = `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
 
-        // Init
         document.addEventListener('DOMContentLoaded', () => {
             if (window.emailjs) {
                 try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e) { console.error("EmailJS Init Failed", e); }
@@ -943,11 +957,9 @@ Total Amount: ₹${finalTotal}
                 });
             });
             
-            // Initial UI Update to ensure empty state logic runs
             updateCartUI();
         });
 
-        // Toggle Menu
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const isOpen = !menu.classList.contains('-translate-y-full');
@@ -989,7 +1001,6 @@ Total Amount: ₹${finalTotal}
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
-        // Scent Details
         function showScentDetails(name) {
             currentScent = perfumesData.find(p => p.name === name);
             if (!currentScent) return;
@@ -1018,7 +1029,6 @@ Total Amount: ₹${finalTotal}
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
         }
 
-        // Quiz
         function openQuiz() {
             quizState = { step: 0, scores: {}, selected: Array(quizQuestions.length).fill(null) };
             const modal = document.getElementById('quiz-modal');
