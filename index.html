@@ -21,7 +21,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Generic Favicon -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3'%3E%3Ctext y='.9em' font-size='90'%3E✨%3C/text%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23A38038' stroke-width='3'%3E%3Ctext y='.9em' font-size='90'%3E?%3C/text%3E%3C/svg%3E">
 
     <script>
         tailwind.config = {
@@ -51,6 +51,8 @@
                         'blur-in': 'blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                        'toast-in': 'toastIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                        'toast-out': 'toastOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
                     },
                     keyframes: {
                         float: {
@@ -75,6 +77,14 @@
                             '0%': { transform: 'scale(1)' },
                             '50%': { transform: 'scale(1.2)' },
                             '100%': { transform: 'scale(1)' }
+                        },
+                        toastIn: {
+                            '0%': { transform: 'translateY(-100%)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 }
+                        },
+                        toastOut: {
+                            '0%': { transform: 'translateY(0)', opacity: 1 },
+                            '100%': { transform: 'translateY(-20px)', opacity: 0 }
                         }
                     }
                 }
@@ -292,6 +302,9 @@
 </head>
 <body class="antialiased selection:bg-avira-gold selection:text-black">
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-24 right-0 left-0 z-[110] pointer-events-none flex flex-col items-center gap-2 px-4" aria-live="polite"></div>
+
     <!-- Ambient Liquid Background -->
     <div class="ambient-layer">
         <div class="orb orb-1"></div>
@@ -446,7 +459,7 @@
             </div>
             
             <div class="text-center reveal-node">
-                 <p class="text-3xl md:text-5xl font-playfair text-avira-text italic leading-tight">"We don’t sell perfumes, <br>we sell personality."</p>
+                 <p class="text-3xl md:text-5xl font-playfair text-avira-text italic leading-tight">"We don�t sell perfumes, <br>we sell personality."</p>
                  <div class="w-12 h-px bg-avira-gold mx-auto my-8"></div>
                  <p class="text-sm font-bold uppercase tracking-[0.3em] text-avira-gold">Avira</p>
             </div>
@@ -470,7 +483,7 @@
                     <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
                     
                     <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
-                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">₹0.00</span></div>
+                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">?0.00</span></div>
                     </div>
                     
                     <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
@@ -485,7 +498,7 @@
                 
                 <div class="flex justify-between items-center mb-6 pb-2 border-b border-[#333]">
                     <h2 class="text-3xl font-playfair text-[#f5f5f7]">Checkout</h2>
-                    <button onclick="hideCheckout()" class="text-[#6e6e73] hover:text-[#f5f5f7]"><i data-lucide="x" class="w-6 h-6"></i></button>
+                    <button onclick="closeCart()" class="text-[#6e6e73] hover:text-[#f5f5f7]"><i data-lucide="x" class="w-6 h-6"></i></button>
                 </div>
 
                 <div id="order-success-overlay" class="absolute inset-0 z-50 bg-black/95 flex flex-col items-center justify-center text-center p-6 hidden">
@@ -501,12 +514,12 @@
                     <div class="checkout-box mb-6 flex justify-between items-center">
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-[#888] mb-1">Total Amount</p>
-                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">₹0.00</p>
+                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">?0.00</p>
                         </div>
                         <button onclick="hideCheckout()" class="text-xs text-avira-gold hover:text-white hover:underline transition-colors">Edit Cart</button>
                     </div>
 
-                    <form onsubmit="event.preventDefault();" class="space-y-6">
+                    <form onsubmit="event.preventDefault(); submitOrder();" class="space-y-6">
                         
                         <div>
                             <label class="checkout-label"><i data-lucide="user" class="w-3 h-3 inline mr-1"></i> Contact Information</label>
@@ -550,6 +563,9 @@
                 </div>
 
                 <div class="flex gap-4 mt-auto pt-4 border-t border-[#333]">
+                    <button onclick="hideCheckout()" class="px-6 py-4 rounded-xl border border-avira-text/20 text-[#6e6e73] hover:text-[#f5f5f7] hover:border-[#f5f5f7] transition-all uppercase tracking-widest text-xs font-bold">
+                        Back
+                    </button>
                     <button type="button" onclick="submitOrder()" id="btn-submit-order" class="w-full btn-liquid bg-avira-gold py-4 rounded-xl text-sm font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-avira-gold/10 relative overflow-hidden">
                         <span id="pay-btn-text">Confirm Order</span>
                     </button>
@@ -649,16 +665,18 @@
         const EMAILJS_PUBLIC_KEY = "6FcTy6BrBiOrvXvOP";
 
         const imageMap = {
-            "Cherry Blossom": "images/avira_.official_14040902_224003361.jpg",
-            "Cafe Date": "images/avira_.official_14040902_223924432.jpg",
-            "Mystic Santale": "images/avira_.official_14040902_223920104.jpg",
-            "Floral Specter": "images/avira_.official_14040902_223922400.jpg",
-            "After Hour": "images/avira_.official_14040904_155321718.jpg",
-            "Glacial Getaway": "images/avira_.official_14040904_154216336.jpg",
-            "Orion Hunt": "images/avira_.official_14040904_154223814.jpg",
-            "Midnight Swim": "images/avira_.official_14040904_154226872.jpg",
-            "Amber Malt": "images/avira_.official_14040904_155321718.jpg",
-            "Orchid": "images/avira_.official_14040904_154239914.jpg",
+            "Cherry Blossom": "images/cherry_blossom.jpg",
+            "Cafe Date": "images/cafe_date.jpg",
+            "Mystic Santale": "images/mystic_santale.jpg",
+            "Floral Specter": "images/floral_specter.jpg",
+            "After Hour": "images/after_hour.jpg",
+            "Glacial Getaway": "images/glacial_gataway.jpg",
+            "Orion Hunt": "images/orion_hunt.jpg",
+            "Midnight Swim": "images/midnight_swim.jpg",
+            "Amber Creme": "images/amber_creme.jpg",
+            "Rebel Night": "images/rebel_night.jpg",
+            "Crystal Bloom": "images/crystal_bloom.jpg",
+            "Avira Signature": "images/avira_signature.jpg"
         };
 
         const perfumesData = [
@@ -670,8 +688,10 @@
             { name: "Glacial Getaway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
             { name: "Orion Hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
             { name: "Midnight Swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
-            { name: "Amber Malt", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
-            { name: "Orchid", price: 499, feel: "Velvety, Luxurious", notes: "Black Orchid, Velvet Woods, Vanilla Pod", description: "A fragrance of ultimate luxury and opulence. Black Orchid draped in rich, velvety woods and dark vanilla pod." }
+            { name: "Amber Creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
+            { name: "Rebel Night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood." },
+            { name: "Crystal Bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk." },
+            { name: "Avira Signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark." }
         ];
         
         function calculateTotals() {
@@ -732,7 +752,7 @@
                 checkoutBtn.style.opacity = '0.3'; 
                 checkoutBtn.style.cursor = 'not-allowed';
                 
-                summaryEl.innerHTML = `<div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">₹0.00</span></div>`;
+                summaryEl.innerHTML = `<div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">?0.00</span></div>`;
             } else {
                 checkoutBtn.disabled = false;
                 checkoutBtn.style.opacity = '1';
@@ -743,7 +763,7 @@
                         <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
                             <div class="flex items-center gap-3">
                                 <img src="${getImageUrl(item.name)}" class="w-12 h-12 rounded-lg object-cover">
-                                <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">₹${item.price} x ${item.qty}</p></div>
+                                <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">?${item.price} x ${item.qty}</p></div>
                             </div>
                             <div class="flex items-center gap-2">
                                 <button onclick="changeCartQty(${idx}, -1)" class="qty-btn text-xs">-</button>
@@ -755,11 +775,11 @@
                 
                 let summaryHTML = '';
                 if (discount > 0) {
-                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>₹${subtotal}</span></div>
-                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[8px] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-₹${discount}</span></div>`;
+                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>?${subtotal}</span></div>
+                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[8px] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-?${discount}</span></div>`;
                 }
-                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">₹69</span> ₹${deliveryFee}</span></div>`;
-                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>₹${finalTotal}</span></div>`;
+                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">?69</span> ?${deliveryFee}</span></div>`;
+                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>?${finalTotal}</span></div>`;
                 summaryEl.innerHTML = summaryHTML;
             }
         }
@@ -783,7 +803,7 @@
                 billingForm.style.opacity = '1';
                 
                 const { finalTotal } = calculateTotals();
-                document.getElementById('checkout-total-display').innerText = `₹${finalTotal}`;
+                document.getElementById('checkout-total-display').innerText = `?${finalTotal}`;
             }, 300);
             
             lucide.createIcons();
@@ -806,6 +826,29 @@
             }, 300);
         }
 
+        // --- Toast System ---
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // Icon based on type
+            const icon = type === 'success' 
+                ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><polyline points="20 6 9 17 4 12"></polyline></svg>' 
+                : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+
+            const bgClass = type === 'success' ? 'bg-white text-black border-green-500/20' : 'bg-white text-black border-red-500/20';
+
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border shadow-xl backdrop-blur-md animate-toast-in pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `${icon}<span class="text-xs font-bold uppercase tracking-wide">${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toast-out 0.5s forwards';
+                toast.addEventListener('animationend', () => toast.remove());
+            }, 3000);
+        }
+
         function submitOrder() {
             const name = document.getElementById('bill-name').value.trim();
             const address = document.getElementById('bill-address').value.trim();
@@ -824,6 +867,9 @@
                 if(!name) document.getElementById('bill-name').style.borderColor = '#ef4444';
                 if(!email) document.getElementById('bill-email').style.borderColor = '#ef4444';
                 if(!address) document.getElementById('bill-address').style.borderColor = '#ef4444';
+                
+                showToast("Please fill all fields", "error");
+
                 setTimeout(() => {
                     document.querySelectorAll('.checkout-input').forEach(el => el.style.borderColor = 'rgba(255, 255, 255, 0.1)');
                 }, 2000);
@@ -841,7 +887,7 @@
 
             const { subtotal, discount, deliveryFee, finalTotal } = calculateTotals();
             let paymentMsg = paymentOption === "UPI" ? "UPI" : "Cash on Delivery";
-            let orderItems = cart.map(i => `${i.qty}x ${i.name} (₹${i.price})`).join('\n');
+            let orderItems = cart.map(i => `${i.qty}x ${i.name} (?${i.price})`).join('\n');
             
             let generatedOrderBody = `
 Customer Name: ${name}
@@ -852,14 +898,14 @@ Delivery Address: ${address}
 Items Ordered:
 ${orderItems}
 
-Subtotal: ₹${subtotal}
-Discount: -₹${discount}
-Delivery Fee: ₹${deliveryFee}
-Total Amount: ₹${finalTotal}
+Subtotal: ?${subtotal}
+Discount: -?${discount}
+Delivery Fee: ?${deliveryFee}
+Total Amount: ?${finalTotal}
             `;
 
             if (typeof emailjs === 'undefined') {
-                alert("Error: Email service not loaded. Please check your internet connection.");
+                showToast("Email service unavailable", "error");
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
                 return;
@@ -886,7 +932,7 @@ Total Amount: ₹${finalTotal}
                 }, 2500);
             }, (error) => {
                 console.error("EmailJS Error:", error);
-                alert('Failed to send order. Please try again.');
+                showToast("Failed to place order", "error");
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
             });
@@ -1008,7 +1054,7 @@ Total Amount: ₹${finalTotal}
             if (!currentScent) return;
             modalQty = 1; document.getElementById('modal-qty').innerText = modalQty;
             document.getElementById('modal-name').textContent = currentScent.name;
-            document.getElementById('modal-price').textContent = '₹' + currentScent.price;
+            document.getElementById('modal-price').textContent = '?' + currentScent.price;
             document.getElementById('modal-feel').textContent = currentScent.feel;
             document.getElementById('modal-notes').textContent = currentScent.notes;
             document.getElementById('modal-description').textContent = currentScent.description;
@@ -1056,7 +1102,7 @@ Total Amount: ₹${finalTotal}
         function renderQuiz() {
             const q = quizQuestions[quizState.step];
             const currentSelected = quizState.selected[quizState.step];
-            const html = `<div class="animate-[fadeIn_0.6s_ease-out]"><p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${quizState.step + 1} / ${quizQuestions.length}</p><h3 class="text-3xl md:text-4xl font-playfair text-avira-text text-center mb-10 leading-tight">${q.question}</h3><div class="space-y-4 mb-10">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${quizState.step}, ${idx})" class="w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${currentSelected === idx ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/5 border-avira-text/5 text-avira-textMuted hover:bg-avira-text/10 hover:border-avira-text/20'}"><span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>${currentSelected === idx ? '<span class="text-black font-bold">●</span>' : ''}</button>`).join('')}</div><div class="flex justify-between items-center"><button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${quizState.step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button><button onclick="nextStep()" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${currentSelected !== null ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/10 text-avira-text/30 cursor-not-allowed border-avira-text/5'}">${quizState.step === quizQuestions.length - 1 ? 'Reveal' : 'Next'}</button></div></div>`;
+            const html = `<div class="animate-[fadeIn_0.6s_ease-out]"><p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${quizState.step + 1} / ${quizQuestions.length}</p><h3 class="text-3xl md:text-4xl font-playfair text-avira-text text-center mb-10 leading-tight">${q.question}</h3><div class="space-y-4 mb-10">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${quizState.step}, ${idx})" class="w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${currentSelected === idx ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/5 border-avira-text/5 text-avira-textMuted hover:bg-avira-text/10 hover:border-avira-text/20'}"><span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>${currentSelected === idx ? '<span class="text-black font-bold">?</span>' : ''}</button>`).join('')}</div><div class="flex justify-between items-center"><button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${quizState.step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button><button onclick="nextStep()" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${currentSelected !== null ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/10 text-avira-text/30 cursor-not-allowed border-avira-text/5'}">${quizState.step === quizQuestions.length - 1 ? 'Reveal' : 'Next'}</button></div></div>`;
             document.getElementById('quiz-body').innerHTML = html;
         }
         function calculateResult() {
@@ -1085,13 +1131,13 @@ Total Amount: ₹${finalTotal}
         });
 
         const quizQuestions = [
-            { id: 1, question: "What time of day defines your energy?", options: [ { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 2, "Cherry Blossom": 2 } }, { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 2, "Floral Specter": 1 } }, { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 2, "Amber Malt": 1 } }, { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Midnight Swim": 2, "Orchid": 1 } } ] },
-            { id: 2, question: "Your ideal escape looks like...", options: [ { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 2, "Mystic Santale": 1 } }, { text: "A vibrant, metropolitan cafe.", score: { "Cafe Date": 2, "Orion Hunt": 1 } }, { text: "An elegant, dimly lit cocktail bar.", score: { "After Hour": 2, "Amber Malt": 1 } }, { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 2, "Floral Specter": 1 } } ] },
-            { id: 3, question: "Which texture appeals most to you?", options: [ { text: "Crisp, white linen.", score: { "Cherry Blossom": 2, "Glacial Getaway": 1 } }, { text: "Rich, aged suede or leather.", score: { "Cafe Date": 1, "Orion Hunt": 2 } }, { text: "Heavy, dark velvet.", score: { "Orchid": 2, "After Hour": 1 } }, { text: "Sheer, flowing silk.", score: { "Floral Specter": 2, "Midnight Swim": 1 } } ] },
-            { id: 4, question: "Which scent note grounds you?", options: [ { text: "Fresh, aromatic spices.", score: { "Orion Hunt": 2, "Mystic Santale": 1 } }, { text: "Sweet, baked goods/vanilla.", score: { "Cafe Date": 1, "Amber Malt": 2 } }, { text: "Clean, oceanic air and salt.", score: { "Midnight Swim": 2, "Glacial Getaway": 1 } }, { text: "Deep, creamy woods.", score: { "Mystic Santale": 2, "Orchid": 1 } } ] },
-            { id: 5, question: "Ideally, a perfume should...", options: [ { text: "Whisper politely.", score: { "Cherry Blossom": 3, "Glacial Getaway": 2 } }, { text: "Announce my arrival.", score: { "Orion Hunt": 2, "Orchid": 2, "After Hour": 1 } }, { text: "Comfort me like a hug.", score: { "Amber Malt": 3, "Cafe Date": 2 } }, { text: "Intrigue those close to me.", score: { "Mystic Santale": 2, "Midnight Swim": 2, "Floral Specter": 2 } } ] },
-            { id: 6, question: "Pick a material:", options: [ { text: "Cool Marble.", score: { "Floral Specter": 2, "Glacial Getaway": 2 } }, { text: "Warm Velvet.", score: { "Orchid": 2, "Amber Malt": 2 } }, { text: "Worn Leather.", score: { "Cafe Date": 2, "Orion Hunt": 2 } }, { text: "Fresh Cotton.", score: { "Cherry Blossom": 2, "Midnight Swim": 2 } } ] },
-            { id: 7, question: "Pick a floral inspiration:", options: [ { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3 } }, { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }, { text: "Exotic, dark, mysterious blooms.", score: { "Orchid": 2, "After Hour": 1 } } ] }
+            { id: 1, question: "What time of day defines your energy?", options: [ { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 2, "Cherry Blossom": 2 } }, { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 2, "Floral Specter": 1 } }, { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 2, "Amber Creme": 1 } }, { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Midnight Swim": 2, "Rebel Night": 1 } } ] },
+            { id: 2, question: "Your ideal escape looks like...", options: [ { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 2, "Mystic Santale": 1 } }, { text: "A vibrant, metropolitan cafe.", score: { "Cafe Date": 2, "Orion Hunt": 1 } }, { text: "An elegant, dimly lit cocktail bar.", score: { "After Hour": 2, "Amber Creme": 1 } }, { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 2, "Floral Specter": 1 } } ] },
+            { id: 3, question: "Which texture appeals most to you?", options: [ { text: "Crisp, white linen.", score: { "Cherry Blossom": 2, "Glacial Getaway": 1 } }, { text: "Rich, aged suede or leather.", score: { "Cafe Date": 1, "Orion Hunt": 2 } }, { text: "Heavy, dark velvet.", score: { "Rebel Night": 2, "After Hour": 1 } }, { text: "Sheer, flowing silk.", score: { "Floral Specter": 2, "Midnight Swim": 1 } } ] },
+            { id: 4, question: "Which scent note grounds you?", options: [ { text: "Fresh, aromatic spices.", score: { "Orion Hunt": 2, "Mystic Santale": 1 } }, { text: "Sweet, baked goods/vanilla.", score: { "Cafe Date": 1, "Amber Creme": 2 } }, { text: "Clean, oceanic air and salt.", score: { "Midnight Swim": 2, "Glacial Getaway": 1 } }, { text: "Deep, creamy woods.", score: { "Mystic Santale": 2, "Rebel Night": 1 } } ] },
+            { id: 5, question: "Ideally, a perfume should...", options: [ { text: "Whisper politely.", score: { "Cherry Blossom": 3, "Glacial Getaway": 2 } }, { text: "Announce my arrival.", score: { "Orion Hunt": 2, "Rebel Night": 2, "After Hour": 1 } }, { text: "Comfort me like a hug.", score: { "Amber Creme": 3, "Cafe Date": 2 } }, { text: "Intrigue those close to me.", score: { "Mystic Santale": 2, "Midnight Swim": 2, "Floral Specter": 2 } } ] },
+            { id: 6, question: "Pick a material:", options: [ { text: "Cool Marble.", score: { "Floral Specter": 2, "Glacial Getaway": 2 } }, { text: "Warm Velvet.", score: { "Rebel Night": 2, "Amber Creme": 2 } }, { text: "Worn Leather.", score: { "Cafe Date": 2, "Orion Hunt": 2 } }, { text: "Fresh Cotton.", score: { "Cherry Blossom": 2, "Midnight Swim": 2 } } ] },
+            { id: 7, question: "Pick a floral inspiration:", options: [ { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3 } }, { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }, { text: "Exotic, dark, mysterious blooms.", score: { "Rebel Night": 2, "After Hour": 1 } } ] }
         ];
     </script>
 </body>
