@@ -293,6 +293,9 @@
 </head>
 <body class="antialiased selection:bg-avira-gold selection:text-black">
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-24 right-0 left-0 z-[110] pointer-events-none flex flex-col items-center gap-2 px-4" aria-live="polite"></div>
+
     <!-- Ambient Liquid Background -->
     <div class="ambient-layer">
         <div class="orb orb-1"></div>
@@ -514,12 +517,17 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <input type="text" id="bill-name" placeholder="Full Name" class="checkout-input">
                                 <input type="email" id="bill-email" placeholder="Email Address" class="checkout-input">
+                                <input type="tel" id="bill-phone" placeholder="Phone Number" class="checkout-input">
                             </div>
                         </div>
 
                         <div>
                             <label class="checkout-label"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> Shipping</label>
                             <input type="text" id="bill-address" placeholder="Delivery Address" class="checkout-input">
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+                                <input type="text" id="bill-street" placeholder="Street / Locality" class="checkout-input">
+                                <input type="text" id="bill-pincode" placeholder="Pincode" class="checkout-input">
+                            </div>
                         </div>
 
                         <div>
@@ -817,23 +825,46 @@
         function submitOrder() {
             const name = document.getElementById('bill-name').value.trim();
             const address = document.getElementById('bill-address').value.trim();
+            const street = document.getElementById('bill-street').value.trim();
+            const pincode = document.getElementById('bill-pincode').value.trim();
+            const phone = document.getElementById('bill-phone').value.trim();
             const email = document.getElementById('bill-email').value.trim();
             
             let missing = [];
             if(!name) missing.push("Name");
             if(!email) missing.push("Email");
+            if(!phone) missing.push("Phone");
             if(!address) missing.push("Address");
+            if(!street) missing.push("Street");
+            if(!pincode) missing.push("Pincode");
 
-            if(missing.length > 0) {
+            // Basic validations
+            let invalid = false;
+            const phoneRegex = /^[0-9]{10,12}$/;
+            const emailRegex = /\S+@\S+\.\S+/;
+
+            if(phone && !phoneRegex.test(phone)) {
+                invalid = true;
+                alert("Please enter a valid phone number (10-12 digits)");
+            }
+            if(email && !emailRegex.test(email)) {
+                invalid = true;
+                alert("Please enter a valid email address");
+            }
+
+            if(missing.length > 0 || invalid) {
                 const btn = document.getElementById('btn-submit-order');
                 btn.classList.add('animate-shake');
                 setTimeout(()=> btn.classList.remove('animate-shake'), 500);
                 
                 if(!name) document.getElementById('bill-name').style.borderColor = '#ef4444';
                 if(!email) document.getElementById('bill-email').style.borderColor = '#ef4444';
+                if(!phone) document.getElementById('bill-phone').style.borderColor = '#ef4444';
                 if(!address) document.getElementById('bill-address').style.borderColor = '#ef4444';
+                if(!street) document.getElementById('bill-street').style.borderColor = '#ef4444';
+                if(!pincode) document.getElementById('bill-pincode').style.borderColor = '#ef4444';
                 
-                alert("Please fill all fields");
+                if(!invalid) alert("Please fill all fields");
 
                 setTimeout(() => {
                     document.querySelectorAll('.checkout-input').forEach(el => el.style.borderColor = 'rgba(255, 255, 255, 0.1)');
@@ -857,8 +888,12 @@
             let generatedOrderBody = `
 Customer Name: ${name}
 Email: ${email}
+Phone: ${phone}
 Payment Method: ${paymentMsg}
-Delivery Address: ${address}
+Delivery Address: 
+${address}
+${street}
+Pincode: ${pincode}
 
 Items Ordered:
 ${orderItems}
@@ -889,7 +924,10 @@ Total Amount: \u20B9${finalTotal}
                     cart = []; updateCartUI(); closeCart();
                     document.getElementById('bill-name').value = '';
                     document.getElementById('bill-email').value = '';
+                    document.getElementById('bill-phone').value = '';
                     document.getElementById('bill-address').value = '';
+                    document.getElementById('bill-street').value = '';
+                    document.getElementById('bill-pincode').value = '';
                     btnSpan.innerText = "Confirm Order";
                     btn.disabled = false;
                     overlay.classList.add('hidden');
@@ -1223,4 +1261,3 @@ Total Amount: \u20B9${finalTotal}
     </script>
 </body>
 </html>
-
