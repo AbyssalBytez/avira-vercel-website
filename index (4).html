@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Avira Perfumes - Hand-crafted, long-lasting luxury fragrances designed for the individual.">
+    <title>Avira Perfumes | Liquid Glass Edition</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Generic Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 50 L50 90 L10 50 Z' fill='none' stroke='%23bfa05a' stroke-width='5'/%3E%3C/svg%3E">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        avira: {
+                            gold: 'var(--color-gold)',
+                            text: 'var(--color-text)',
+                            textMuted: 'var(--color-text-muted)',
+                            darkBg: '#121212',
+                            inputBg: '#1E1E1E',
+                            border: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'cormorant': ['Cormorant Garamond', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'currency': ['Inter', 'sans-serif', 'Arial', 'Helvetica'], 
+                    },
+                    animation: {
+                        'float': 'float 12s ease-in-out infinite',
+                        'shimmer': 'shimmer 4s infinite linear',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'blur-in': 'blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%) skewX(-15deg)' },
+                            '100%': { transform: 'translateX(200%) skewX(-15deg)' },
+                        },
+                        blurIn: {
+                            '0%': { opacity: '0', filter: 'blur(10px)', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', filter: 'blur(0)', transform: 'translateY(0)' }
+                        },
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        pop: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                            '100%': { transform: 'scale(1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- Dynamic Theming Variables --- */
+        :root {
+            --bg-canvas: #f2f4f7;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            --glass-highlight: rgba(255, 255, 255, 0.9);
+            --color-text: #1a1a1c;
+            --color-text-muted: #6e6e73;
+            --color-gold: #bfa05a; 
+            --orb-1: #c4d7ed; 
+            --orb-2: #e8dff5; 
+            --orb-3: #fceec5; 
+        }
+
+        [data-theme="dark"] {
+            --bg-canvas: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.60);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --color-text: #f5f5f7;
+            --color-text-muted: #86868b;
+            --color-gold: #D4AF37;
+            --orb-1: #102a43; 
+            --orb-2: #240b2f; 
+            --orb-3: #3d2c05; 
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--color-text);
+            transition: background-color 1.2s cubic-bezier(0.25, 1, 0.5, 1), color 0.8s ease;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glass Components */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.4s ease;
+            will-change: transform, backdrop-filter;
+            transform: translateZ(0);
+        }
+        .glass-panel:hover {
+            transform: translateY(-6px) scale(1.005);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            border-color: var(--color-gold);
+            z-index: 10;
+        }
+
+        .glass-menu {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        [data-theme="dark"] .glass-menu { background: rgba(5, 5, 5, 0.95); }
+
+        .glass-nav {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Checkout Specific Styles */
+        .checkout-input {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f5f5f7;
+            padding: 16px;
+            border-radius: 12px;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+        .checkout-input:focus {
+            border-color: var(--color-gold);
+            background: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 0 0 1px var(--color-gold);
+        }
+        .checkout-input::placeholder {
+            color: #666;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+        
+        .checkout-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #888;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .checkout-box {
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 20px;
+            background: rgba(20,20,20,0.4);
+        }
+
+        /* Buttons */
+        .btn-liquid {
+            background: rgba(125, 125, 125, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--color-text);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer;
+        }
+        .btn-liquid::before {
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            background: var(--color-gold); opacity: 0; transform: scaleX(0); transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease; z-index: 0;
+        }
+        .btn-liquid span { position: relative; z-index: 1; }
+        .btn-liquid:hover { border-color: var(--color-gold); color: var(--bg-canvas); transform: scale(1.02); }
+        .btn-liquid:active { transform: scale(0.95); }
+        .btn-liquid:hover::before { opacity: 1; transform: scaleX(1); }
+        
+        .btn-liquid:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+            filter: grayscale(1);
+        }
+
+        /* Ambient Background */
+        .ambient-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; will-change: transform; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; transition: background-color 3s ease; will-change: transform; }
+        .orb-1 { top: -20%; left: -10%; width: 70vw; height: 70vw; background: var(--orb-1); animation: moveOrb1 45s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); }
+        .orb-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: var(--orb-2); animation: moveOrb2 55s infinite alternate-reverse cubic-bezier(0.4, 0, 0.2, 1); }
+        .orb-3 { top: 40%; left: 30%; width: 50vw; height: 50vw; background: var(--orb-3); animation: moveOrb3 50s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.3; }
+
+        @keyframes moveOrb1 { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 100% { transform: translate(50px, 80px) scale(1.15) rotate(10deg); } }
+        @keyframes moveOrb2 { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 100% { transform: translate(-60px, -40px) scale(0.9) rotate(-10deg); } }
+        @keyframes moveOrb3 { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-30px, 40px) scale(1.1); } 100% { transform: translate(30px, -30px) scale(1); } }
+
+        /* Reveal System */
+        .reveal-node { opacity: 1; transform: translateY(0); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform; }
+        .js-reveal-hidden { opacity: 0; transform: translateY(40px); }
+        .blur-enter { opacity: 0; filter: blur(10px); transform: translateY(20px); animation: blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes blurIn { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
+
+        /* Components */
+        .theme-toggle { width: 52px; height: 30px; border-radius: 20px; background: rgba(125,125,125,0.1); border: 1px solid var(--glass-border); position: relative; cursor: pointer; transition: background 0.4s ease; }
+        .toggle-knob { width: 24px; height: 24px; border-radius: 50%; background: var(--color-text); position: absolute; top: 2px; left: 2px; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .toggle-knob svg { width: 14px; height: 14px; color: var(--bg-canvas); }
+        [data-theme="dark"] .toggle-knob { transform: translateX(22px); background: white; }
+        [data-theme="dark"] .toggle-knob svg { color: black; }
+        
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--color-gold); color: black; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; opacity: 0; transform: scale(0); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .cart-badge.show { opacity: 1; transform: scale(1); }
+        
+        .qty-btn { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); background: rgba(125,125,125,0.1); cursor: pointer; transition: all 0.2s; }
+        .qty-btn:hover { background: var(--color-gold); color: black; border-color: var(--color-gold); }
+        
+        /* Payment Card Styling */
+        .payment-card {
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(30,30,30,0.6);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .payment-radio:checked + .payment-card {
+            background: rgba(20, 20, 20, 0.8);
+            border-color: var(--color-gold);
+            box-shadow: 0 0 15px rgba(191, 160, 90, 0.05);
+        }
+        .payment-radio:checked + .payment-card .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ---------------------------------------------------- */
+        /* HIDDEN SCROLLBARS (BUT SCROLLABLE)                   */
+        /* ---------------------------------------------------- */
+        
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            background: transparent;
+        }
+        
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-avira-gold selection:text-black">
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-24 right-0 left-0 z-[110] pointer-events-none flex flex-col items-center gap-2 px-4" aria-live="polite"></div>
+
+    <!-- Ambient Liquid Background -->
+    <div class="ambient-layer">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Floating Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 transition-all duration-700 cubic-bezier(0.2, 0.8, 0.2, 1)" id="navbar">
+        <nav class="glass-nav rounded-full px-4 py-2 md:px-8 md:py-3 flex items-center justify-between w-full max-w-6xl relative">
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors z-50 relative focus:outline-none active:scale-90 transition-transform" aria-label="Toggle Menu">
+                <i data-lucide="menu" class="w-6 h-6 text-avira-text"></i>
+            </button>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#collection" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Collection</a>
+                <a href="#philosophy" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Craft</a>
+            </div>
+            <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
+                <a href="#" class="group flex items-center gap-3 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
+                    <span class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-3 md:space-x-8 absolute right-4 md:static z-40">
+                <div class="theme-toggle scale-90 md:scale-100" onclick="toggleTheme()" title="Switch Mode">
+                    <div class="toggle-knob"></div>
+                </div>
+                <button onclick="openCart()" id="main-cart-btn" class="relative p-2 rounded-full hover:bg-avira-text/5 transition-colors duration-300 focus:outline-none active:scale-90 transition-transform" aria-label="Cart">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-avira-text"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </button>
+                <button onclick="openQuiz()" class="hidden md:block btn-liquid px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em]">
+                    <span>Scent Finder</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[100] transform -translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) glass-menu flex flex-col justify-center items-center space-y-8 overflow-y-auto">
+        <button onclick="toggleMobileMenu()" class="absolute top-8 right-8 p-3 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-[101] cursor-pointer shadow-lg hover:rotate-90" aria-label="Close Menu">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <a href="#collection" onclick="toggleMobileMenu()" class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Collection</a>
+        <a href="#philosophy" onclick="toggleMobileMenu()" class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Philosophy</a>
+        <button onclick="toggleMobileMenu(); openQuiz()" class="text-lg font-inter uppercase tracking-widest text-avira-gold border border-avira-gold p-4 rounded-full px-10 hover:bg-avira-gold hover:text-black transition-colors duration-300 cursor-pointer active:scale-95">
+            Take Scent Quiz
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
+        <div class="z-10 max-w-5xl mx-auto perspective-1000">
+            <div class="blur-enter" style="animation-delay: 0.1s;">
+                <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
+                    Editorial Luxury
+                </span>
+            </div>
+            <h1 class="blur-enter text-6xl md:text-8xl lg:text-9xl font-playfair text-avira-text mb-8 leading-[0.9] drop-shadow-sm" style="animation-delay: 0.3s;">
+                AVIRA
+            </h1>
+            <p class="blur-enter text-xl md:text-2xl font-cormorant italic text-avira-textMuted max-w-2xl mx-auto mb-14 leading-relaxed" style="animation-delay: 0.5s;">
+                "We reject the fleeting. We craft fragrances that do not just project, but gracefully endure the passage of time."
+            </p>
+            <div class="blur-enter flex flex-col sm:flex-row justify-center gap-6" style="animation-delay: 0.7s;">
+                <a href="#collection" class="btn-liquid px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text group">
+                    <span>Explore Collection</span>
+                </a>
+                <button onclick="openQuiz()" class="group relative px-10 py-4 rounded-full text-xs font-bold uppercase tracking-widest bg-avira-gold text-black overflow-hidden hover:scale-105 active:scale-95 transition-transform duration-500 shadow-lg shadow-avira-gold/20">
+                    <span class="relative z-10">Find Your Scent</span>
+                    <div class="absolute inset-0 bg-white/40 animate-shimmer skew-x-12"></div>
+                </button>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-float text-avira-textMuted">
+            <i data-lucide="arrow-down" class="w-6 h-6 opacity-60"></i>
+        </div>
+    </section>
+
+    <!-- Collection Grid -->
+    <section id="collection" class="py-32 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal-node flex flex-col md:flex-row justify-between items-end mb-16 border-b border-avira-text/10 pb-8">
+                <div>
+                    <h2 class="text-5xl md:text-6xl font-playfair text-avira-text mb-4">The Expressions</h2>
+                    <p class="text-avira-textMuted italic font-cormorant text-2xl">Curated for the discerning few.</p>
+                </div>
+            </div>
+            <div id="collection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- JS Injected -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section id="philosophy" class="py-32 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-10 md:gap-20 items-center">
+                <div class="reveal-node glass-panel p-10 md:p-16 rounded-[2.5rem] border-l-4 border-l-avira-gold">
+                    <h2 class="text-4xl md:text-6xl font-playfair text-avira-text mb-8 leading-tight">
+                        Time is the <br><span class="text-avira-gold italic">True Measure.</span>
+                    </h2>
+                    <p class="text-avira-textMuted font-inter font-light leading-loose text-lg mb-8">
+                        Our difference lies in the depth of our formulation.
+                    </p>
+                    <div class="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-avira-text">
+                        <span>Pure Ingredients</span>
+                        <div class="h-px w-12 bg-avira-text/20"></div>
+                        <span>Aged to perfection</span>
+                    </div>
+                </div>
+                <div class="space-y-8">
+                     <div class="reveal-node glass-panel p-10 rounded-3xl group cursor-default">
+                        <h3 class="text-sm font-bold uppercase tracking-[0.2em] text-avira-gold mb-3">Artisan Blending</h3>
+                        <p class="text-avira-textMuted font-inter font-light">Every batch is individually blended and poured by skilled artisans.</p>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How To Use Section -->
+    <section id="how-to-use" class="py-32 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 reveal-node">
+                <h2 class="text-4xl md:text-6xl font-playfair text-avira-text mb-6">How To Use <br><span class="italic text-avira-gold">Our Product</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full">
+                    <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="spray-can" class="w-8 h-8"></i></div>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Spray about 3 times on the same spot for good projection.</p>
+                </div>
+                <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.1s">
+                    <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="maximize" class="w-8 h-8"></i></div>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Spray it from a distance of 10cm away from the body.</p>
+                </div>
+                <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.2s">
+                    <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="droplet" class="w-8 h-8"></i></div>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Apply a natural lotion at the pulse point for longevity.</p>
+                </div>
+                <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.3s">
+                    <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="hand" class="w-8 h-8"></i></div>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Don't rub the perfume after applying.</p>
+                </div>
+                <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.4s">
+                    <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="snowflake" class="w-8 h-8"></i></div>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Keep inside refrigerator for 5 days for maturation.</p>
+                </div>
+                <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.5s">
+                    <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="shirt" class="w-8 h-8"></i></div>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Prefer cotton clothes for greater experience.</p>
+                </div>
+            </div>
+            
+            <div class="text-center reveal-node">
+                 <p class="text-3xl md:text-5xl font-playfair text-avira-text italic leading-tight">"We don't sell perfumes, <br>we sell personality."</p>
+                 <div class="w-12 h-px bg-avira-gold mx-auto my-8"></div>
+                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-avira-gold">Avira</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
+        <div id="cart-content" class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
+                <h2 class="text-3xl font-playfair text-avira-text transition-all duration-300" id="cart-title">Your Selection</h2>
+                <button onclick="closeCart()" class="p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-sm hover:rotate-90">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Items View -->
+            <div id="cart-view" class="flex-grow flex flex-col overflow-hidden transition-all duration-500">
+                <div class="flex-grow overflow-y-auto flex flex-col">
+                    <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
+                    
+                    <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
+                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">\u20B90.00</span></div>
+                    </div>
+                    
+                    <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
+                </div>
+                <div id="cart-actions" class="shrink-0 mt-auto">
+                    <button onclick="showCheckout()" id="btn-checkout" class="btn-liquid w-full py-4 rounded-xl text-sm font-bold uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"><span>Proceed to Checkout</span></button>
+                </div>
+            </div>
+
+            <!-- Checkout Form View -->
+            <div id="billing-form" class="hidden flex-col h-full relative transition-all duration-500 bg-[#050505] absolute inset-0 rounded-[2rem] p-8 z-20 overflow-hidden opacity-0">
+                
+                <div class="flex justify-between items-center mb-6 pb-2 border-b border-[#333]">
+                    <h2 class="text-3xl font-playfair text-[#f5f5f7]">Checkout</h2>
+                    <button onclick="closeCart()" class="text-[#6e6e73] hover:text-[#f5f5f7]"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+
+                <div id="order-success-overlay" class="absolute inset-0 z-50 bg-black/95 flex flex-col items-center justify-center text-center p-6 hidden">
+                    <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6 text-green-500 animate-pulse">
+                        <i data-lucide="check" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-3xl font-playfair text-[#f5f5f7] mb-2">Order Confirmed</h3>
+                    <p class="text-sm text-[#888] max-w-xs mx-auto">We have received your request. Our artisan will contact you shortly.</p>
+                </div>
+
+                <div class="overflow-y-auto flex-grow pr-2 pb-4">
+                     <!-- Total Box -->
+                    <div class="checkout-box mb-6 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-[#888] mb-1">Total Amount</p>
+                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">\u20B90.00</p>
+                        </div>
+                        <button onclick="hideCheckout()" class="text-xs text-avira-gold hover:text-white hover:underline transition-colors">Edit Cart</button>
+                    </div>
+
+                    <form onsubmit="event.preventDefault(); submitOrder();" class="space-y-6">
+                        
+                        <div>
+                            <label class="checkout-label"><i data-lucide="user" class="w-3 h-3 inline mr-1"></i> Contact Information</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <input type="text" id="bill-name" placeholder="Full Name" class="checkout-input">
+                                <input type="email" id="bill-email" placeholder="Email Address" class="checkout-input">
+                                <input type="tel" id="bill-phone" placeholder="Phone Number" class="checkout-input">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="checkout-label"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> Shipping</label>
+                            <input type="text" id="bill-address" placeholder="Delivery Address" class="checkout-input">
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+                                <input type="text" id="bill-street" placeholder="Street / Locality" class="checkout-input">
+                                <input type="text" id="bill-pincode" placeholder="Pincode" class="checkout-input">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="checkout-label"><i data-lucide="credit-card" class="w-3 h-3 inline mr-1"></i> Payment Method</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="cursor-pointer relative group">
+                                    <input type="radio" name="payment" value="UPI" class="hidden payment-radio peer" checked>
+                                    <div class="payment-card rounded-xl p-6 flex flex-col items-center justify-center gap-3 h-32 hover:border-avira-gold/50">
+                                        <i data-lucide="smartphone" class="w-8 h-8 text-[#666] peer-checked:text-avira-gold transition-colors"></i>
+                                        <span class="text-xs font-bold uppercase tracking-widest text-[#f5f5f7]">UPI</span>
+                                        <div class="check-icon absolute top-3 right-3 text-avira-gold opacity-0 transform scale-50 transition-all duration-300">
+                                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer relative group">
+                                    <input type="radio" name="payment" value="COD" class="hidden payment-radio peer">
+                                    <div class="payment-card rounded-xl p-6 flex flex-col items-center justify-center gap-3 h-32 hover:border-avira-gold/50">
+                                        <i data-lucide="banknote" class="w-8 h-8 text-[#666] peer-checked:text-avira-gold transition-colors"></i>
+                                        <span class="text-xs font-bold uppercase tracking-widest text-[#f5f5f7]">CASH</span>
+                                        <div class="check-icon absolute top-3 right-3 text-avira-gold opacity-0 transform scale-50 transition-all duration-300">
+                                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="flex gap-4 mt-auto pt-4 border-t border-[#333]">
+                    <button onclick="hideCheckout()" class="px-6 py-4 rounded-xl border border-avira-text/20 text-[#6e6e73] hover:text-[#f5f5f7] hover:border-[#f5f5f7] transition-all uppercase tracking-widest text-xs font-bold">
+                        Back
+                    </button>
+                    <button type="button" onclick="submitOrder()" id="btn-submit-order" class="w-full btn-liquid bg-avira-gold py-4 rounded-xl text-sm font-bold uppercase tracking-widest text-black flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-avira-gold/10 relative overflow-hidden">
+                        <span id="pay-btn-text">Confirm Order</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scent Detail Modal -->
+    <div id="scent-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-700 ease-in-out opacity-0" id="scent-backdrop"></div>
+        <div id="scent-content" class="glass-panel w-full max-w-5xl max-h-[90vh] rounded-[3rem] overflow-hidden relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
+            <button onclick="closeScentDetails()" class="absolute top-6 right-6 z-20 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 backdrop-blur-md shadow-lg hover:rotate-90">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="w-full md:w-1/2 h-64 md:h-auto relative bg-black/10 shrink-0">
+                <img id="modal-image" src="" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent md:bg-gradient-to-r"></div>
+            </div>
+            <div class="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-avira-text/5 backdrop-blur-xl overflow-y-auto">
+                <div class="mb-auto">
+                    <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold mb-4"></p>
+                    <h2 id="modal-name" class="text-5xl md:text-6xl font-playfair text-avira-text mb-4"></h2>
+                    <p class="text-xl font-cormorant italic text-avira-textMuted mb-6" id="modal-price"></p>
+                    <div class="glass-panel border-0 bg-white/5 dark:bg-black/20 rounded-2xl p-6 mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-avira-gold"></div>
+                        <p class="text-xs uppercase tracking-widest text-avira-textMuted mb-2">Olfactory Notes</p>
+                        <p id="modal-notes" class="font-cormorant text-2xl italic text-avira-text"></p>
+                    </div>
+                    <p id="modal-description" class="font-inter text-avira-textMuted leading-loose text-lg mb-8"></p>
+                </div>
+                <div class="flex items-center gap-4 mt-6">
+                    <div class="flex items-center border border-avira-text/20 rounded-xl bg-avira-text/5">
+                        <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(-1)">-</button>
+                        <span id="modal-qty" class="font-inter text-sm font-bold w-4 text-center">1</span>
+                        <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(1)">+</button>
+                    </div>
+                    <button onclick="addToCart()" class="btn-liquid flex-grow py-4 rounded-xl text-xs uppercase tracking-widest font-bold active:scale-95"><span>Add to Bag</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-500 opacity-0" id="quiz-backdrop"></div>
+        <div id="quiz-content" class="glass-panel w-full max-w-2xl max-h-[85vh] rounded-[2rem] p-8 md:p-12 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
+            <button onclick="closeQuiz()" class="absolute top-6 right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col justify-center overflow-y-auto"></div>
+        </div>
+    </div>
+    
+    <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 backdrop-blur-md mt-0">
+        <div class="max-w-6xl mx-auto text-center">
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">Founders</h3>
+                    <ul class="space-y-3 font-cormorant text-xl italic text-avira-text"><li>Archit</li><li>Mohit</li></ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">Finance</h3>
+                    <ul class="space-y-3 font-inter text-sm text-avira-textMuted"><li>Manas Ranjan Sahoo</li><li>Aurodeep Priyadarsan</li></ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">Marketing</h3>
+                    <ul class="space-y-3 font-inter text-sm text-avira-textMuted"><li>Haraprasad Panighari</li><li>Ayush Sarkar</li><li>Pallab Mahana</li><li>Nishant Ratha</li></ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">Design</h3>
+                    <ul class="space-y-3 font-inter text-sm text-avira-textMuted"><li>Mohit Kumar Sahu</li><li>Ayush Tripathy</li></ul>
+                </div>
+            </div>
+            
+            <p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted">&copy; 2025 Avira Atelier</p>
+            <div class="mt-8 flex justify-center">
+                <a href="https://www.instagram.com/avira_.official" target="_blank" class="flex items-center space-x-2 text-xs uppercase tracking-widest text-avira-text hover:text-avira-gold transition-colors border-b border-transparent hover:border-avira-gold pb-1 group">
+                    <span>Follow @avira_.official</span>
+                    <i data-lucide="arrow-up-right" class="w-3 h-3 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // State
+        let cart = [];
+        let currentScent = null;
+        let modalQty = 1;
+        let quizState = { step: 0, scores: {}, selected: [] };
+        
+        const EMAILJS_SERVICE_ID = "service_bsilwzs";
+        const EMAILJS_TEMPLATE_ID = "template_sj18onc";
+        const EMAILJS_PUBLIC_KEY = "6FcTy6BrBiOrvXvOP";
+
+        const imageMap = {
+            "Cherry Blossom": "images/cherry_blossom.jpg",
+            "Cafe Date": "images/cafe_date.jpg",
+            "Mystic Santale": "images/mystic_santale.jpg",
+            "Floral Specter": "images/floral_specter.jpg",
+            "After Hour": "images/after_hour.jpg",
+            "Glacial Getaway": "images/glacial_gataway.jpg",
+            "Orion Hunt": "images/orion_hunt.jpg",
+            "Midnight Swim": "images/midnight_swim.jpg",
+            "Amber Creme": "images/amber_creme.jpg",
+            "Rebel Night": "images/rebel_night.jpg",
+            "Crystal Bloom": "images/crystal_bloom.jpg",
+            "Avira Signature": "images/avira_signature.jpg"
+        };
+
+        const perfumesData = [
+            { name: "Cherry Blossom", price: 499, feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air." },
+            { name: "Cafe Date", price: 499, feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather." },
+            { name: "Mystic Santale", price: 499, feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber." },
+            { name: "Floral Specter", price: 499, feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
+            { name: "After Hour", price: 499, feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf." },
+            { name: "Glacial Getaway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
+            { name: "Orion Hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
+            { name: "Midnight Swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
+            { name: "Amber Creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
+            { name: "Rebel Night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood." },
+            { name: "Crystal Bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk." },
+            { name: "Avira Signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark." }
+        ];
+        
+        function calculateTotals() {
+            if (cart.length === 0) {
+                return { totalItems: 0, subtotal: 0, discount: 0, deliveryFee: 0, finalTotal: 0 };
+            }
+
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const discount = Math.floor(totalItems / 2) * 99;
+            const deliveryFee = 49;
+            const finalTotal = subtotal - discount + deliveryFee;
+            return { totalItems, subtotal, discount, deliveryFee, finalTotal };
+        }
+
+        function changeModalQty(delta) {
+            modalQty += delta;
+            if (modalQty < 1) modalQty = 1;
+            document.getElementById('modal-qty').innerText = modalQty;
+        }
+
+        function addToCart() {
+            if (!currentScent) return;
+            const existingItem = cart.find(item => item.name === currentScent.name);
+            if (existingItem) existingItem.qty += modalQty;
+            else cart.push({ ...currentScent, qty: modalQty });
+            
+            const cartBtn = document.getElementById('main-cart-btn');
+            cartBtn.classList.remove('animate-pop');
+            void cartBtn.offsetWidth; // trigger reflow
+            cartBtn.classList.add('animate-pop');
+            
+            updateCartUI();
+            closeScentDetails();
+        }
+
+        function changeCartQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const { totalItems, subtotal, discount, deliveryFee, finalTotal } = calculateTotals();
+            
+            const countEl = document.getElementById('cart-count');
+            countEl.innerText = totalItems;
+            totalItems > 0 ? countEl.classList.add('show') : countEl.classList.remove('show');
+
+            const itemsEl = document.getElementById('cart-items');
+            const summaryEl = document.getElementById('cart-summary');
+            const checkoutBtn = document.getElementById('btn-checkout');
+
+            itemsEl.innerHTML = '';
+            if (cart.length === 0) {
+                itemsEl.innerHTML = '<p class="text-center text-avira-textMuted italic py-10">Your collection is empty.</p>';
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.3'; 
+                checkoutBtn.style.cursor = 'not-allowed';
+                
+                summaryEl.innerHTML = `<div class="flex justify-between items-center text-avira-text font-playfair text-xl"><span>Total</span><span id="cart-total">\u20B90.00</span></div>`;
+            } else {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.style.cursor = 'pointer';
+
+                cart.forEach((item, idx) => {
+                    itemsEl.innerHTML += `
+                        <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
+                            <div class="flex items-center gap-3">
+                                <img src="${getImageUrl(item.name)}" class="w-12 h-12 rounded-lg object-cover">
+                                <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">\u20B9${item.price} x ${item.qty}</p></div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="changeCartQty(${idx}, -1)" class="qty-btn text-xs">-</button>
+                                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                                <button onclick="changeCartQty(${idx}, 1)" class="qty-btn text-xs">+</button>
+                            </div>
+                        </div>`;
+                });
+                
+                let summaryHTML = '';
+                if (discount > 0) {
+                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>\u20B9${subtotal}</span></div>
+                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[8px] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
+                }
+                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B969</span> \u20B9${deliveryFee}</span></div>`;
+                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>\u20B9${finalTotal}</span></div>`;
+                summaryEl.innerHTML = summaryHTML;
+            }
+        }
+
+        function showCheckout() {
+            if(cart.length === 0) return; 
+
+            const cartView = document.getElementById('cart-view');
+            const billingForm = document.getElementById('billing-form');
+            const title = document.getElementById('cart-title');
+
+            cartView.style.opacity = '0';
+            
+            setTimeout(() => {
+                cartView.style.display = 'none';
+                billingForm.classList.remove('hidden');
+                billingForm.classList.add('flex');
+                
+                void billingForm.offsetWidth;
+                
+                billingForm.style.opacity = '1';
+                
+                const { finalTotal } = calculateTotals();
+                document.getElementById('checkout-total-display').innerText = `\u20B9${finalTotal}`;
+            }, 300);
+            
+            lucide.createIcons();
+        }
+        
+        function hideCheckout() {
+            const cartView = document.getElementById('cart-view');
+            const billingForm = document.getElementById('billing-form');
+            const title = document.getElementById('cart-title');
+
+            billingForm.style.opacity = '0';
+            
+            setTimeout(() => {
+                billingForm.classList.remove('flex');
+                billingForm.classList.add('hidden');
+                
+                cartView.style.display = 'flex';
+                void cartView.offsetWidth;
+                cartView.style.opacity = '1';
+            }, 300);
+        }
+
+        function submitOrder() {
+            const name = document.getElementById('bill-name').value.trim();
+            const address = document.getElementById('bill-address').value.trim();
+            const street = document.getElementById('bill-street').value.trim();
+            const pincode = document.getElementById('bill-pincode').value.trim();
+            const phone = document.getElementById('bill-phone').value.trim();
+            const email = document.getElementById('bill-email').value.trim();
+            
+            let missing = [];
+            if(!name) missing.push("Name");
+            if(!email) missing.push("Email");
+            if(!phone) missing.push("Phone");
+            if(!address) missing.push("Address");
+            if(!street) missing.push("Street");
+            if(!pincode) missing.push("Pincode");
+
+            // Basic validations
+            let invalid = false;
+            const phoneRegex = /^[0-9]{10,12}$/;
+            const emailRegex = /\S+@\S+\.\S+/;
+
+            if(phone && !phoneRegex.test(phone)) {
+                invalid = true;
+                alert("Please enter a valid phone number (10-12 digits)");
+            }
+            if(email && !emailRegex.test(email)) {
+                invalid = true;
+                alert("Please enter a valid email address");
+            }
+
+            if(missing.length > 0 || invalid) {
+                const btn = document.getElementById('btn-submit-order');
+                btn.classList.add('animate-shake');
+                setTimeout(()=> btn.classList.remove('animate-shake'), 500);
+                
+                if(!name) document.getElementById('bill-name').style.borderColor = '#ef4444';
+                if(!email) document.getElementById('bill-email').style.borderColor = '#ef4444';
+                if(!phone) document.getElementById('bill-phone').style.borderColor = '#ef4444';
+                if(!address) document.getElementById('bill-address').style.borderColor = '#ef4444';
+                if(!street) document.getElementById('bill-street').style.borderColor = '#ef4444';
+                if(!pincode) document.getElementById('bill-pincode').style.borderColor = '#ef4444';
+                
+                if(!invalid) alert("Please fill all fields");
+
+                setTimeout(() => {
+                    document.querySelectorAll('.checkout-input').forEach(el => el.style.borderColor = 'rgba(255, 255, 255, 0.1)');
+                }, 2000);
+                return;
+            }
+
+            const paymentOption = document.querySelector('input[name="payment"]:checked').value;
+            const btn = document.getElementById('btn-submit-order');
+            const btnSpan = document.getElementById('pay-btn-text');
+            const originalContent = btnSpan.innerText;
+            
+            btnSpan.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-2"></i> Sending...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const { subtotal, discount, deliveryFee, finalTotal } = calculateTotals();
+            let paymentMsg = paymentOption === "UPI" ? "UPI" : "Cash on Delivery";
+            let orderItems = cart.map(i => `${i.qty}x ${i.name} (\u20B9${i.price})`).join('\n');
+            
+            let generatedOrderBody = `
+Customer Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Payment Method: ${paymentMsg}
+Delivery Address: 
+${address}
+${street}
+Pincode: ${pincode}
+
+Items Ordered:
+${orderItems}
+
+Subtotal: \u20B9${subtotal}
+Discount: -\u20B9${discount}
+Delivery Fee: \u20B9${deliveryFee}
+Total Amount: \u20B9${finalTotal}
+            `;
+
+            if (typeof emailjs === 'undefined') {
+                alert("Error: Email service not loaded. Please check your internet connection.");
+                btnSpan.innerText = originalContent;
+                btn.disabled = false;
+                return;
+            }
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                from_name: name,
+                name: name,
+                email: email,
+                message: generatedOrderBody
+            }).then(() => {
+                const overlay = document.getElementById('order-success-overlay');
+                overlay.classList.remove('hidden');
+                lucide.createIcons();
+                setTimeout(() => {
+                    cart = []; updateCartUI(); closeCart();
+                    document.getElementById('bill-name').value = '';
+                    document.getElementById('bill-email').value = '';
+                    document.getElementById('bill-phone').value = '';
+                    document.getElementById('bill-address').value = '';
+                    document.getElementById('bill-street').value = '';
+                    document.getElementById('bill-pincode').value = '';
+                    btnSpan.innerText = "Confirm Order";
+                    btn.disabled = false;
+                    overlay.classList.add('hidden');
+                    hideCheckout();
+                }, 2500);
+            }, (error) => {
+                console.error("EmailJS Error:", error);
+                alert('Failed to send order. Please try again.');
+                btnSpan.innerText = originalContent;
+                btn.disabled = false;
+            });
+        }
+
+        function openCart() {
+            const modal = document.getElementById('cart-modal');
+            const content = document.getElementById('cart-content');
+            const backdrop = document.getElementById('cart-backdrop');
+            hideCheckout(); 
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => { backdrop.classList.remove('opacity-0'); content.classList.remove('translate-y-full'); });
+        }
+        function closeCart() {
+            const modal = document.getElementById('cart-modal');
+            const content = document.getElementById('cart-content');
+            const backdrop = document.getElementById('cart-backdrop');
+            backdrop.classList.add('opacity-0');
+            content.classList.add('translate-y-full');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
+        }
+        
+        function getImageUrl(name) { return imageMap[name] || `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
+        function handleImageError(img, name) { img.onerror = null; img.src = `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.emailjs) {
+                try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e) { console.error("EmailJS Init Failed", e); }
+            }
+
+            const grid = document.getElementById('collection-grid');
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.querySelector('.toggle-knob').innerHTML = isDark ? '<i data-lucide="moon" class="w-4 h-4"></i>' : '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
+
+            perfumesData.forEach((p, index) => {
+                const safeName = p.name.replace(/'/g, "\\'");
+                const delay = index * 100;
+                grid.innerHTML += `
+                    <div class="reveal-node glass-panel rounded-3xl overflow-hidden cursor-pointer flex flex-col group h-full hover:z-10 transition-all duration-700" onclick="showScentDetails('${safeName}')" style="transition-delay: ${delay}ms">
+                        <div class="relative h-72 overflow-hidden">
+                            <img src="${getImageUrl(p.name)}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
+                            <div class="absolute bottom-5 left-5 right-5">
+                                <p class="text-[10px] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
+                                <h3 class="text-2xl playfair font-medium text-white group-hover:text-avira-gold transition-colors duration-500">${p.name}</h3>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-end bg-transparent">
+                            <div class="border border-avira-text/20 dark:border-white/20 rounded-full px-5 py-3 flex items-center justify-between bg-avira-text/5 hover:bg-avira-text/10 transition-colors duration-500">
+                                <span class="text-xs text-avira-textMuted font-inter truncate pr-4">${p.notes}</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-avira-gold transition-transform duration-500 group-hover:translate-x-1"></i>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            lucide.createIcons();
+            
+            const revealElements = document.querySelectorAll('.reveal-node');
+            revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
+            setupScrollReveal();
+
+            document.addEventListener('mousemove', e => {
+                document.querySelectorAll('.glass-panel').forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+            
+            updateCartUI();
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = !menu.classList.contains('-translate-y-full');
+            if (isOpen) { menu.classList.add('-translate-y-full'); document.body.style.overflow = ''; }
+            else { menu.classList.remove('-translate-y-full'); document.body.style.overflow = 'hidden'; }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            const iconContainer = document.querySelector('.toggle-knob');
+            if (current === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('avira-theme', 'light');
+                iconContainer.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('avira-theme', 'dark');
+                iconContainer.innerHTML = '<i data-lucide="moon" class="w-4 h-4"></i>';
+            }
+            lucide.createIcons();
+        }
+        (function() {
+            const saved = localStorage.getItem('avira-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) document.body.setAttribute('data-theme', 'dark');
+        })();
+
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { 
+                    if (entry.isIntersecting) { 
+                        entry.target.classList.remove('js-reveal-hidden');
+                        entry.target.classList.add('is-visible'); 
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
+        }
+
+        function showScentDetails(name) {
+            currentScent = perfumesData.find(p => p.name === name);
+            if (!currentScent) return;
+            modalQty = 1; document.getElementById('modal-qty').innerText = modalQty;
+            document.getElementById('modal-name').textContent = currentScent.name;
+            document.getElementById('modal-price').textContent = '\u20B9' + currentScent.price;
+            document.getElementById('modal-feel').textContent = currentScent.feel;
+            document.getElementById('modal-notes').textContent = currentScent.notes;
+            document.getElementById('modal-description').textContent = currentScent.description;
+            const imgEl = document.getElementById('modal-image');
+            imgEl.src = getImageUrl(currentScent.name);
+            imgEl.onerror = function() { handleImageError(this, currentScent.name) };
+            const modal = document.getElementById('scent-modal');
+            const content = document.getElementById('scent-content');
+            const backdrop = document.getElementById('scent-backdrop');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => { backdrop.classList.remove('opacity-0'); content.classList.remove('opacity-0', 'translate-y-20'); });
+        }
+        function closeScentDetails() {
+            const modal = document.getElementById('scent-modal');
+            const content = document.getElementById('scent-content');
+            const backdrop = document.getElementById('scent-backdrop');
+            backdrop.classList.add('opacity-0');
+            content.classList.add('opacity-0', 'translate-y-20');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
+        }
+
+        function openQuiz() {
+            quizState = { step: 0, scores: {}, selected: Array(quizQuestions.length).fill(null) };
+            const modal = document.getElementById('quiz-modal');
+            const content = document.getElementById('quiz-content');
+            const backdrop = document.getElementById('quiz-backdrop');
+            renderQuiz();
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => { backdrop.classList.remove('opacity-0'); content.classList.remove('opacity-0', 'scale-90'); content.classList.add('scale-100'); });
+        }
+        function closeQuiz() {
+            const modal = document.getElementById('quiz-modal');
+            const content = document.getElementById('quiz-content');
+            const backdrop = document.getElementById('quiz-backdrop');
+            backdrop.classList.add('opacity-0');
+            content.classList.add('opacity-0', 'scale-90');
+            content.classList.remove('scale-100');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
+        }
+        function selectAnswer(qIdx, optIdx) { quizState.selected[qIdx] = optIdx; renderQuiz(); }
+        function nextStep() { if (quizState.selected[quizState.step] === null) return; if (quizState.step < quizQuestions.length - 1) { quizState.step++; renderQuiz(); } else { calculateResult(); } }
+        function prevStep() { if (quizState.step > 0) { quizState.step--; renderQuiz(); } }
+        function renderQuiz() {
+            const q = quizQuestions[quizState.step];
+            const currentSelected = quizState.selected[quizState.step];
+            const html = `<div class="animate-[fadeIn_0.6s_ease-out]"><p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${quizState.step + 1} / ${quizQuestions.length}</p><h3 class="text-3xl md:text-4xl font-playfair text-avira-text text-center mb-10 leading-tight">${q.question}</h3><div class="space-y-4 mb-10">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${quizState.step}, ${idx})" class="w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${currentSelected === idx ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/5 border-avira-text/5 text-avira-textMuted hover:bg-avira-text/10 hover:border-avira-text/20'}"><span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>${currentSelected === idx ? '<span class="text-black font-bold">●</span>' : ''}</button>`).join('')}</div><div class="flex justify-between items-center"><button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${quizState.step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button><button onclick="nextStep()" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${currentSelected !== null ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/10 text-avira-text/30 cursor-not-allowed border-avira-text/5'}">${quizState.step === quizQuestions.length - 1 ? 'Reveal' : 'Next'}</button></div></div>`;
+            document.getElementById('quiz-body').innerHTML = html;
+        }
+        function calculateResult() {
+            // New "Vibe Profile" logic
+            let profiles = { "Fresh": 0, "Dark": 0, "Warm": 0, "Luxurious": 0 };
+            
+            // Map scents to archetypes
+            const scentArchetypes = {
+                "Glacial Getaway": "Fresh",
+                "Cherry Blossom": "Fresh", 
+                "Midnight Swim": "Fresh",
+                "Crystal Bloom": "Fresh",
+                "Floral Specter": "Fresh",
+                "Rebel Night": "Dark",
+                "After Hour": "Dark",
+                "Orion Hunt": "Dark",
+                "Mystic Santale": "Warm",
+                "Cafe Date": "Warm",
+                "Amber Creme": "Warm",
+                "Avira Signature": "Luxurious"
+            };
+
+            // Calculate scores
+            let scores = {};
+            quizQuestions.forEach((q, qIdx) => {
+                const ansIdx = quizState.selected[qIdx];
+                const points = q.options[ansIdx].score;
+                for (const [scent, val] of Object.entries(points)) { 
+                    scores[scent] = (scores[scent] || 0) + val;
+                    // Add to archetype score
+                    if(scentArchetypes[scent]) {
+                        profiles[scentArchetypes[scent]] += val;
+                    }
+                }
+            });
+
+            // Find winner
+            let max = 0; let winners = [];
+            for (const [scent, score] of Object.entries(scores)) { 
+                if (score > max) { max = score; winners = [scent]; } 
+                else if (score === max) winners.push(scent); 
+            }
+            
+            // Tie-breaking using archetype strength if needed
+            let result = winners[0];
+            if (winners.length > 1) {
+                // If tie, pick the one whose archetype is strongest overall
+                result = winners.sort((a,b) => profiles[scentArchetypes[b]] - profiles[scentArchetypes[a]])[0];
+            }
+
+            // Show "Analyzing" state before result
+            const container = document.getElementById('quiz-body');
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-64 animate-[fadeIn_0.5s_ease]">
+                    <div class="w-16 h-16 border-4 border-avira-text/10 border-t-avira-gold rounded-full animate-spin mb-6"></div>
+                    <p class="text-avira-text font-playfair text-2xl animate-pulse">Analyzing your persona...</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                showResult(result, scentArchetypes[result]);
+            }, 1500);
+        }
+
+        function showResult(name, vibe) {
+            const scent = perfumesData.find(p => p.name === name);
+            
+            // Dynamic text based on vibe
+            let vibeText = "";
+            if(vibe === "Fresh") vibeText = "You embody clarity and light.";
+            else if(vibe === "Dark") vibeText = "You possess a magnetic, mysterious allure.";
+            else if(vibe === "Warm") vibeText = "You radiate comfort and grounded energy.";
+            else vibeText = "You value bold elegance and timeless luxury.";
+
+            const html = `<div class="text-center animate-[fadeIn_0.8s_ease-out] py-4"><p class="text-xs uppercase tracking-[0.3em] text-avira-gold mb-2">Your Signature Scent</p><h2 class="text-5xl md:text-6xl font-playfair text-avira-text mb-4 drop-shadow-sm">${scent.name}</h2><p class="text-sm font-inter text-avira-textMuted mb-8 tracking-wide">${vibeText}</p><div class="w-56 h-56 mx-auto rounded-full p-1 border border-avira-gold/30 mb-8 relative group"><div class="absolute inset-0 bg-avira-gold/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-1000"></div><img src="${getImageUrl(name)}" class="w-full h-full object-cover rounded-full relative z-10 shadow-2xl" onerror="handleImageError(this, '${name}')"></div><p class="font-cormorant italic text-xl text-avira-textMuted mb-10 max-w-md mx-auto leading-relaxed">"${scent.description}"</p><div class="flex gap-6 justify-center"><button onclick="closeQuiz(); showScentDetails('${name}')" class="btn-liquid px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text border-avira-text/20 hover:bg-avira-text/5"><span>View Details</span></button><button onclick="openQuiz()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text px-4 transition-colors">Retake</button></div></div>`;
+            document.getElementById('quiz-body').innerHTML = html;
+        }
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scale-[0.98]', 'opacity-95');
+            else nav.classList.remove('scale-[0.98]', 'opacity-95');
+            const orbs = document.querySelectorAll('.orb');
+            orbs.forEach((orb, index) => { const speed = (index + 1) * 0.1; orb.style.transform = `translateY(${window.scrollY * speed}px)`; });
+        });
+
+        // REBALANCED QUIZ LOGIC FOR NEW SCENTS
+        const quizQuestions = [
+            { 
+                id: 1, 
+                question: "What time of day defines your energy?", 
+                options: [ 
+                    { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 3, "Cherry Blossom": 2, "Crystal Bloom": 2 } }, 
+                    { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 3, "Floral Specter": 1, "Avira Signature": 2 } }, 
+                    { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 3, "Amber Creme": 2, "Mystic Santale": 1 } }, 
+                    { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Rebel Night": 3, "Midnight Swim": 2 } } 
+                ] 
+            },
+            { 
+                id: 2, 
+                question: "Your ideal escape looks like...", 
+                options: [ 
+                    { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 3, "Mystic Santale": 1, "Crystal Bloom": 1 } }, 
+                    { text: "A vibrant, metropolitan rooftop.", score: { "Avira Signature": 3, "Orion Hunt": 2, "Rebel Night": 1 } }, 
+                    { text: "A warm, rustic cabin by the fire.", score: { "Amber Creme": 3, "Cafe Date": 2, "Mystic Santale": 2 } }, 
+                    { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 3, "Floral Specter": 2, "After Hour": 1 } } 
+                ] 
+            },
+            { 
+                id: 3, 
+                question: "Which texture appeals most to you?", 
+                options: [ 
+                    { text: "Crisp, white linen.", score: { "Cherry Blossom": 3, "Crystal Bloom": 2, "Glacial Getaway": 1 } }, 
+                    { text: "Rich, worn leather.", score: { "Rebel Night": 3, "Orion Hunt": 2, "After Hour": 2 } }, 
+                    { text: "Soft, warm cashmere.", score: { "Amber Creme": 3, "Cafe Date": 2, "Mystic Santale": 1 } }, 
+                    { text: "Sheer, flowing silk.", score: { "Floral Specter": 3, "Midnight Swim": 2, "Avira Signature": 1 } } 
+                ] 
+            },
+            { 
+                id: 4, 
+                question: "Which scent note grounds you?", 
+                options: [ 
+                    { text: "Smoky woods and spices.", score: { "Rebel Night": 3, "Orion Hunt": 2, "Avira Signature": 2 } }, 
+                    { text: "Sweet vanilla or caramel.", score: { "Cafe Date": 2, "Amber Creme": 3, "Avira Signature": 1 } }, 
+                    { text: "Clean ocean air.", score: { "Midnight Swim": 3, "Glacial Getaway": 2, "Crystal Bloom": 1 } }, 
+                    { text: "Earthy, creamy sandalwood.", score: { "Mystic Santale": 3, "Amber Creme": 1, "Rebel Night": 1 } } 
+                ] 
+            },
+            { 
+                id: 5, 
+                question: "Ideally, a perfume should...", 
+                options: [ 
+                    { text: "Whisper politely.", score: { "Cherry Blossom": 3, "Crystal Bloom": 3, "Glacial Getaway": 1 } }, 
+                    { text: "Announce my arrival.", score: { "Avira Signature": 3, "Rebel Night": 2, "Orion Hunt": 2 } }, 
+                    { text: "Comfort me like a hug.", score: { "Amber Creme": 3, "Cafe Date": 3, "Mystic Santale": 1 } }, 
+                    { text: "Intrigue those close to me.", score: { "Midnight Swim": 2, "After Hour": 3, "Floral Specter": 2 } } 
+                ] 
+            },
+            { 
+                id: 6, 
+                question: "Pick a material:", 
+                options: [ 
+                    { text: "Cool Marble.", score: { "Floral Specter": 2, "Glacial Getaway": 2 } }, { text: "Warm Velvet.", score: { "Rebel Night": 2, "Amber Creme": 2 } }, { text: "Worn Leather.", score: { "Cafe Date": 2, "Orion Hunt": 2 } }, { text: "Fresh Cotton.", score: { "Cherry Blossom": 2, "Midnight Swim": 2 } } ] },
+            { 
+                id: 7, 
+                question: "Pick a floral inspiration:", 
+                options: [ 
+                    { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3, "Crystal Bloom": 2 } }, 
+                    { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }, 
+                    { text: "Exotic, dark, mysterious blooms.", score: { "Rebel Night": 2, "After Hour": 1 } } 
+                ] 
+            }
+        ];
+    </script>
+</body>
+</html>
