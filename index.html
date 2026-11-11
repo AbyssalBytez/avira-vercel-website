@@ -2,12 +2,18 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Avira Perfumes - Hand-crafted, long-lasting luxury fragrances designed for the individual.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Avira Perfumes">
+    <meta property="og:description" content="Hand-crafted, long-lasting luxury fragrances designed for the individual.">
+    <meta property="og:image" content="https://avira-vercel-website.vercel.app/images/avira_signature.jpg">
+    <meta property="og:url" content="https://avira-vercel-website.vercel.app/">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Avira Perfumes | Liquid Glass Edition</title>
     
     <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     
     <!-- Load EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -18,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
     
     <!-- Generic Favicon -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 50 L50 90 L10 50 Z' fill='none' stroke='%23bfa05a' stroke-width='5'/%3E%3C/svg%3E">
@@ -168,7 +174,7 @@
             outline: none;
             transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
+            font-size: 1rem;
             letter-spacing: 0.05em;
         }
         .checkout-input:focus {
@@ -239,6 +245,8 @@
         @keyframes moveOrb2 { 0% { transform: translate(0, 0) scale(1) rotate(0deg); } 100% { transform: translate(-60px, -40px) scale(0.9) rotate(-10deg); } }
         @keyframes moveOrb3 { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-30px, 40px) scale(1.1); } 100% { transform: translate(30px, -30px) scale(1); } }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
         /* Reveal System */
         .reveal-node { opacity: 1; transform: translateY(0); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform; }
         .js-reveal-hidden { opacity: 0; transform: translateY(40px); }
@@ -292,6 +300,15 @@
     </style>
 </head>
 <body class="antialiased selection:bg-avira-gold selection:text-black">
+    <script>
+        (function() {
+            try {
+                const saved = localStorage.getItem('avira-theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (saved === 'dark' || (!saved && prefersDark)) document.body.setAttribute('data-theme', 'dark');
+            } catch (e) {}
+        })();
+    </script>
 
     <!-- Toast Container -->
     <div id="toast-container" class="fixed top-24 right-0 left-0 z-[110] pointer-events-none flex flex-col items-center gap-2 px-4" aria-live="polite"></div>
@@ -311,7 +328,8 @@
             </button>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#collection" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Collection</a>
-                <a href="#philosophy" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Craft</a>
+                <a href="#philosophy" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Philosophy</a>
+                <a href="#how-to-use" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">How To Use</a>
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
                 <a href="#" class="group flex items-center gap-3 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
@@ -319,9 +337,7 @@
                 </a>
             </div>
             <div class="flex items-center space-x-3 md:space-x-8 absolute right-4 md:static z-40">
-                <div class="theme-toggle scale-90 md:scale-100" onclick="toggleTheme()" title="Switch Mode">
-                    <div class="toggle-knob"></div>
-                </div>
+                <button type="button" class="theme-toggle scale-90 md:scale-100" onclick="toggleTheme()" title="Switch Mode" aria-label="Switch light or dark mode"><span class="toggle-knob"></span></button>
                 <button onclick="openCart()" id="main-cart-btn" class="relative p-2 rounded-full hover:bg-avira-text/5 transition-colors duration-300 focus:outline-none active:scale-90 transition-transform" aria-label="Cart">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-avira-text"></i>
                     <span id="cart-count" class="cart-badge">0</span>
@@ -340,6 +356,7 @@
         </button>
         <a href="#collection" onclick="toggleMobileMenu()" class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Collection</a>
         <a href="#philosophy" onclick="toggleMobileMenu()" class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Philosophy</a>
+        <a href="#how-to-use" onclick="toggleMobileMenu()" class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">How To Use</a>
         <button onclick="toggleMobileMenu(); openQuiz()" class="text-lg font-inter uppercase tracking-widest text-avira-gold border border-avira-gold p-4 rounded-full px-10 hover:bg-avira-gold hover:text-black transition-colors duration-300 cursor-pointer active:scale-95">
             Take Scent Quiz
         </button>
@@ -458,12 +475,12 @@
     </section>
 
     <!-- Cart Modal -->
-    <div id="cart-modal" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
+    <div id="cart-modal" role="dialog" aria-modal="true" aria-label="Your cart" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
         <div id="cart-content" class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80vh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
                 <h2 class="text-3xl font-playfair text-avira-text transition-all duration-300" id="cart-title">Your Selection</h2>
-                <button onclick="closeCart()" class="p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-sm hover:rotate-90">
+                <button aria-label="Close" onclick="closeCart()" class="p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-sm hover:rotate-90">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -474,7 +491,7 @@
                     <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
                     
                     <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
-                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">\u20B90.00</span></div>
+                        <div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold"><span>Total</span><span id="cart-total">&#8377;0.00</span></div>
                     </div>
                     
                     <p class="text-xs text-avira-textMuted mb-6 text-center uppercase tracking-widest shrink-0">Shipping calculated at checkout</p>
@@ -489,7 +506,7 @@
                 
                 <div class="flex justify-between items-center mb-6 pb-2 border-b border-[#333]">
                     <h2 class="text-3xl font-playfair text-[#f5f5f7]">Checkout</h2>
-                    <button onclick="closeCart()" class="text-[#6e6e73] hover:text-[#f5f5f7]"><i data-lucide="x" class="w-6 h-6"></i></button>
+                    <button aria-label="Close" onclick="closeCart()" class="text-[#6e6e73] hover:text-[#f5f5f7]"><i data-lucide="x" class="w-6 h-6"></i></button>
                 </div>
 
                 <div id="order-success-overlay" class="absolute inset-0 z-50 bg-black/95 flex flex-col items-center justify-center text-center p-6 hidden">
@@ -505,7 +522,7 @@
                     <div class="checkout-box mb-6 flex justify-between items-center">
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-[#888] mb-1">Total Amount</p>
-                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">\u20B90.00</p>
+                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">&#8377;0.00</p>
                         </div>
                         <button onclick="hideCheckout()" class="text-xs text-avira-gold hover:text-white hover:underline transition-colors">Edit Cart</button>
                     </div>
@@ -515,18 +532,18 @@
                         <div>
                             <label class="checkout-label"><i data-lucide="user" class="w-3 h-3 inline mr-1"></i> Contact Information</label>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <input type="text" id="bill-name" placeholder="Full Name" class="checkout-input">
-                                <input type="email" id="bill-email" placeholder="Email Address" class="checkout-input">
-                                <input type="tel" id="bill-phone" placeholder="Phone Number" class="checkout-input">
+                                <input type="text" id="bill-name" placeholder="Full Name" autocomplete="name" class="checkout-input">
+                                <input type="email" id="bill-email" placeholder="Email Address" autocomplete="email" inputmode="email" class="checkout-input">
+                                <input type="tel" id="bill-phone" placeholder="Phone Number" autocomplete="tel" inputmode="tel" class="checkout-input">
                             </div>
                         </div>
 
                         <div>
                             <label class="checkout-label"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> Shipping</label>
-                            <input type="text" id="bill-address" placeholder="Delivery Address" class="checkout-input">
+                            <input type="text" id="bill-address" placeholder="House / Flat No., Building" autocomplete="address-line1" class="checkout-input">
                             <div class="grid grid-cols-2 gap-4 mt-4">
-                                <input type="text" id="bill-street" placeholder="Street / Locality" class="checkout-input">
-                                <input type="text" id="bill-pincode" placeholder="Pincode" class="checkout-input">
+                                <input type="text" id="bill-street" placeholder="Street / Locality" autocomplete="address-line2" class="checkout-input">
+                                <input type="text" id="bill-pincode" placeholder="Pincode" autocomplete="postal-code" inputmode="numeric" maxlength="6" class="checkout-input">
                             </div>
                         </div>
 
@@ -558,6 +575,7 @@
                     </form>
                 </div>
 
+                <p id="checkout-error" role="alert" class="hidden text-sm text-red-400 text-center pt-3"></p>
                 <div class="flex gap-4 mt-auto pt-4 border-t border-[#333]">
                     <button onclick="hideCheckout()" class="px-6 py-4 rounded-xl border border-avira-text/20 text-[#6e6e73] hover:text-[#f5f5f7] hover:border-[#f5f5f7] transition-all uppercase tracking-widest text-xs font-bold">
                         Back
@@ -571,15 +589,18 @@
     </div>
 
     <!-- Scent Detail Modal -->
-    <div id="scent-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+    <div id="scent-modal" role="dialog" aria-modal="true" aria-label="Product details" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-700 ease-in-out opacity-0" id="scent-backdrop"></div>
         <div id="scent-content" class="glass-panel w-full max-w-5xl max-h-[90vh] rounded-[3rem] overflow-hidden relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
-            <button onclick="closeScentDetails()" class="absolute top-6 right-6 z-20 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 backdrop-blur-md shadow-lg hover:rotate-90">
+            <button aria-label="Close" onclick="closeScentDetails()" class="absolute top-6 right-6 z-20 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 backdrop-blur-md shadow-lg hover:rotate-90">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div class="w-full md:w-1/2 h-64 md:h-auto relative bg-black/10 shrink-0">
                 <img id="modal-image" src="" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent md:bg-gradient-to-r"></div>
+                <button id="modal-prev" onclick="changeModalSlide(-1)" class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">&lsaquo;</button>
+                <button id="modal-next" onclick="changeModalSlide(1)" class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">&rsaquo;</button>
+                <div id="modal-dots" class="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2"></div>
             </div>
             <div class="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center bg-avira-text/5 backdrop-blur-xl overflow-y-auto">
                 <div class="mb-auto">
@@ -595,9 +616,9 @@
                 </div>
                 <div class="flex items-center gap-4 mt-6">
                     <div class="flex items-center border border-avira-text/20 rounded-xl bg-avira-text/5">
-                        <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(-1)">-</button>
+                        <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(-1)" aria-label="Decrease quantity">-</button>
                         <span id="modal-qty" class="font-inter text-sm font-bold w-4 text-center">1</span>
-                        <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(1)">+</button>
+                        <button class="p-4 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(1)" aria-label="Increase quantity">+</button>
                     </div>
                     <button onclick="addToCart()" class="btn-liquid flex-grow py-4 rounded-xl text-xs uppercase tracking-widest font-bold active:scale-95"><span>Add to Bag</span></button>
                 </div>
@@ -606,10 +627,10 @@
     </div>
 
     <!-- Quiz Modal -->
-    <div id="quiz-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+    <div id="quiz-modal" role="dialog" aria-modal="true" aria-label="Scent finder quiz" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-500 opacity-0" id="quiz-backdrop"></div>
         <div id="quiz-content" class="glass-panel w-full max-w-2xl max-h-[85vh] rounded-[2rem] p-8 md:p-12 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
-            <button onclick="closeQuiz()" class="absolute top-6 right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
+            <button aria-label="Close" onclick="closeQuiz()" class="absolute top-6 right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div id="quiz-body" class="relative z-10 flex-grow flex flex-col justify-center overflow-y-auto"></div>
@@ -638,7 +659,7 @@
                 </div>
             </div>
             
-            <p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted">&copy; 2025 Avira Atelier</p>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted">&copy; <span id="year">2026</span> Avira Atelier</p>
             <div class="mt-8 flex justify-center">
                 <a href="https://www.instagram.com/avira_.official" target="_blank" class="flex items-center space-x-2 text-xs uppercase tracking-widest text-avira-text hover:text-avira-gold transition-colors border-b border-transparent hover:border-avira-gold pb-1 group">
                     <span>Follow @avira_.official</span>
@@ -660,36 +681,87 @@
         const EMAILJS_TEMPLATE_ID = "template_sj18onc";
         const EMAILJS_PUBLIC_KEY = "6FcTy6BrBiOrvXvOP";
 
-        const imageMap = {
-            "Cherry Blossom": "images/cherry_blossom.jpg",
-            "Cafe Date": "images/cafe_date.jpg",
-            "Mystic Santale": "images/mystic_santale.jpg",
-            "Floral Specter": "images/floral_specter.jpg",
-            "After Hour": "images/after_hour.jpg",
-            "Glacial Getaway": "images/glacial_gataway.jpg",
-            "Orion Hunt": "images/orion_hunt.jpg",
-            "Midnight Swim": "images/midnight_swim.jpg",
-            "Amber Creme": "images/amber_creme.jpg",
-            "Rebel Night": "images/rebel_night.jpg",
-            "Crystal Bloom": "images/crystal_bloom.jpg",
-            "Avira Signature": "images/avira_signature.jpg"
-        };
+        /* =========================================================
+           IMAGE SYSTEM
+           Each perfume has an imgKey (filename WITHOUT extension).
+           Files live in the images/ folder:
+             - single image : images/<imgKey>.jpg   (png/jpeg/webp also work)
+             - slideshow    : images/<imgKey>.1.jpg, <imgKey>.2.jpg ... up to 4
+           The plain file is checked first, then the numbered ones.
+           Avoid dots inside the key itself (use _ or -).
+           ========================================================= */
+        const IMAGE_FOLDER = 'images/';
+        const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
+        const MAX_SLIDES = 4;
+        const slideCache = {};
+        const firstImage = {};
+
+        function tryLoadImage(base) {
+            return new Promise(resolve => {
+                let i = 0;
+                const next = () => {
+                    if (i >= IMAGE_EXTENSIONS.length) return resolve(null);
+                    const url = `${IMAGE_FOLDER}${base}.${IMAGE_EXTENSIONS[i++]}`;
+                    const img = new Image();
+                    img.onload = () => resolve(url);
+                    img.onerror = next;
+                    img.src = url;
+                };
+                next();
+            });
+        }
+
+        function resolveSlides(key) {
+            if (!slideCache[key]) {
+                slideCache[key] = (async () => {
+                    const plain = await tryLoadImage(key);
+                    let slides = [];
+                    if (plain) slides = [plain];
+                    else {
+                        for (let n = 1; n <= MAX_SLIDES; n++) {
+                            const u = await tryLoadImage(`${key}.${n}`);
+                            if (!u) break;
+                            slides.push(u);
+                        }
+                    }
+                    if (slides[0]) firstImage[key] = slides[0];
+                    return slides;
+                })();
+            }
+            return slideCache[key];
+        }
+
 
         const perfumesData = [
-            { name: "Cherry Blossom", price: 499, feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air." },
-            { name: "Cafe Date", price: 499, feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather." },
-            { name: "Mystic Santale", price: 499, feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber." },
-            { name: "Floral Specter", price: 499, feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
-            { name: "After Hour", price: 499, feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf." },
-            { name: "Glacial Getaway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
-            { name: "Orion Hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
-            { name: "Midnight Swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
-            { name: "Amber Creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
-            { name: "Rebel Night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood." },
-            { name: "Crystal Bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk." },
-            { name: "Avira Signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark." }
+            { name: "Cherry Blossom", imgKey: "cherry_blossom", price: 499, feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air." },
+            { name: "Cafe Date", imgKey: "cafe_date", price: 499, feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather." },
+            { name: "Mystic Santale", imgKey: "mystic_santale", price: 499, feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber." },
+            { name: "Floral Specter", imgKey: "floral_specter", price: 499, feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
+            { name: "After Hour", imgKey: "after_hour", price: 499, feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf." },
+            { name: "Glacial Getaway", imgKey: "glacial_gataway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
+            { name: "Orion Hunt", imgKey: "orion_hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
+            { name: "Midnight Swim", imgKey: "midnight_swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
+            { name: "Amber Creme", imgKey: "amber_creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
+            { name: "Rebel Night", imgKey: "rebel_night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood." },
+            { name: "Crystal Bloom", imgKey: "crystal_bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk." },
+            { name: "Avira Signature", imgKey: "avira_signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark." }
         ];
         
+        const CART_KEY = 'avira-cart';
+        function loadCart() {
+            try {
+                const raw = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+                return raw.map(i => {
+                    const p = perfumesData.find(x => x.name === i.name);
+                    const q = parseInt(i.qty, 10);
+                    return p && q > 0 ? { ...p, qty: Math.min(q, 99) } : null;
+                }).filter(Boolean);
+            } catch (e) { return []; }
+        }
+        function saveCart() {
+            try { localStorage.setItem(CART_KEY, JSON.stringify(cart.map(i => ({ name: i.name, qty: i.qty })))); } catch (e) {}
+        }
+
         function calculateTotals() {
             if (cart.length === 0) {
                 return { totalItems: 0, subtotal: 0, discount: 0, deliveryFee: 0, finalTotal: 0 };
@@ -731,6 +803,7 @@
         }
 
         function updateCartUI() {
+            saveCart();
             const { totalItems, subtotal, discount, deliveryFee, finalTotal } = calculateTotals();
             
             const countEl = document.getElementById('cart-count');
@@ -758,13 +831,13 @@
                     itemsEl.innerHTML += `
                         <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
                             <div class="flex items-center gap-3">
-                                <img src="${getImageUrl(item.name)}" class="w-12 h-12 rounded-lg object-cover">
+                                <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover">
                                 <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">\u20B9${item.price} x ${item.qty}</p></div>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button onclick="changeCartQty(${idx}, -1)" class="qty-btn text-xs">-</button>
+                                <button onclick="changeCartQty(${idx}, -1)" aria-label="Decrease quantity" class="qty-btn text-xs">-</button>
                                 <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                                <button onclick="changeCartQty(${idx}, 1)" class="qty-btn text-xs">+</button>
+                                <button onclick="changeCartQty(${idx}, 1)" aria-label="Increase quantity" class="qty-btn text-xs">+</button>
                             </div>
                         </div>`;
                 });
@@ -822,6 +895,12 @@
             }, 300);
         }
 
+        function showCheckoutError(msg) {
+            const el = document.getElementById('checkout-error');
+            el.textContent = msg;
+            el.classList.toggle('hidden', !msg);
+        }
+
         function submitOrder() {
             const name = document.getElementById('bill-name').value.trim();
             const address = document.getElementById('bill-address').value.trim();
@@ -830,42 +909,27 @@
             const phone = document.getElementById('bill-phone').value.trim();
             const email = document.getElementById('bill-email').value.trim();
             
-            let missing = [];
-            if(!name) missing.push("Name");
-            if(!email) missing.push("Email");
-            if(!phone) missing.push("Phone");
-            if(!address) missing.push("Address");
-            if(!street) missing.push("Street");
-            if(!pincode) missing.push("Pincode");
+            showCheckoutError('');
+            const ids = { name: 'bill-name', email: 'bill-email', phone: 'bill-phone', address: 'bill-address', street: 'bill-street', pincode: 'bill-pincode' };
+            const values = { name, email, phone, address, street, pincode };
+            const bad = Object.keys(values).filter(k => !values[k]);
 
-            // Basic validations
-            let invalid = false;
-            const phoneRegex = /^[0-9]{10,12}$/;
-            const emailRegex = /\S+@\S+\.\S+/;
+            let phoneClean = phone.replace(/\D/g, '');
+            if (phoneClean.length === 12 && phoneClean.startsWith('91')) phoneClean = phoneClean.slice(2);
+            else if (phoneClean.length === 11 && phoneClean.startsWith('0')) phoneClean = phoneClean.slice(1);
 
-            if(phone && !phoneRegex.test(phone)) {
-                invalid = true;
-                alert("Please enter a valid phone number (10-12 digits)");
-            }
-            if(email && !emailRegex.test(email)) {
-                invalid = true;
-                alert("Please enter a valid email address");
-            }
+            let errorMsg = '';
+            if (bad.length) errorMsg = 'Please fill all fields.';
+            else if (!/^[0-9]{10}$/.test(phoneClean)) { bad.push('phone'); errorMsg = 'Please enter a valid 10-digit phone number.'; }
+            else if (!/^\S+@\S+\.\S+$/.test(email)) { bad.push('email'); errorMsg = 'Please enter a valid email address.'; }
+            else if (!/^[0-9]{6}$/.test(pincode)) { bad.push('pincode'); errorMsg = 'Pincode must be 6 digits.'; }
 
-            if(missing.length > 0 || invalid) {
+            if (errorMsg) {
                 const btn = document.getElementById('btn-submit-order');
                 btn.classList.add('animate-shake');
-                setTimeout(()=> btn.classList.remove('animate-shake'), 500);
-                
-                if(!name) document.getElementById('bill-name').style.borderColor = '#ef4444';
-                if(!email) document.getElementById('bill-email').style.borderColor = '#ef4444';
-                if(!phone) document.getElementById('bill-phone').style.borderColor = '#ef4444';
-                if(!address) document.getElementById('bill-address').style.borderColor = '#ef4444';
-                if(!street) document.getElementById('bill-street').style.borderColor = '#ef4444';
-                if(!pincode) document.getElementById('bill-pincode').style.borderColor = '#ef4444';
-                
-                if(!invalid) alert("Please fill all fields");
-
+                setTimeout(() => btn.classList.remove('animate-shake'), 500);
+                bad.forEach(k => { document.getElementById(ids[k]).style.borderColor = '#ef4444'; });
+                showCheckoutError(errorMsg);
                 setTimeout(() => {
                     document.querySelectorAll('.checkout-input').forEach(el => el.style.borderColor = 'rgba(255, 255, 255, 0.1)');
                 }, 2000);
@@ -888,7 +952,7 @@
             let generatedOrderBody = `
 Customer Name: ${name}
 Email: ${email}
-Phone: ${phone}
+Phone: ${phoneClean}
 Payment Method: ${paymentMsg}
 Delivery Address: 
 ${address}
@@ -905,7 +969,7 @@ Total Amount: \u20B9${finalTotal}
             `;
 
             if (typeof emailjs === 'undefined') {
-                alert("Error: Email service not loaded. Please check your internet connection.");
+                showCheckoutError("Email service not loaded. Please check your internet connection.");
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
                 return;
@@ -935,7 +999,7 @@ Total Amount: \u20B9${finalTotal}
                 }, 2500);
             }, (error) => {
                 console.error("EmailJS Error:", error);
-                alert('Failed to send order. Please try again.');
+                showCheckoutError('Failed to send order. Please try again.');
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
             });
@@ -959,8 +1023,12 @@ Total Amount: \u20B9${finalTotal}
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
         }
         
-        function getImageUrl(name) { return imageMap[name] || `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
-        function handleImageError(img, name) { img.onerror = null; img.src = `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
+        function placeholderUrl(name) { return `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
+        function getImageUrl(name) {
+            const p = perfumesData.find(x => x.name === name);
+            return (p && firstImage[p.imgKey]) || placeholderUrl(name);
+        }
+        function handleImageError(img, name) { img.onerror = null; img.src = placeholderUrl(name); }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.emailjs) {
@@ -971,13 +1039,15 @@ Total Amount: \u20B9${finalTotal}
             const isDark = document.body.getAttribute('data-theme') === 'dark';
             document.querySelector('.toggle-knob').innerHTML = isDark ? '<i data-lucide="moon" class="w-4 h-4"></i>' : '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
 
+            document.getElementById("year").textContent = new Date().getFullYear();
+            let gridHTML = "";
             perfumesData.forEach((p, index) => {
                 const safeName = p.name.replace(/'/g, "\\'");
                 const delay = index * 100;
-                grid.innerHTML += `
+                gridHTML += `
                     <div class="reveal-node glass-panel rounded-3xl overflow-hidden cursor-pointer flex flex-col group h-full hover:z-10 transition-all duration-700" onclick="showScentDetails('${safeName}')" style="transition-delay: ${delay}ms">
                         <div class="relative h-72 overflow-hidden">
-                            <img src="${getImageUrl(p.name)}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
+                            <img loading="lazy" decoding="async" src="${placeholderUrl(p.name)}" data-img-key="${p.imgKey}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
                             <div class="absolute bottom-5 left-5 right-5">
                                 <p class="text-[10px] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
@@ -992,23 +1062,22 @@ Total Amount: \u20B9${finalTotal}
                         </div>
                     </div>`;
             });
+            grid.innerHTML = gridHTML;
             lucide.createIcons();
+
+            document.querySelectorAll('img[data-img-key]').forEach(async img => {
+                const slides = await resolveSlides(img.dataset.imgKey);
+                if (slides[0]) img.src = slides[0];
+            });
             
             const revealElements = document.querySelectorAll('.reveal-node');
             revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
             setupScrollReveal();
 
-            document.addEventListener('mousemove', e => {
-                document.querySelectorAll('.glass-panel').forEach(card => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    card.style.setProperty('--mouse-x', `${x}px`);
-                    card.style.setProperty('--mouse-y', `${y}px`);
-                });
-            });
             
+            cart = loadCart();
             updateCartUI();
+            Promise.all(perfumesData.map(p => resolveSlides(p.imgKey))).then(updateCartUI);
         });
 
         function toggleMobileMenu() {
@@ -1024,20 +1093,15 @@ Total Amount: \u20B9${finalTotal}
             const iconContainer = document.querySelector('.toggle-knob');
             if (current === 'dark') {
                 body.removeAttribute('data-theme');
-                localStorage.setItem('avira-theme', 'light');
+                try { localStorage.setItem('avira-theme', 'light'); } catch (e) {}
                 iconContainer.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
             } else {
                 body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('avira-theme', 'dark');
+                try { localStorage.setItem('avira-theme', 'dark'); } catch (e) {}
                 iconContainer.innerHTML = '<i data-lucide="moon" class="w-4 h-4"></i>';
             }
             lucide.createIcons();
         }
-        (function() {
-            const saved = localStorage.getItem('avira-theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (saved === 'dark' || (!saved && prefersDark)) document.body.setAttribute('data-theme', 'dark');
-        })();
 
         function setupScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
@@ -1052,6 +1116,23 @@ Total Amount: \u20B9${finalTotal}
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
+        let modalSlides = [], modalSlideIdx = 0;
+        function renderModalSlide() {
+            const multi = modalSlides.length > 1;
+            if (modalSlides.length) document.getElementById('modal-image').src = modalSlides[modalSlideIdx];
+            ['modal-prev', 'modal-next'].forEach(id => {
+                const b = document.getElementById(id);
+                b.classList.toggle('hidden', !multi); b.classList.toggle('flex', multi);
+            });
+            document.getElementById('modal-dots').innerHTML = multi
+                ? modalSlides.map((_, i) => `<span class="w-2 h-2 rounded-full ${i === modalSlideIdx ? 'bg-white' : 'bg-white/40'}"></span>`).join('') : '';
+        }
+        function changeModalSlide(d) {
+            if (modalSlides.length < 2) return;
+            modalSlideIdx = (modalSlideIdx + d + modalSlides.length) % modalSlides.length;
+            renderModalSlide();
+        }
+
         function showScentDetails(name) {
             currentScent = perfumesData.find(p => p.name === name);
             if (!currentScent) return;
@@ -1062,8 +1143,15 @@ Total Amount: \u20B9${finalTotal}
             document.getElementById('modal-notes').textContent = currentScent.notes;
             document.getElementById('modal-description').textContent = currentScent.description;
             const imgEl = document.getElementById('modal-image');
-            imgEl.src = getImageUrl(currentScent.name);
+            imgEl.alt = currentScent.name;
+            imgEl.src = placeholderUrl(currentScent.name);
             imgEl.onerror = function() { handleImageError(this, currentScent.name) };
+            modalSlides = []; modalSlideIdx = 0; renderModalSlide();
+            const shown = currentScent;
+            resolveSlides(shown.imgKey).then(slides => {
+                if (currentScent !== shown || !slides.length) return;
+                modalSlides = slides; modalSlideIdx = 0; renderModalSlide();
+            });
             const modal = document.getElementById('scent-modal');
             const content = document.getElementById('scent-content');
             const backdrop = document.getElementById('scent-backdrop');
@@ -1185,10 +1273,18 @@ Total Amount: \u20B9${finalTotal}
         }
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) nav.classList.add('scale-[0.98]', 'opacity-95');
-            else nav.classList.remove('scale-[0.98]', 'opacity-95');
-            const orbs = document.querySelectorAll('.orb');
-            orbs.forEach((orb, index) => { const speed = (index + 1) * 0.1; orb.style.transform = `translateY(${window.scrollY * speed}px)`; });
+            const scrolled = window.scrollY > 50;
+            nav.classList.toggle('scale-[0.98]', scrolled);
+            nav.classList.toggle('opacity-95', scrolled);
+        }, { passive: true });
+
+        document.addEventListener('keydown', e => {
+            if (e.key !== 'Escape') return;
+            const isOpen = id => !document.getElementById(id).classList.contains('hidden');
+            if (isOpen('quiz-modal')) closeQuiz();
+            else if (isOpen('scent-modal')) closeScentDetails();
+            else if (isOpen('cart-modal')) closeCart();
+            else if (!document.getElementById('mobile-menu').classList.contains('-translate-y-full')) toggleMobileMenu();
         });
 
         // REBALANCED QUIZ LOGIC FOR NEW SCENTS
