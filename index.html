@@ -13,7 +13,6 @@
     <title>Avira Perfumes | Liquid Glass Edition</title>
     
     <!-- Load Tailwind CSS -->
-    <link rel="stylesheet" href="tailwind.css">
     
     <!-- Load EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -185,13 +184,25 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        /* Dynamic scaling: every rem-based size (text, padding, cards, popups) follows the screen width.
+           ~15px on phones, ~16px on laptops, up to 20px on very large screens. Respects the browser's font-size setting. */
+        html { font-size: clamp(93.75%, calc(0.3vw + 0.78rem), 125%); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         @media (max-width: 768px) { .orb-3 { display: none; } }
         @media (prefers-reduced-motion: reduce) { .orb { animation: none !important; } }
 
+        /* Quiz */
+        .quiz-title { font-size: clamp(1.5rem, 5.5vw, 2.25rem); }
+        .quiz-option, .quiz-card { background: color-mix(in srgb, var(--color-text) 6%, transparent); border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent); color: var(--color-text-muted); }
+        .quiz-option:hover { background: color-mix(in srgb, var(--color-text) 10%, transparent); }
+        .quiz-option.is-selected { background: var(--color-gold); border-color: transparent; color: #000; }
+        .quiz-next { border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent); color: color-mix(in srgb, var(--color-text) 35%, transparent); cursor: not-allowed; }
+        .quiz-next.is-ready { background: var(--color-gold); border-color: transparent; color: #000; cursor: pointer; }
+        .quiz-progress { height: 4px; border-radius: 999px; background: color-mix(in srgb, var(--color-text) 12%, transparent); overflow: hidden; }
+        .quiz-progress > div { height: 100%; background: var(--color-gold); border-radius: 999px; transition: width 0.4s ease; }
+
         /* Fluid type */
-        .hero-title { font-size: clamp(3.5rem, 15vw, 8rem); }
-        .h2-fluid { font-size: clamp(2.25rem, 7.5vw, 3.75rem); }
+        .hero-title { font-size: clamp(3.5rem, calc(11vw + 1rem), 8rem); }
+        .h2-fluid { font-size: clamp(2rem, 7.5vw, 3.75rem); overflow-wrap: anywhere; }
         .quote-fluid { font-size: clamp(1.75rem, 5.5vw, 3rem); }
 
         /* Reveal System */
@@ -245,6 +256,8 @@
             -ms-overflow-style: none;
         }
     </style>
+    <!-- Loaded last so utility classes win over the custom CSS above (same order the old CDN used) -->
+    <link rel="stylesheet" href="tailwind.css">
 </head>
 <body class="antialiased selection:bg-avira-gold selection:text-black">
     <script>
@@ -274,9 +287,9 @@
                 <i data-lucide="menu" class="w-6 h-6 text-avira-text"></i>
             </button>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="#collection" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Collection</a>
-                <a href="#philosophy" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Philosophy</a>
-                <a href="#how-to-use" class="text-[11px] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">How To Use</a>
+                <a href="#collection" class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Collection</a>
+                <a href="#philosophy" class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Philosophy</a>
+                <a href="#how-to-use" class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">How To Use</a>
             </div>
             <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
                 <a href="#" class="group flex items-center gap-3 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
@@ -289,7 +302,7 @@
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-avira-text"></i>
                     <span id="cart-count" class="cart-badge">0</span>
                 </button>
-                <button onclick="openQuiz()" class="hidden md:block btn-liquid px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-[0.2em]">
+                <button onclick="openQuiz()" class="hidden md:block btn-liquid px-6 py-2 rounded-full text-[0.625rem] font-bold uppercase tracking-[0.2em]">
                     <span>Scent Finder</span>
                 </button>
             </div>
@@ -313,7 +326,7 @@
     <section class="min-h-[100svh] flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
         <div class="z-10 max-w-5xl mx-auto perspective-1000">
             <div class="blur-enter" style="animation-delay: 0.1s;">
-                <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[10px] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
+                <span class="inline-block py-1 px-4 rounded-full border border-avira-gold/30 bg-avira-gold/5 text-[0.625rem] md:text-xs uppercase tracking-[0.3em] text-avira-text font-bold backdrop-blur-sm">
                     Editorial Luxury
                 </span>
             </div>
@@ -356,8 +369,8 @@
     <!-- Philosophy -->
     <section id="philosophy" class="py-20 md:py-32 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-10 md:gap-20 items-center">
-                <div class="reveal-node glass-panel p-10 md:p-16 rounded-[2.5rem] border-l-4 border-l-avira-gold">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
+                <div class="reveal-node glass-panel p-6 sm:p-10 md:p-16 rounded-[2.5rem] border-l-4 border-l-avira-gold">
                     <h2 class="h2-fluid font-playfair text-avira-text mb-8 leading-tight">
                         Time is the <br><span class="text-avira-gold italic">True Measure.</span>
                     </h2>
@@ -371,7 +384,7 @@
                     </div>
                 </div>
                 <div class="space-y-8">
-                     <div class="reveal-node glass-panel p-10 rounded-3xl group cursor-default">
+                     <div class="reveal-node glass-panel p-6 sm:p-10 rounded-3xl group cursor-default">
                         <h3 class="text-sm font-bold uppercase tracking-[0.2em] text-avira-gold mb-3">Artisan Blending</h3>
                         <p class="text-avira-textMuted font-inter font-light">Every batch is individually blended and poured by skilled artisans.</p>
                      </div>
@@ -425,7 +438,7 @@
     <div id="cart-modal" role="dialog" aria-modal="true" aria-label="Your cart" class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-700 ease-in-out opacity-0" id="cart-backdrop" onclick="closeCart()"></div>
         <div id="cart-content" class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80dvh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
+            <div id="cart-header" class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
                 <h2 class="text-3xl font-playfair text-avira-text transition-all duration-300" id="cart-title">Your Selection</h2>
                 <button aria-label="Close" onclick="closeCart()" class="p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-sm hover:rotate-90">
                     <i data-lucide="x" class="w-5 h-5"></i>
@@ -468,7 +481,7 @@
                      <!-- Total Box -->
                     <div class="checkout-box mb-6 flex justify-between items-center">
                         <div>
-                            <p class="text-[10px] uppercase tracking-widest text-[#888] mb-1">Total Amount</p>
+                            <p class="text-[0.625rem] uppercase tracking-widest text-[#888] mb-1">Total Amount</p>
                             <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">&#8377;0.00</p>
                         </div>
                         <button onclick="hideCheckout()" class="text-xs text-avira-gold hover:text-white hover:underline transition-colors">Edit Cart</button>
@@ -580,7 +593,7 @@
             <button aria-label="Close" onclick="closeQuiz()" class="absolute top-6 right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col justify-center overflow-y-auto"></div>
+            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col overflow-y-auto overscroll-contain pt-10"></div>
         </div>
     </div>
     
@@ -606,7 +619,7 @@
                 </div>
             </div>
             
-            <p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted">&copy; <span id="year">2026</span> Avira Atelier</p>
+            <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted">&copy; <span id="year">2026</span> Avira Atelier</p>
             <div class="mt-8 flex justify-center">
                 <a href="https://www.instagram.com/avira_.official" target="_blank" class="flex items-center space-x-2 text-xs uppercase tracking-widest text-avira-text hover:text-avira-gold transition-colors border-b border-transparent hover:border-avira-gold pb-1 group">
                     <span>Follow @avira_.official</span>
@@ -622,7 +635,7 @@
         let cart = [];
         let currentScent = null;
         let modalQty = 1;
-        let quizState = { step: 0, scores: {}, selected: [] };
+        let quizState = { step: 0, questions: [], selected: [] };
         
         const EMAILJS_SERVICE_ID = "service_bsilwzs";
         const EMAILJS_TEMPLATE_ID = "template_sj18onc";
@@ -680,18 +693,18 @@
 
 
         const perfumesData = [
-            { name: "Cherry Blossom", imgKey: "cherry_blossom", price: 499, feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air." },
-            { name: "Cafe Date", imgKey: "cafe_date", price: 499, feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather." },
-            { name: "Mystic Santale", imgKey: "mystic_santale", price: 499, feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber." },
-            { name: "Floral Specter", imgKey: "floral_specter", price: 499, feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss." },
-            { name: "After Hour", imgKey: "after_hour", price: 499, feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf." },
-            { name: "Glacial Getaway", imgKey: "glacial_gataway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine." },
-            { name: "Orion Hunt", imgKey: "orion_hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver." },
-            { name: "Midnight Swim", imgKey: "midnight_swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine." },
-            { name: "Amber Creme", imgKey: "amber_creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness." },
-            { name: "Rebel Night", imgKey: "rebel_night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood." },
-            { name: "Crystal Bloom", imgKey: "crystal_bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk." },
-            { name: "Avira Signature", imgKey: "avira_signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark." }
+            { name: "Cherry Blossom", imgKey: "cherry_blossom", price: 499, feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air.", profile: "Fresh", traits: { floral: 3, fresh: 3, soft: 3 } },
+            { name: "Cafe Date", imgKey: "cafe_date", price: 499, feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather.", profile: "Warm", traits: { sweet: 3, cozy: 2, dark: 2, bold: 1 } },
+            { name: "Mystic Santale", imgKey: "mystic_santale", price: 499, feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber.", profile: "Warm", traits: { woody: 3, cozy: 2, dark: 1, soft: 1, luxe: 1 } },
+            { name: "Floral Specter", imgKey: "floral_specter", price: 499, feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss.", profile: "Fresh", traits: { floral: 3, dark: 2, soft: 1, luxe: 1 } },
+            { name: "After Hour", imgKey: "after_hour", price: 499, feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf.", profile: "Dark", traits: { dark: 3, sweet: 2, luxe: 1, bold: 1 } },
+            { name: "Glacial Getaway", imgKey: "glacial_gataway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine.", profile: "Fresh", traits: { fresh: 3, soft: 1, woody: 1 } },
+            { name: "Orion Hunt", imgKey: "orion_hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver.", profile: "Dark", traits: { bold: 3, woody: 2, fresh: 1 } },
+            { name: "Midnight Swim", imgKey: "midnight_swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine.", profile: "Fresh", traits: { fresh: 2, dark: 2, luxe: 2, floral: 1 } },
+            { name: "Amber Creme", imgKey: "amber_creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness.", profile: "Warm", traits: { cozy: 3, woody: 2, sweet: 1 } },
+            { name: "Rebel Night", imgKey: "rebel_night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood.", profile: "Dark", traits: { bold: 3, dark: 2, woody: 3 } },
+            { name: "Crystal Bloom", imgKey: "crystal_bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk.", profile: "Fresh", traits: { floral: 2, sweet: 3, luxe: 2, soft: 2, fresh: 1 } },
+            { name: "Avira Signature", imgKey: "avira_signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark.", profile: "Luxurious", traits: { luxe: 3, bold: 2, sweet: 1, woody: 1, dark: 1 } }
         ];
         
         const CART_KEY = 'avira-cart';
@@ -792,7 +805,7 @@
                 let summaryHTML = '';
                 if (discount > 0) {
                     summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>\u20B9${subtotal}</span></div>
-                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[8px] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
+                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[0.5rem] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
                 }
                 summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B969</span> \u20B9${deliveryFee}</span></div>`;
                 summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>\u20B9${finalTotal}</span></div>`;
@@ -811,6 +824,7 @@
             
             setTimeout(() => {
                 cartView.style.display = 'none';
+                document.getElementById('cart-header').style.display = 'none';
                 billingForm.classList.remove('hidden');
                 billingForm.classList.add('flex');
                 
@@ -835,6 +849,7 @@
             setTimeout(() => {
                 billingForm.classList.remove('flex');
                 billingForm.classList.add('hidden');
+                document.getElementById('cart-header').style.display = '';
                 
                 cartView.style.display = 'flex';
                 void cartView.offsetWidth;
@@ -997,7 +1012,7 @@ Total Amount: \u20B9${finalTotal}
                             <img loading="lazy" decoding="async" src="${placeholderUrl(p.name)}" data-img-key="${p.imgKey}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
                             <div class="absolute bottom-5 left-5 right-5">
-                                <p class="text-[10px] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
+                                <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
                                 <h3 class="text-2xl playfair font-medium text-white group-hover:text-avira-gold transition-colors duration-500">${p.name}</h3>
                             </div>
                         </div>
@@ -1117,7 +1132,7 @@ Total Amount: \u20B9${finalTotal}
         }
 
         function openQuiz() {
-            quizState = { step: 0, scores: {}, selected: Array(quizQuestions.length).fill(null) };
+            quizState = buildQuizRun();
             const modal = document.getElementById('quiz-modal');
             const content = document.getElementById('quiz-content');
             const backdrop = document.getElementById('quiz-backdrop');
@@ -1136,88 +1151,97 @@ Total Amount: \u20B9${finalTotal}
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
         }
         function selectAnswer(qIdx, optIdx) { quizState.selected[qIdx] = optIdx; renderQuiz(); }
-        function nextStep() { if (quizState.selected[quizState.step] === null) return; if (quizState.step < quizQuestions.length - 1) { quizState.step++; renderQuiz(); } else { calculateResult(); } }
+        function nextStep() {
+            if (quizState.selected[quizState.step] === null) return;
+            if (quizState.step < quizState.questions.length - 1) { quizState.step++; renderQuiz(); }
+            else { calculateResult(); }
+        }
         function prevStep() { if (quizState.step > 0) { quizState.step--; renderQuiz(); } }
+
         function renderQuiz() {
-            const q = quizQuestions[quizState.step];
-            const currentSelected = quizState.selected[quizState.step];
-            const html = `<div class="animate-[fadeIn_0.6s_ease-out]"><p class="text-[10px] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${quizState.step + 1} / ${quizQuestions.length}</p><h3 class="text-3xl md:text-4xl font-playfair text-avira-text text-center mb-10 leading-tight">${q.question}</h3><div class="space-y-4 mb-10">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${quizState.step}, ${idx})" class="w-full text-left p-5 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${currentSelected === idx ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/5 border-avira-text/5 text-avira-textMuted hover:bg-avira-text/10 hover:border-avira-text/20'}"><span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>${currentSelected === idx ? '<span class="text-black font-bold">●</span>' : ''}</button>`).join('')}</div><div class="flex justify-between items-center"><button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${quizState.step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button><button onclick="nextStep()" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${currentSelected !== null ? 'bg-avira-gold text-black hover:scale-105 shadow-xl shadow-avira-gold/20 border-transparent' : 'bg-avira-text/10 text-avira-text/30 cursor-not-allowed border-avira-text/5'}">${quizState.step === quizQuestions.length - 1 ? 'Reveal' : 'Next'}</button></div></div>`;
-            document.getElementById('quiz-body').innerHTML = html;
+            const total = quizState.questions.length;
+            const step = quizState.step;
+            const q = quizState.questions[step];
+            const sel = quizState.selected[step];
+            const isLast = step === total - 1;
+            const options = q.options.map((opt, idx) => `
+                <button onclick="selectAnswer(${step}, ${idx})" class="quiz-option w-full text-left p-4 md:p-5 rounded-2xl transition-all duration-300 flex items-center justify-between gap-3 ${sel === idx ? 'is-selected' : ''}">
+                    <span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>
+                    ${sel === idx ? '<span class="font-bold">&#9679;</span>' : ''}
+                </button>`).join('');
+            document.getElementById('quiz-body').innerHTML = `
+                <div class="my-auto animate-[fadeIn_0.5s_ease-out]">
+                    <div class="quiz-progress mb-5"><div style="width:${((step + 1) / total) * 100}%"></div></div>
+                    <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${step + 1} / ${total}</p>
+                    <h3 class="quiz-title font-playfair text-avira-text text-center mb-8 leading-tight">${q.question}</h3>
+                    <div class="space-y-3 mb-8">${options}</div>
+                    <div class="flex justify-between items-center">
+                        <button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button>
+                        <button onclick="nextStep()" class="quiz-next px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${sel !== null ? 'is-ready' : ''}">${isLast ? 'Reveal' : 'Next'}</button>
+                    </div>
+                </div>`;
+            document.getElementById('quiz-body').scrollTop = 0;
         }
+
         function calculateResult() {
-            // New "Vibe Profile" logic
-            let profiles = { "Fresh": 0, "Dark": 0, "Warm": 0, "Luxurious": 0 };
-            
-            // Map scents to archetypes
-            const scentArchetypes = {
-                "Glacial Getaway": "Fresh",
-                "Cherry Blossom": "Fresh", 
-                "Midnight Swim": "Fresh",
-                "Crystal Bloom": "Fresh",
-                "Floral Specter": "Fresh",
-                "Rebel Night": "Dark",
-                "After Hour": "Dark",
-                "Orion Hunt": "Dark",
-                "Mystic Santale": "Warm",
-                "Cafe Date": "Warm",
-                "Amber Creme": "Warm",
-                "Avira Signature": "Luxurious"
-            };
-
-            // Calculate scores
-            let scores = {};
-            quizQuestions.forEach((q, qIdx) => {
-                const ansIdx = quizState.selected[qIdx];
-                const points = q.options[ansIdx].score;
-                for (const [scent, val] of Object.entries(points)) { 
-                    scores[scent] = (scores[scent] || 0) + val;
-                    // Add to archetype score
-                    if(scentArchetypes[scent]) {
-                        profiles[scentArchetypes[scent]] += val;
-                    }
-                }
-            });
-
-            // Find winner
-            let max = 0; let winners = [];
-            for (const [scent, score] of Object.entries(scores)) { 
-                if (score > max) { max = score; winners = [scent]; } 
-                else if (score === max) winners.push(scent); 
-            }
-            
-            // Tie-breaking using archetype strength if needed
-            let result = winners[0];
-            if (winners.length > 1) {
-                // If tie, pick the one whose archetype is strongest overall
-                result = winners.sort((a,b) => profiles[scentArchetypes[b]] - profiles[scentArchetypes[a]])[0];
-            }
-
-            // Show "Analyzing" state before result
-            const container = document.getElementById('quiz-body');
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-64 animate-[fadeIn_0.5s_ease]">
-                    <div class="w-16 h-16 border-4 border-avira-text/10 border-t-avira-gold rounded-full animate-spin mb-6"></div>
+            const ranked = rankScents();
+            document.getElementById('quiz-body').innerHTML = `
+                <div class="my-auto flex flex-col items-center justify-center py-16 animate-[fadeIn_0.5s_ease]">
+                    <div class="w-16 h-16 border-4 border-avira-gold/30 border-t-avira-gold rounded-full animate-spin mb-6"></div>
                     <p class="text-avira-text font-playfair text-2xl animate-pulse">Analyzing your persona...</p>
-                </div>
-            `;
-
-            setTimeout(() => {
-                showResult(result, scentArchetypes[result]);
-            }, 1500);
+                </div>`;
+            setTimeout(() => showResult(ranked), 1300);
         }
 
-        function showResult(name, vibe) {
-            const scent = perfumesData.find(p => p.name === name);
-            
-            // Dynamic text based on vibe
-            let vibeText = "";
-            if(vibe === "Fresh") vibeText = "You embody clarity and light.";
-            else if(vibe === "Dark") vibeText = "You possess a magnetic, mysterious allure.";
-            else if(vibe === "Warm") vibeText = "You radiate comfort and grounded energy.";
-            else vibeText = "You value bold elegance and timeless luxury.";
+        function quickAddToCart(name, btn) {
+            const p = perfumesData.find(x => x.name === name);
+            if (!p) return;
+            const existing = cart.find(i => i.name === name);
+            if (existing) existing.qty = Math.min(existing.qty + 1, 99);
+            else cart.push({ ...p, qty: 1 });
+            const cartBtn = document.getElementById('main-cart-btn');
+            cartBtn.classList.remove('animate-pop');
+            void cartBtn.offsetWidth;
+            cartBtn.classList.add('animate-pop');
+            updateCartUI();
+            if (btn) {
+                const label = btn.querySelector('span');
+                label.textContent = 'Added \u2713';
+                setTimeout(() => { if (btn.isConnected) label.textContent = 'Add to Bag'; }, 1600);
+            }
+        }
 
-            const html = `<div class="text-center animate-[fadeIn_0.8s_ease-out] py-4"><p class="text-xs uppercase tracking-[0.3em] text-avira-gold mb-2">Your Signature Scent</p><h2 class="h2-fluid font-playfair text-avira-text mb-4 drop-shadow-sm">${scent.name}</h2><p class="text-sm font-inter text-avira-textMuted mb-8 tracking-wide">${vibeText}</p><div class="w-56 h-56 mx-auto rounded-full p-1 border border-avira-gold/30 mb-8 relative group"><div class="absolute inset-0 bg-avira-gold/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-1000"></div><img src="${getImageUrl(name)}" class="w-full h-full object-cover rounded-full relative z-10 shadow-2xl" onerror="handleImageError(this, '${name}')"></div><p class="font-cormorant italic text-xl text-avira-textMuted mb-10 max-w-md mx-auto leading-relaxed">"${scent.description}"</p><div class="flex gap-6 justify-center"><button onclick="closeQuiz(); showScentDetails('${name}')" class="btn-liquid px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text border-avira-text/20 hover:bg-avira-text/5"><span>View Details</span></button><button onclick="openQuiz()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text px-4 transition-colors">Retake</button></div></div>`;
-            document.getElementById('quiz-body').innerHTML = html;
+        function showResult(ranked) {
+            const pick = ranked[0].p;
+            const runners = ranked.slice(1, 3).map(r => r.p);
+            const vibeText = PROFILE_TEXT[pick.profile] || PROFILE_TEXT.Luxurious;
+            const runnerCards = runners.map((p, i) => `
+                <div class="quiz-card rounded-2xl p-3 text-left flex flex-col">
+                    <img src="${getImageUrl(p.name)}" alt="${p.name}" class="w-full h-28 object-cover rounded-xl mb-3" onerror="handleImageError(this, ${jsArg(p.name)})">
+                    <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-gold mb-1">Runner-up ${i + 1}</p>
+                    <p class="font-playfair text-lg text-avira-text leading-tight">${p.name}</p>
+                    <p class="text-xs font-inter text-avira-textMuted mb-3">${p.feel}</p>
+                    <button onclick="closeQuiz(); showScentDetails(${jsArg(p.name)})" class="mt-auto text-[0.6875rem] uppercase tracking-widest text-avira-text border border-avira-gold rounded-full py-2 hover:bg-avira-gold hover:text-black transition-colors">View</button>
+                </div>`).join('');
+            document.getElementById('quiz-body').innerHTML = `
+                <div class="my-auto text-center animate-[fadeIn_0.8s_ease-out] py-2">
+                    <p class="text-xs uppercase tracking-[0.3em] text-avira-gold mb-2">Your Signature Scent</p>
+                    <h2 class="h2-fluid font-playfair text-avira-text mb-2">${pick.name}</h2>
+                    <p class="text-sm font-inter text-avira-textMuted mb-1 tracking-wide">${vibeText}</p>
+                    <p class="text-[0.6875rem] uppercase tracking-[0.2em] text-avira-textMuted mb-6">${pick.feel}</p>
+                    <div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-full p-1 border border-avira-gold mb-6">
+                        <img src="${getImageUrl(pick.name)}" alt="${pick.name}" class="w-full h-full object-cover rounded-full shadow-2xl" onerror="handleImageError(this, ${jsArg(pick.name)})">
+                    </div>
+                    <p class="font-cormorant italic text-lg md:text-xl text-avira-textMuted mb-8 max-w-md mx-auto leading-relaxed">&ldquo;${pick.description}&rdquo;</p>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+                        <button onclick="quickAddToCart(${jsArg(pick.name)}, this)" class="px-8 py-3 rounded-full bg-avira-gold text-black text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"><span>Add to Bag</span></button>
+                        <button onclick="closeQuiz(); showScentDetails(${jsArg(pick.name)})" class="px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest text-avira-text border border-avira-gold hover:bg-avira-gold hover:text-black transition-colors"><span>View Details</span></button>
+                    </div>
+                    <p class="text-[0.625rem] uppercase tracking-[0.3em] text-avira-textMuted mb-4">You might also love</p>
+                    <div class="grid grid-cols-2 gap-3 mb-8">${runnerCards}</div>
+                    <button onclick="openQuiz()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text px-4 py-2 transition-colors">Retake</button>
+                </div>`;
+            document.getElementById('quiz-body').scrollTop = 0;
         }
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
@@ -1235,73 +1259,168 @@ Total Amount: \u20B9${finalTotal}
             else if (!document.getElementById('mobile-menu').classList.contains('-translate-y-full')) toggleMobileMenu();
         });
 
-        // REBALANCED QUIZ LOGIC FOR NEW SCENTS
-        const quizQuestions = [
-            { 
-                id: 1, 
-                question: "What time of day defines your energy?", 
-                options: [ 
-                    { text: "Sunrise: Clean, fresh beginnings.", score: { "Glacial Getaway": 3, "Cherry Blossom": 2, "Crystal Bloom": 2 } }, 
-                    { text: "Midday: Focused and ambitious.", score: { "Orion Hunt": 3, "Floral Specter": 1, "Avira Signature": 2 } }, 
-                    { text: "Afternoon: Cozy, contemplative moments.", score: { "Cafe Date": 3, "Amber Creme": 2, "Mystic Santale": 1 } }, 
-                    { text: "Midnight: Intriguing, sensual mystery.", score: { "After Hour": 2, "Rebel Night": 3, "Midnight Swim": 2 } } 
-                ] 
-            },
-            { 
-                id: 2, 
-                question: "Your ideal escape looks like...", 
-                options: [ 
-                    { text: "A silent, snowy mountain peak.", score: { "Glacial Getaway": 3, "Mystic Santale": 1, "Crystal Bloom": 1 } }, 
-                    { text: "A vibrant, metropolitan rooftop.", score: { "Avira Signature": 3, "Orion Hunt": 2, "Rebel Night": 1 } }, 
-                    { text: "A warm, rustic cabin by the fire.", score: { "Amber Creme": 3, "Cafe Date": 2, "Mystic Santale": 2 } }, 
-                    { text: "A secluded, moonlit beach.", score: { "Midnight Swim": 3, "Floral Specter": 2, "After Hour": 1 } } 
-                ] 
-            },
-            { 
-                id: 3, 
-                question: "Which texture appeals most to you?", 
-                options: [ 
-                    { text: "Crisp, white linen.", score: { "Cherry Blossom": 3, "Crystal Bloom": 2, "Glacial Getaway": 1 } }, 
-                    { text: "Rich, worn leather.", score: { "Rebel Night": 3, "Orion Hunt": 2, "After Hour": 2 } }, 
-                    { text: "Soft, warm cashmere.", score: { "Amber Creme": 3, "Cafe Date": 2, "Mystic Santale": 1 } }, 
-                    { text: "Sheer, flowing silk.", score: { "Floral Specter": 3, "Midnight Swim": 2, "Avira Signature": 1 } } 
-                ] 
-            },
-            { 
-                id: 4, 
-                question: "Which scent note grounds you?", 
-                options: [ 
-                    { text: "Smoky woods and spices.", score: { "Rebel Night": 3, "Orion Hunt": 2, "Avira Signature": 2 } }, 
-                    { text: "Sweet vanilla or caramel.", score: { "Cafe Date": 2, "Amber Creme": 3, "Avira Signature": 1 } }, 
-                    { text: "Clean ocean air.", score: { "Midnight Swim": 3, "Glacial Getaway": 2, "Crystal Bloom": 1 } }, 
-                    { text: "Earthy, creamy sandalwood.", score: { "Mystic Santale": 3, "Amber Creme": 1, "Rebel Night": 1 } } 
-                ] 
-            },
-            { 
-                id: 5, 
-                question: "Ideally, a perfume should...", 
-                options: [ 
-                    { text: "Whisper politely.", score: { "Cherry Blossom": 3, "Crystal Bloom": 3, "Glacial Getaway": 1 } }, 
-                    { text: "Announce my arrival.", score: { "Avira Signature": 3, "Rebel Night": 2, "Orion Hunt": 2 } }, 
-                    { text: "Comfort me like a hug.", score: { "Amber Creme": 3, "Cafe Date": 3, "Mystic Santale": 1 } }, 
-                    { text: "Intrigue those close to me.", score: { "Midnight Swim": 2, "After Hour": 3, "Floral Specter": 2 } } 
-                ] 
-            },
-            { 
-                id: 6, 
-                question: "Pick a material:", 
-                options: [ 
-                    { text: "Cool Marble.", score: { "Floral Specter": 2, "Glacial Getaway": 2 } }, { text: "Warm Velvet.", score: { "Rebel Night": 2, "Amber Creme": 2 } }, { text: "Worn Leather.", score: { "Cafe Date": 2, "Orion Hunt": 2 } }, { text: "Fresh Cotton.", score: { "Cherry Blossom": 2, "Midnight Swim": 2 } } ] },
-            { 
-                id: 7, 
-                question: "Pick a floral inspiration:", 
-                options: [ 
-                    { text: "Delicate, pale pink blossoms.", score: { "Cherry Blossom": 3, "Crystal Bloom": 2 } }, 
-                    { text: "Intoxicating white flowers.", score: { "Floral Specter": 2, "Midnight Swim": 1 } }, 
-                    { text: "Exotic, dark, mysterious blooms.", score: { "Rebel Night": 2, "After Hour": 1 } } 
-                ] 
-            }
+        /* =========================================================
+           QUIZ SYSTEM
+           - Every perfume in perfumesData has a `profile` ("Fresh", "Dark", "Warm"
+             or "Luxurious") and optional `traits` { trait: 0-3 }. If traits are
+             missing, defaults for the profile are used - so a new perfume only
+             needs a profile to appear in quiz results.
+           - Answers carry trait weights, never perfume names.
+           - Every run asks QUIZ_LENGTH random questions (preferring ones not
+             asked last time) with the options in random order.
+           - Result = best match + 2 runner-ups.
+           Traits: fresh, floral, sweet, cozy, woody, dark, bold, soft, luxe
+           ========================================================= */
+        const QUIZ_LENGTH = 7;
+        const PROFILE_TRAITS = {
+            Fresh: { fresh: 2, soft: 1 },
+            Dark: { dark: 2, bold: 1 },
+            Warm: { cozy: 2, sweet: 1 },
+            Luxurious: { luxe: 2, bold: 1 }
+        };
+        const PROFILE_TEXT = {
+            Fresh: "You embody clarity and light.",
+            Dark: "You possess a magnetic, mysterious allure.",
+            Warm: "You radiate comfort and grounded energy.",
+            Luxurious: "You value bold elegance and timeless luxury."
+        };
+        const QUIZ_BANK = [
+            { question: "What time of day defines your energy?", options: [
+                { text: "Sunrise: Clean, fresh beginnings.", traits: { fresh: 3, soft: 2, floral: 1 } },
+                { text: "Midday: Focused and ambitious.", traits: { bold: 3, luxe: 2, woody: 1 } },
+                { text: "Afternoon: Cozy, contemplative moments.", traits: { cozy: 3, sweet: 2, woody: 1 } },
+                { text: "Midnight: Intriguing, sensual mystery.", traits: { dark: 3, bold: 1, fresh: 1 } } ] },
+            { question: "Your ideal escape looks like...", options: [
+                { text: "A silent, snowy mountain peak.", traits: { fresh: 3, soft: 1, woody: 1 } },
+                { text: "A vibrant, metropolitan rooftop.", traits: { luxe: 3, bold: 2 } },
+                { text: "A warm, rustic cabin by the fire.", traits: { cozy: 3, woody: 2, sweet: 1 } },
+                { text: "A secluded, moonlit beach.", traits: { dark: 2, fresh: 2, floral: 1 } } ] },
+            { question: "Which texture appeals most to you?", options: [
+                { text: "Crisp, white linen.", traits: { soft: 3, fresh: 2 } },
+                { text: "Rich, worn leather.", traits: { dark: 2, bold: 3, woody: 1 } },
+                { text: "Soft, warm cashmere.", traits: { cozy: 3, soft: 2, sweet: 1 } },
+                { text: "Sheer, flowing silk.", traits: { floral: 2, luxe: 2, soft: 2 } } ] },
+            { question: "Which scent note grounds you?", options: [
+                { text: "Smoky woods and spices.", traits: { woody: 3, bold: 2, dark: 1 } },
+                { text: "Sweet vanilla or caramel.", traits: { sweet: 3, cozy: 2 } },
+                { text: "Clean ocean air.", traits: { fresh: 3, soft: 1 } },
+                { text: "Earthy, creamy sandalwood.", traits: { woody: 2, cozy: 2, soft: 1 } } ] },
+            { question: "Ideally, a perfume should...", options: [
+                { text: "Whisper politely.", traits: { soft: 3, fresh: 1 } },
+                { text: "Announce my arrival.", traits: { bold: 3, luxe: 2 } },
+                { text: "Comfort me like a hug.", traits: { cozy: 3, sweet: 2 } },
+                { text: "Intrigue those close to me.", traits: { dark: 3, floral: 1, luxe: 1 } } ] },
+            { question: "Pick a material:", options: [
+                { text: "Cool marble.", traits: { fresh: 2, luxe: 2, soft: 1 } },
+                { text: "Warm velvet.", traits: { cozy: 2, dark: 2, luxe: 1 } },
+                { text: "Worn leather.", traits: { dark: 1, bold: 2, woody: 2 } },
+                { text: "Fresh cotton.", traits: { fresh: 2, soft: 3 } } ] },
+            { question: "Pick a floral inspiration:", options: [
+                { text: "Delicate, pale pink blossoms.", traits: { floral: 3, soft: 2, sweet: 1 } },
+                { text: "Intoxicating white flowers.", traits: { floral: 3, luxe: 1, dark: 1 } },
+                { text: "Exotic, dark, mysterious blooms.", traits: { floral: 1, dark: 3, bold: 1 } },
+                { text: "Wild, green meadow flowers.", traits: { floral: 2, fresh: 3 } } ] },
+            { question: "How do you want to be remembered?", options: [
+                { text: "Effortlessly clean and calm.", traits: { fresh: 3, soft: 2 } },
+                { text: "Warm and approachable.", traits: { cozy: 3, sweet: 2 } },
+                { text: "Unforgettable.", traits: { bold: 3, luxe: 2, dark: 1 } },
+                { text: "A little mysterious.", traits: { dark: 3, floral: 1 } } ] },
+            { question: "Choose a weekend plan:", options: [
+                { text: "A sunrise hike.", traits: { fresh: 3, woody: 2 } },
+                { text: "A cozy cafe with a good book.", traits: { cozy: 3, sweet: 2 } },
+                { text: "A rooftop party.", traits: { bold: 3, luxe: 2 } },
+                { text: "A late-night jazz bar.", traits: { dark: 3, sweet: 1, luxe: 1 } } ] },
+            { question: "Your favourite season?", options: [
+                { text: "Spring, when everything blooms.", traits: { floral: 3, soft: 2, fresh: 1 } },
+                { text: "Summer, bright and breezy.", traits: { fresh: 3, sweet: 1 } },
+                { text: "Autumn, warm and golden.", traits: { cozy: 3, woody: 2, sweet: 1 } },
+                { text: "Winter, deep and dramatic.", traits: { dark: 2, woody: 2, bold: 1, luxe: 1 } } ] },
+            { question: "Choose a drink:", options: [
+                { text: "Iced mint water.", traits: { fresh: 3, soft: 1 } },
+                { text: "Hot chocolate or coffee.", traits: { sweet: 3, cozy: 2 } },
+                { text: "Smoky whisky.", traits: { dark: 3, woody: 2, bold: 1 } },
+                { text: "Champagne.", traits: { luxe: 3, floral: 1, sweet: 1 } } ] },
+            { question: "Pick a colour palette:", options: [
+                { text: "Pastel pink and white.", traits: { soft: 3, floral: 2 } },
+                { text: "Deep burgundy and black.", traits: { dark: 3, bold: 2 } },
+                { text: "Gold and ivory.", traits: { luxe: 3, cozy: 1 } },
+                { text: "Forest green and brown.", traits: { woody: 3, cozy: 2 } } ] },
+            { question: "Pick a soundtrack:", options: [
+                { text: "An acoustic morning.", traits: { soft: 3, fresh: 2 } },
+                { text: "Smooth late-night jazz.", traits: { dark: 2, luxe: 2, cozy: 1 } },
+                { text: "A rock anthem.", traits: { bold: 3, dark: 1 } },
+                { text: "Lo-fi by the fire.", traits: { cozy: 3, sweet: 1, woody: 1 } } ] }
         ];
+
+        let lastAsked = new Set();
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+        function buildQuizRun() {
+            // questions not asked last run go first; each group is shuffled
+            const fresh = shuffle(QUIZ_BANK.filter(q => !lastAsked.has(q.question)));
+            const seen = shuffle(QUIZ_BANK.filter(q => lastAsked.has(q.question)));
+            const picked = shuffle(fresh.concat(seen).slice(0, QUIZ_LENGTH));
+            lastAsked = new Set(picked.map(q => q.question));
+            const questions = picked.map(q => ({ question: q.question, options: shuffle(q.options) }));
+            return { step: 0, questions, selected: Array(questions.length).fill(null) };
+        }
+        // Trait vectors are scaled to equal length, so a perfume with many tags
+        // doesn't win just for having more of them.
+        function scentTraits(p) {
+            if (p._norm) return p._norm;
+            const raw = p.traits || PROFILE_TRAITS[p.profile] || {};
+            const len = Math.sqrt(Object.values(raw).reduce((sum, v) => sum + v * v, 0)) || 1;
+            const norm = {};
+            for (const [k, v] of Object.entries(raw)) norm[k] = v / len;
+            Object.defineProperty(p, '_norm', { value: norm, enumerable: false });
+            return norm;
+        }
+        function dotTraits(optTraits, p) {
+            const t = scentTraits(p);
+            let pts = 0;
+            for (const [trait, w] of Object.entries(optTraits)) pts += w * (t[trait] || 0);
+            return pts;
+        }
+        // How a perfume scores on average / how much it varies across the whole
+        // question bank. Used to level the field so generalist perfumes (lots of
+        // traits) don't win more often than distinctive ones.
+        function scentStats(p) {
+            if (p._stats) return p._stats;
+            let mean = 0, variance = 0;
+            QUIZ_BANK.forEach(q => {
+                const c = q.options.map(o => dotTraits(o.traits, p));
+                const m = c.reduce((x, y) => x + y, 0) / c.length;
+                mean += m;
+                variance += c.reduce((x, y) => x + (y - m) * (y - m), 0) / c.length;
+            });
+            const n = QUIZ_BANK.length;
+            const stats = { mean: (mean / n) * QUIZ_LENGTH, sd: Math.sqrt((variance / n) * QUIZ_LENGTH) || 1 };
+            Object.defineProperty(p, '_stats', { value: stats, enumerable: false });
+            return stats;
+        }
+        function rankScents() {
+            const totals = {};
+            quizState.questions.forEach((q, i) => {
+                const opt = q.options[quizState.selected[i]];
+                if (!opt) return;
+                perfumesData.forEach(p => { totals[p.name] = (totals[p.name] || 0) + dotTraits(opt.traits, p); });
+            });
+            // tiny random jitter so exact ties don't always resolve the same way
+            return perfumesData
+                .map(p => {
+                    const st = scentStats(p);
+                    return { p, score: ((totals[p.name] || 0) - st.mean) / st.sd + Math.random() * 0.001 };
+                })
+                .sort((a, b) => b.score - a.score);
+        }
+        function jsArg(str) { return "'" + String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'"; }
+
     </script>
 </body>
 </html>
