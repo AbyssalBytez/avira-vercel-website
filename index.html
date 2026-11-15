@@ -890,14 +890,6 @@
             return { totalItems, subtotal, discount, deliveryFee, finalTotal };
         }
 
-            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
-            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            const discount = Math.floor(totalItems / 2) * 99;
-            const deliveryFee = 49;
-            const finalTotal = subtotal - discount + deliveryFee;
-            return { totalItems, subtotal, discount, deliveryFee, finalTotal };
-        }
-
         function changeModalQty(delta) {
             modalQty += delta;
             if (modalQty < 1) modalQty = 1;
