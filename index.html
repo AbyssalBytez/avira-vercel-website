@@ -1083,67 +1083,41 @@
     </div>
 
     <!-- Scent Detail Modal -->
-    <div id="scent-modal" role="dialog" aria-modal="true" aria-label="Product details"
-        class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-700 ease-in-out opacity-0"
-            id="scent-backdrop" onclick="closeScentDetails()"></div>
-        <div id="scent-content"
-            class="glass-panel w-full max-w-5xl max-h-[90dvh] rounded-[2rem] md:rounded-[3rem] overflow-y-auto md:overflow-hidden overscroll-contain relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
-            <button aria-label="Close" onclick="closeScentDetails()"
-                class="sticky top-4 self-end mr-4 mt-4 -mb-14 shrink-0 z-20 md:absolute md:top-6 md:right-6 md:m-0 p-2 rounded-full bg-black/40 md:bg-avira-text/5 border border-avira-text/10 text-white md:text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-lg hover:rotate-90">
+    <div id="scent-modal" role="dialog" aria-modal="true" aria-label="Product details" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-700 ease-in-out opacity-0" id="scent-backdrop" onclick="closeScentDetails()"></div>
+        <div id="scent-content" class="glass-panel w-full max-w-5xl max-h-[90dvh] rounded-[2rem] md:rounded-[3rem] overflow-y-auto md:overflow-hidden overscroll-contain relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
+            <button aria-label="Close" onclick="closeScentDetails()" class="sticky top-4 self-end mr-4 mt-4 -mb-14 shrink-0 z-20 md:absolute md:top-6 md:right-6 md:m-0 p-2 rounded-full bg-black/40 md:bg-avira-text/5 border border-avira-text/10 text-white md:text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-lg hover:rotate-90">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div class="w-full md:w-1/2 h-64 sm:h-72 md:h-auto relative bg-black/10 shrink-0">
-                <img id="modal-image" src=""
-                    class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="" />
+                <img id="modal-image" src="" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent md:bg-gradient-to-r"></div>
-                <button id="modal-prev" onclick="changeModalSlide(-1)"
-                    class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">
-                    &lsaquo;
-                </button>
-                <button id="modal-next" onclick="changeModalSlide(1)"
-                    class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">
-                    &rsaquo;
-                </button>
+                <button id="modal-prev" onclick="changeModalSlide(-1)" class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">&lsaquo;</button>
+                <button id="modal-next" onclick="changeModalSlide(1)" class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">&rsaquo;</button>
                 <div id="modal-dots" class="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2"></div>
             </div>
-            <div
-                class="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-avira-text/5 md:overflow-y-auto">
+            <div id="modal-right-panel" class="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-avira-text/5 md:overflow-y-auto transition-colors duration-500">
                 <div>
-                    <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold mb-2 pr-8">
-                    </p>
-                    <h2 id="modal-name" class="text-3xl md:text-4xl font-playfair text-avira-text mb-2 leading-tight">
-                    </h2>
+                    <div class="flex items-center justify-between gap-2 mb-2 pr-8">
+                        <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold"></p>
+                        <div id="modal-swatches" class="flex items-center gap-2 shrink-0"></div>
+                    </div>
+                    <h2 id="modal-name" class="text-3xl md:text-4xl font-playfair text-avira-text mb-2 leading-tight"></h2>
                     <div class="flex items-center gap-3 mb-6" id="modal-price"></div>
-                    <div
-                        class="glass-panel border-0 bg-white/5 dark:bg-black/20 rounded-2xl p-4 sm:p-6 mb-6 relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-1 h-full bg-avira-gold"></div>
-                        <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted mb-2">
-                            Olfactory Notes
-                        </p>
-                        <p id="modal-notes"
-                            class="font-cormorant text-lg md:text-xl italic text-avira-text leading-relaxed"></p>
+                    <div id="modal-notes-box" class="glass-panel border-0 bg-white/5 dark:bg-black/20 rounded-2xl p-4 sm:p-6 mb-6 relative overflow-hidden">
+                        <div id="modal-notes-bar" class="absolute top-0 left-0 w-1 h-full bg-avira-gold"></div>
+                        <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted mb-2">Olfactory Notes</p>
+                        <p id="modal-notes" class="font-cormorant text-lg md:text-xl italic text-avira-text leading-relaxed"></p>
                     </div>
-                    <p id="modal-description"
-                        class="font-inter text-avira-textMuted leading-relaxed text-sm md:text-base mb-6"></p>
+                    <p id="modal-description" class="font-inter text-avira-textMuted leading-relaxed text-sm md:text-base mb-6"></p>
                 </div>
-                <div
-                    class="flex items-center gap-4 pt-4 border-t border-avira-text/10 sticky bottom-0 bg-[var(--bg-canvas)] md:bg-transparent">
+                <div class="flex items-center gap-4 pt-4 border-t border-avira-text/10 sticky bottom-0 bg-[var(--bg-canvas)] md:bg-transparent">
                     <div class="flex items-center border border-avira-text/20 rounded-xl bg-avira-text/5">
-                        <button class="px-4 py-3 text-avira-textMuted hover:text-avira-text transition"
-                            onclick="changeModalQty(-1)" aria-label="Decrease quantity">
-                            -
-                        </button>
+                        <button class="px-4 py-3 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(-1)" aria-label="Decrease quantity">-</button>
                         <span id="modal-qty" class="font-inter text-sm font-bold w-6 text-center">1</span>
-                        <button class="px-4 py-3 text-avira-textMuted hover:text-avira-text transition"
-                            onclick="changeModalQty(1)" aria-label="Increase quantity">
-                            +
-                        </button>
+                        <button class="px-4 py-3 text-avira-textMuted hover:text-avira-text transition" onclick="changeModalQty(1)" aria-label="Increase quantity">+</button>
                     </div>
-                    <button onclick="addToCart()"
-                        class="btn-liquid flex-grow py-4 rounded-xl text-xs uppercase tracking-widest font-bold active:scale-95">
-                        <span>Add to Bag</span>
-                    </button>
+                    <button id="modal-add-btn" onclick="addToCart()" class="btn-liquid flex-grow py-4 rounded-xl text-xs uppercase tracking-widest font-bold active:scale-95"><span>Add to Bag</span></button>
                 </div>
             </div>
         </div>
@@ -1324,160 +1298,149 @@
         }
 
         const perfumesData = [
-            {
-                name: "Golden Brown",
-                imgKey: "golden_brown",
-                price: 450,
-                feel: "Amber Aromatic",
-                notes: "Lavender, Mint, Vanilla, Benzoin, Honey, Tonka Bean, Tobacco",
-                description:
-                    "Fresh aromatic opening with a rich, addictive heart of vanilla and honeyed warmth, settling into a deep tobacco-like finish.",
-                profile: "Warm",
-                traits: { sweet: 3, cozy: 3, dark: 2, fresh: 1 },
+            { 
+                name: "Golden Brown", 
+                imgKey: "golden_brown", 
+                price: 450, 
+                colors: ["#A65E24", "#D6A84B", "#3B2520"],
+                feel: "Amber Aromatic", 
+                notes: "Lavender, Mint, Vanilla, Benzoin, Honey, Tonka Bean, Tobacco", 
+                description: "Fresh aromatic opening with a rich, addictive heart of vanilla and honeyed warmth, settling into a deep tobacco-like finish.", 
+                profile: "Warm", 
+                traits: { sweet: 3, cozy: 3, dark: 2, fresh: 1 } 
             },
-            {
-                name: "Amber Smoke",
-                imgKey: "amber_smoke",
-                price: 450,
-                feel: "Woody Spicy",
-                notes:
-                    "Rosewood, Cardamom, Chinese Pepper, Oud, Sandalwood, Vetiver, Tonka, Vanilla, Amber",
-                description:
-                    "Polished woods meet soft spice and dark oud for a composed, understated scent with a warm, smoky finish.",
-                profile: "Warm",
-                traits: { woody: 3, dark: 2, cozy: 2, luxe: 2, bold: 1 },
+            { 
+                name: "Amber Smoke", 
+                imgKey: "amber_smoke", 
+                price: 450, 
+                colors: ["#574238", "#B49A7A", "#292725"],
+                feel: "Woody Spicy", 
+                notes: "Rosewood, Cardamom, Chinese Pepper, Oud, Sandalwood, Vetiver, Tonka, Vanilla, Amber", 
+                description: "Polished woods meet soft spice and dark oud for a composed, understated scent with a warm, smoky finish.", 
+                profile: "Warm", 
+                traits: { woody: 3, dark: 2, cozy: 2, luxe: 2, bold: 1 } 
             },
-            {
-                name: "Midnight Swim",
-                imgKey: "midnight_swim",
-                price: 450,
-                feel: "Spicy Woody Aromatic",
-                notes:
-                    "Grapefruit, Cinnamon, Nutmeg, Cardamom, Lavender, Licorice, Amber Woods, Vetiver, Patchouli",
-                description:
-                    "Bright citrus and aromatic lavender are balanced by warming spices and a deep, lasting woody character.",
-                profile: "Dark",
-                traits: { woody: 3, bold: 2, fresh: 2, dark: 2 },
+            { 
+                name: "Midnight Swim", 
+                imgKey: "midnight_swim", 
+                price: 450, 
+                colors: ["#142B4A", "#777B80", "#17191D"],
+                feel: "Spicy Woody Aromatic", 
+                notes: "Grapefruit, Cinnamon, Nutmeg, Cardamom, Lavender, Licorice, Amber Woods, Vetiver, Patchouli", 
+                description: "Bright citrus and aromatic lavender are balanced by warming spices and a deep, lasting woody character.", 
+                profile: "Dark", 
+                traits: { woody: 3, bold: 2, fresh: 2, dark: 2 } 
             },
-            {
-                name: "Lavender Land",
-                imgKey: "lavender_land",
-                price: 450,
-                feel: "Amber Floral",
-                notes:
-                    "Mandarin, Bergamot, Lavender, Orange Blossom, Jasmine, Orchid, Vanilla, Tonka, Ambergris, Vetiver",
-                description:
-                    "Fresh lavender and luminous white flowers soften into a creamy vanilla and warm amber trail.",
-                profile: "Fresh",
-                traits: { floral: 3, sweet: 2, soft: 2, cozy: 2, fresh: 1 },
+            { 
+                name: "Lavender Land", 
+                imgKey: "lavender_land", 
+                price: 450, 
+                colors: ["#B77B36", "#E4C99A", "#482D35"],
+                feel: "Amber Floral", 
+                notes: "Mandarin, Bergamot, Lavender, Orange Blossom, Jasmine, Orchid, Vanilla, Tonka, Ambergris, Vetiver", 
+                description: "Fresh lavender and luminous white flowers soften into a creamy vanilla and warm amber trail.", 
+                profile: "Fresh", 
+                traits: { floral: 3, sweet: 2, soft: 2, cozy: 2, fresh: 1 } 
             },
-            {
-                name: "Wildflower Valley",
-                imgKey: "wildflower_valley",
-                price: 450,
-                feel: "White Floral Fruity",
-                notes:
-                    "Pear, White Nectarine, Gardenia, Tuberose, Orange Blossom, Jasmine, Vanilla, Patchouli, Sandalwood, Musk",
-                description:
-                    "Juicy fruits and white blossoms are wrapped in creamy woods and soft musk for an elegant, comforting finish.",
-                profile: "Fresh",
-                traits: { floral: 3, sweet: 2, soft: 3, cozy: 1 },
+            { 
+                name: "Wildflower Valley", 
+                imgKey: "wildflower_valley", 
+                price: 450, 
+                colors: ["#F1E7D5", "#C6A7A0", "#A68A55"],
+                feel: "White Floral Fruity", 
+                notes: "Pear, White Nectarine, Gardenia, Tuberose, Orange Blossom, Jasmine, Vanilla, Patchouli, Sandalwood, Musk", 
+                description: "Juicy fruits and white blossoms are wrapped in creamy woods and soft musk for an elegant, comforting finish.", 
+                profile: "Fresh", 
+                traits: { floral: 3, sweet: 2, soft: 3, cozy: 1 } 
             },
-            {
-                name: "Fluid Vanilla",
-                imgKey: "fluid_vanilla",
-                price: 450,
-                feel: "Ambery Woody Vanilla",
-                notes:
-                    "Juniper Berries, Coriander, Nutmeg, Vanilla, Musks, Amber Woods",
-                description:
-                    "An airy take on vanilla: lightly aromatic at first, then smooth and warm with musks and amber woods.",
-                profile: "Warm",
-                traits: { sweet: 3, cozy: 3, soft: 2, woody: 2 },
+            { 
+                name: "Fluid Vanilla", 
+                imgKey: "fluid_vanilla", 
+                price: 450, 
+                colors: ["#D5B36A", "#F0E5CD", "#A18A69"],
+                feel: "Ambery Woody Vanilla", 
+                notes: "Juniper Berries, Coriander, Nutmeg, Vanilla, Musks, Amber Woods", 
+                description: "An airy take on vanilla: lightly aromatic at first, then smooth and warm with musks and amber woods.", 
+                profile: "Warm", 
+                traits: { sweet: 3, cozy: 3, soft: 2, woody: 2 } 
             },
-            {
-                name: "Oud Flower",
-                imgKey: "oud_flower",
-                price: 450,
-                feel: "Oud Amber Floral",
-                notes: "Saffron, Rose, Oud, Smoky Woods, Amber, Patchouli, Musk",
-                description:
-                    "A floral interpretation of oud, pairing rose-like softness with smoky woods and a deep amber-musk base.",
-                profile: "Luxurious",
-                traits: { luxe: 3, floral: 2, woody: 2, dark: 2 },
+            { 
+                name: "Oud Flower", 
+                imgKey: "oud_flower", 
+                price: 450, 
+                colors: ["#3A2027", "#96703D", "#242322"],
+                feel: "Oud Amber Floral", 
+                notes: "Saffron, Rose, Oud, Smoky Woods, Amber, Patchouli, Musk", 
+                description: "A floral interpretation of oud, pairing rose-like softness with smoky woods and a deep amber-musk base.", 
+                profile: "Luxurious", 
+                traits: { luxe: 3, floral: 2, woody: 2, dark: 2 } 
             },
-            {
-                name: "Lobby 07",
-                imgKey: "lobby_07",
-                price: 450,
-                feel: "Citrus Aromatic Tea",
-                notes:
-                    "Bergamot, Orange, Mandarin, Litsea Cubeba, Oolong Tea, Nutmeg, Fig, Musk",
-                description:
-                    "Fresh citrus and green tea create a bright, welcoming impression, balanced by gentle spice and a soft musky finish.",
-                profile: "Fresh",
-                traits: { fresh: 3, soft: 3, cozy: 1 },
+            { 
+                name: "Lobby 07", 
+                imgKey: "lobby_07", 
+                price: 450, 
+                colors: ["#A9B89A", "#D6C58B", "#53675A"],
+                feel: "Citrus Aromatic Tea", 
+                notes: "Bergamot, Orange, Mandarin, Litsea Cubeba, Oolong Tea, Nutmeg, Fig, Musk", 
+                description: "Fresh citrus and green tea create a bright, welcoming impression, balanced by gentle spice and a soft musky finish.", 
+                profile: "Fresh", 
+                traits: { fresh: 3, soft: 3, cozy: 1 } 
             },
-            {
-                name: "Horizon Rain",
-                imgKey: "horizon_rain",
-                price: 450,
-                feel: "Woody Aromatic",
-                notes:
-                    "Lemon, Mint, Pink Pepper, Grapefruit, Ginger, Nutmeg, Jasmine, Incense, Vetiver, Cedar, Sandalwood, Patchouli, Musk",
-                description:
-                    "Cool citrus and mint bring an invigorating opening, while gentle spice and refined woods leave a clean, confident impression.",
-                profile: "Fresh",
-                traits: { fresh: 3, woody: 3, bold: 1, soft: 1 },
+            { 
+                name: "Horizon Rain", 
+                imgKey: "horizon_rain", 
+                price: 450, 
+                colors: ["#172C48", "#8B969F", "#222426"],
+                feel: "Woody Aromatic", 
+                notes: "Lemon, Mint, Pink Pepper, Grapefruit, Ginger, Nutmeg, Jasmine, Incense, Vetiver, Cedar, Sandalwood, Patchouli, Musk", 
+                description: "Cool citrus and mint bring an invigorating opening, while gentle spice and refined woods leave a clean, confident impression.", 
+                profile: "Fresh", 
+                traits: { fresh: 3, woody: 3, bold: 1, soft: 1 } 
             },
-            {
-                name: "Clean Deal",
-                imgKey: "clean_deal",
-                price: 450,
-                feel: "Woody Floral Citrus",
-                notes:
-                    "Bergamot, Lemon, Neroli, Blackcurrant, Violet, Cyclamen, Jasmine, African Marigold, Vetiver, Cedarwood, Musk, Amber",
-                description:
-                    "Sparkling citrus and soft florals create a sunny, easygoing scent, grounded by smooth woods and a warm, clean finish.",
-                profile: "Fresh",
-                traits: { fresh: 3, floral: 2, soft: 2, woody: 1 },
+            { 
+                name: "Clean Deal", 
+                imgKey: "clean_deal", 
+                price: 450, 
+                colors: ["#D9A441", "#E5C9A0", "#B86C46"],
+                feel: "Woody Floral Citrus", 
+                notes: "Bergamot, Lemon, Neroli, Blackcurrant, Violet, Cyclamen, Jasmine, African Marigold, Vetiver, Cedarwood, Musk, Amber", 
+                description: "Sparkling citrus and soft florals create a sunny, easygoing scent, grounded by smooth woods and a warm, clean finish.", 
+                profile: "Fresh", 
+                traits: { fresh: 3, floral: 2, soft: 2, woody: 1 } 
             },
-            {
-                name: "Cherry Rain",
-                imgKey: "cherry_rain",
-                price: 450,
-                feel: "Fruity Floral Gourmand",
-                notes:
-                    "Cherry, Green Mandarin, Jasmine, Orange Blossom, Coffee, Vanilla, Patchouli",
-                description:
-                    "Juicy cherry and bright mandarin meet a soft floral heart, followed by a warm blend of coffee, vanilla and patchouli.",
-                profile: "Warm",
-                traits: { sweet: 3, floral: 2, cozy: 2, dark: 1 },
+            { 
+                name: "Cherry Rain", 
+                imgKey: "cherry_rain", 
+                price: 450, 
+                colors: ["#9D1D36", "#3D1726", "#C49A51"],
+                feel: "Fruity Floral Gourmand", 
+                notes: "Cherry, Green Mandarin, Jasmine, Orange Blossom, Coffee, Vanilla, Patchouli", 
+                description: "Juicy cherry and bright mandarin meet a soft floral heart, followed by a warm blend of coffee, vanilla and patchouli.", 
+                profile: "Warm", 
+                traits: { sweet: 3, floral: 2, cozy: 2, dark: 1 } 
             },
-            {
-                name: "After Dark",
-                imgKey: "after_dark",
-                price: 450,
-                feel: "Chypre Amber Floral",
-                notes:
-                    "Saffron, Black Truffle, Black Rose, Patchouli, Vanilla, Oud, Oakmoss",
-                description:
-                    "A dramatic dark-rose fragrance with earthy depth and a warm, resinous base, made for an elegant evening mood.",
-                profile: "Dark",
-                traits: { dark: 3, luxe: 3, floral: 2, bold: 2 },
+            { 
+                name: "After Dark", 
+                imgKey: "after_dark", 
+                price: 450, 
+                colors: ["#3B202B", "#75404D", "#B39A63"],
+                feel: "Chypre Amber Floral", 
+                notes: "Saffron, Black Truffle, Black Rose, Patchouli, Vanilla, Oud, Oakmoss", 
+                description: "A dramatic dark-rose fragrance with earthy depth and a warm, resinous base, made for an elegant evening mood.", 
+                profile: "Dark", 
+                traits: { dark: 3, luxe: 3, floral: 2, bold: 2 } 
             },
-            {
-                name: "Winter Jacket",
-                imgKey: "winter_jacket",
-                price: 450,
-                feel: "Leather Chypre",
-                notes:
-                    "Saffron, Raspberry, Thyme, Olibanum, Jasmine, Leather, Suede, Amberwood",
-                description:
-                    "Bold leather is softened by a hint of fruit and aromatic spice, settling into a smooth suede-like warmth.",
-                profile: "Luxurious",
-                traits: { bold: 3, woody: 2, dark: 2, luxe: 2, cozy: 1 },
-            },
+            { 
+                name: "Winter Jacket", 
+                imgKey: "winter_jacket", 
+                price: 450, 
+                colors: ["#632F2E", "#49352C", "#B18A54"],
+                feel: "Leather Chypre", 
+                notes: "Saffron, Raspberry, Thyme, Olibanum, Jasmine, Leather, Suede, Amberwood", 
+                description: "Bold leather is softened by a hint of fruit and aromatic spice, settling into a smooth suede-like warmth.", 
+                profile: "Luxurious", 
+                traits: { bold: 3, woody: 2, dark: 2, luxe: 2, cozy: 1 } 
+            }
         ];
 
         const CART_KEY = "avira-cart";
@@ -1838,12 +1801,22 @@ Total Amount: \u20B9${finalTotal}
         }
 
         function placeholderUrl(name) {
-            const isDark = document.body.getAttribute("data-theme") === "dark";
-            const bg = isDark ? "#141414" : "#e6d7be"; // Warm sand in cream mode, charcoal in dark mode
-            const fg = isDark ? "#D4AF37" : "#8a6621"; // Gold in dark mode, deep bronze in cream mode
-            const label = String(name).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="${bg}"/><text x="50%" y="50%" fill="${fg}" font-family="Georgia,serif" font-size="36" text-anchor="middle" dominant-baseline="middle">${label}</text></svg>`;
-            return "data:image/svg+xml," + encodeURIComponent(svg);
+            const p = perfumesData.find(x => x.name === name);
+            const [c1, c2, c3] = (p && p.colors) ? p.colors : ['#A65E24', '#D6A84B', '#3B2520'];
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+                <defs>
+                    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${c1}"/>
+                        <stop offset="52%" stop-color="${c2}"/>
+                        <stop offset="100%" stop-color="${c3}"/>
+                    </linearGradient>
+                </defs>
+                <rect width="600" height="600" fill="url(#g)"/>
+                <rect width="200" height="14" x="0" y="0" fill="${c1}"/>
+                <rect width="200" height="14" x="200" y="0" fill="${c2}"/>
+                <rect width="200" height="14" x="400" y="0" fill="${c3}"/>
+            </svg>`;
+            return 'data:image/svg+xml,' + encodeURIComponent(svg);
         }
         function getImageUrl(name) {
             const p = perfumesData.find((x) => x.name === name);
@@ -2004,47 +1977,50 @@ Total Amount: \u20B9${finalTotal}
         }
 
         function showScentDetails(name) {
-            currentScent = perfumesData.find((p) => p.name === name);
+            currentScent = perfumesData.find(p => p.name === name);
             if (!currentScent) return;
-            modalQty = 1;
-            document.getElementById("modal-qty").innerText = modalQty;
-            document.getElementById("modal-name").textContent = currentScent.name;
-            document.getElementById("modal-price").innerHTML = `
-    <span class="text-2xl md:text-3xl font-playfair font-bold text-avira-text">\u20B9450</span>
-    <span class="text-base font-inter text-avira-textMuted line-through opacity-60">\u20B9549</span>
-    <span class="py-1 px-2 rounded-full bg-avira-gold text-black text-[0.625rem] font-inter font-bold uppercase tracking-widest shadow-sm">Save \u20B999</span>
-`;
-            document.getElementById("modal-feel").textContent = currentScent.feel;
-            document.getElementById("modal-notes").textContent = currentScent.notes;
-            document.getElementById("modal-description").textContent =
-                currentScent.description;
-            const imgEl = document.getElementById("modal-image");
+            modalQty = 1; document.getElementById('modal-qty').innerText = modalQty;
+            document.getElementById('modal-name').textContent = currentScent.name;
+            document.getElementById('modal-price').innerHTML = `
+                <span class="text-2xl md:text-3xl font-playfair font-bold text-avira-text">\u20B9450</span>
+                <span class="text-base font-inter text-avira-textMuted line-through opacity-60">\u20B9549</span>
+                <span id="modal-save-badge" class="py-1 px-2 rounded-full bg-avira-gold text-black text-[0.625rem] font-inter font-bold uppercase tracking-widest shadow-sm">Save \u20B999</span>
+            `;
+            document.getElementById('modal-feel').textContent = currentScent.feel;
+            document.getElementById('modal-notes').textContent = currentScent.notes;
+            document.getElementById('modal-description').textContent = currentScent.description;
+
+            // Apply Pantone Colors to Popup
+            const [c1, c2, c3] = currentScent.colors || ['#b0893e', '#e6d3b3', '#241e16'];
+            const content = document.getElementById('scent-content');
+            const rightPanel = document.getElementById('modal-right-panel');
+            const notesBar = document.getElementById('modal-notes-bar');
+            const swatchesEl = document.getElementById('modal-swatches');
+
+            content.style.borderColor = c1;
+            content.style.boxShadow = `0 25px 60px -15px ${c1}55`;
+            rightPanel.style.background = `linear-gradient(135deg, ${c1}22 0%, ${c2}18 50%, ${c3}28 100%)`;
+            notesBar.style.background = `linear-gradient(to bottom, ${c1}, ${c2}, ${c3})`;
+            swatchesEl.innerHTML = (currentScent.colors || []).map(hex => 
+                `<span title="${hex}" class="w-4 h-4 rounded-full border border-white/40 shadow-sm" style="background-color:${hex}"></span>`
+            ).join('');
+
+            const imgEl = document.getElementById('modal-image');
             imgEl.alt = currentScent.name;
             imgEl.src = placeholderUrl(currentScent.name);
-            imgEl.onerror = function () {
-                handleImageError(this, currentScent.name);
-            };
-            modalSlides = [];
-            modalSlideIdx = 0;
-            renderModalSlide();
+            imgEl.onerror = function() { handleImageError(this, currentScent.name) };
+            modalSlides = []; modalSlideIdx = 0; renderModalSlide();
             const shown = currentScent;
-            resolveSlides(shown.imgKey).then((slides) => {
+            resolveSlides(shown.imgKey).then(slides => {
                 if (currentScent !== shown || !slides.length) return;
-                modalSlides = slides;
-                modalSlideIdx = 0;
-                renderModalSlide();
+                modalSlides = slides; modalSlideIdx = 0; renderModalSlide();
             });
-            const modal = document.getElementById("scent-modal");
-            const content = document.getElementById("scent-content");
-            const backdrop = document.getElementById("scent-backdrop");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
+            const modal = document.getElementById('scent-modal');
+            const backdrop = document.getElementById('scent-backdrop');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
             content.scrollTop = 0;
-            document.body.style.overflow = "hidden";
-            requestAnimationFrame(() => {
-                backdrop.classList.remove("opacity-0");
-                content.classList.remove("opacity-0", "translate-y-20");
-            });
+            document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => { backdrop.classList.remove('opacity-0'); content.classList.remove('opacity-0', 'translate-y-20'); });
         }
         function closeScentDetails() {
             const modal = document.getElementById("scent-modal");
