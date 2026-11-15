@@ -31,17 +31,17 @@
     <style>
         /* --- Dynamic Theming Variables --- */
         :root {
-            --bg-canvas: #faf6f0; /* Warm alabaster / soft cream */
-            --glass-bg: rgba(255, 251, 244, 0.72); /* Translucent warm ivory */
-            --glass-border: rgba(215, 200, 178, 0.55); /* Subtle champagne-beige border */
-            --glass-shadow: 0 8px 32px 0 rgba(74, 58, 35, 0.06); /* Soft warm umber shadow */
-            --glass-highlight: rgba(255, 253, 248, 0.9);
-            --color-text: #1f1c18; /* Deep espresso charcoal */
-            --color-text-muted: #6e6559; /* Warm taupe-grey */
-            --color-gold: #b5924c; /* Rich antique gold */
-            --orb-1: #efe2cc; /* Warm sand glow */
-            --orb-2: #f5dec9; /* Soft peach-amber glow */
-            --orb-3: #f7e9c8; /* Pale honey glow */
+            --bg-canvas: #f3ead8; /* Rich warm cream / parchment */
+            --glass-bg: rgba(252, 246, 234, 0.75); /* Warm buttery ivory glass */
+            --glass-border: rgba(204, 184, 150, 0.6); /* Toasted almond border */
+            --glass-shadow: 0 8px 32px 0 rgba(82, 60, 28, 0.08); /* Warm sepia shadow */
+            --glass-highlight: rgba(255, 250, 240, 0.9);
+            --color-text: #241e16; /* Deep roasted coffee */
+            --color-text-muted: #6b5e4c; /* Muted warm bronze-taupe */
+            --color-gold: #b0893e; /* Deep antique brass-gold */
+            --orb-1: #e6d3b3; /* Warm sandstone */
+            --orb-2: #ebd5be; /* Soft terracotta-cream */
+            --orb-3: #f0dfaf; /* Golden wheat */
         }
 
         [data-theme="dark"] {
@@ -84,7 +84,7 @@
         } }
 
         .glass-menu {
-            background: rgba(250, 246, 240, 0.97);
+            background: rgba(243, 234, 216, 0.97);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
@@ -1284,12 +1284,23 @@ Total Amount: \u20B9${finalTotal}
                 </div>`;
             document.getElementById('quiz-body').scrollTop = 0;
         }
+        let lastScrollY = window.scrollY;
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            const scrolled = window.scrollY > 50;
-            nav.classList.toggle('scale-[0.98]', scrolled);
-            nav.classList.toggle('opacity-95', scrolled);
-        }, { passive: true });
+            const currentScrollY = window.scrollY;
+
+            // Hide navbar when scrolling down past 80px, show when scrolling up
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                nav.classList.remove('scale-[0.98]', 'opacity-95');
+                nav.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+            } else {
+                nav.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+                nav.classList.toggle('scale-[0.98]', currentScrollY > 50);
+                nav.classList.toggle('opacity-95', currentScrollY > 50);
+            }
+
+            lastScrollY = Math.max(0, currentScrollY);
+        }, { passive: true });;
 
         document.addEventListener('keydown', e => {
             if (e.key !== 'Escape') return;
