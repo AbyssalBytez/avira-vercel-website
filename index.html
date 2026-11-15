@@ -186,7 +186,7 @@
 
         /* Dynamic scaling: every rem-based size (text, padding, cards, popups) follows the screen width.
            ~15px on phones, ~16px on laptops, up to 20px on very large screens. Respects the browser's font-size setting. */
-        html { font-size: clamp(93.75%, calc(0.3vw + 0.78rem), 125%); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        html { scroll-padding-top: 6rem; font-size: clamp(93.75%, calc(0.3vw + 0.78rem), 125%); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
         @media (max-width: 768px) { .orb-3 { display: none; } }
         @media (prefers-reduced-motion: reduce) { .orb { animation: none !important; } }
 
@@ -206,8 +206,8 @@
         .quote-fluid { font-size: clamp(1.75rem, 5.5vw, 3rem); }
 
         /* Reveal System */
-        .reveal-node { opacity: 1; transform: translateY(0); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .js-reveal-hidden { opacity: 0; transform: translateY(40px); }
+        .reveal-node { opacity: 1; transform: translateY(0); transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .js-reveal-hidden { opacity: 0; transform: translateY(24px); }
         .blur-enter { opacity: 0; filter: blur(10px); transform: translateY(20px); animation: blurIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes blurIn { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
 
@@ -346,15 +346,15 @@
                 </button>
             </div>
         </div>
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-float text-avira-textMuted">
-            <i data-lucide="arrow-down" class="w-6 h-6 opacity-60"></i>
+        <div class="absolute bottom-10 inset-x-0 flex justify-center pointer-events-none text-avira-textMuted">
+            <div class="animate-float"><i data-lucide="arrow-down" class="w-6 h-6 opacity-60"></i></div>
         </div>
     </section>
 
     <!-- Collection Grid -->
     <section id="collection" class="py-20 md:py-32 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="reveal-node flex flex-col md:flex-row justify-between items-end mb-16 border-b border-avira-text/10 pb-8">
+            <div class="reveal-node flex flex-col md:flex-row justify-between items-start md:items-end mb-16 border-b border-avira-text/10 pb-8">
                 <div>
                     <h2 class="h2-fluid font-playfair text-avira-text mb-4">The Expressions</h2>
                     <p class="text-avira-textMuted italic font-cormorant text-2xl">Curated for the discerning few.</p>
@@ -656,34 +656,37 @@
         const slideCache = {};
         const firstImage = {};
 
-        function tryLoadImage(base) {
-            return new Promise(resolve => {
-                let i = 0;
-                const next = () => {
-                    if (i >= IMAGE_EXTENSIONS.length) return resolve(null);
-                    const url = `${IMAGE_FOLDER}${base}.${IMAGE_EXTENSIONS[i++]}`;
+        // Cheap existence check (HEAD request, no image download). Falls back to
+        // loading the image when HEAD isn't possible (e.g. opening the file locally).
+        function imageExists(url) {
+            return fetch(url, { method: 'HEAD' })
+                .then(r => r.ok && (r.headers.get('content-type') || '').startsWith('image/'))
+                .catch(() => new Promise(resolve => {
                     const img = new Image();
-                    img.onload = () => resolve(url);
-                    img.onerror = next;
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
                     img.src = url;
-                };
-                next();
-            });
+                }));
+        }
+
+        // Checks all extensions in parallel, returns the first match in IMAGE_EXTENSIONS order.
+        async function tryLoadImage(base) {
+            const urls = IMAGE_EXTENSIONS.map(ext => `${IMAGE_FOLDER}${base}.${ext}`);
+            const found = await Promise.all(urls.map(imageExists));
+            const i = found.indexOf(true);
+            return i === -1 ? null : urls[i];
         }
 
         function resolveSlides(key) {
             if (!slideCache[key]) {
                 slideCache[key] = (async () => {
-                    const plain = await tryLoadImage(key);
+                    const [plain, ...numbered] = await Promise.all([
+                        tryLoadImage(key),
+                        ...Array.from({ length: MAX_SLIDES }, (_, i) => tryLoadImage(`${key}.${i + 1}`))
+                    ]);
                     let slides = [];
                     if (plain) slides = [plain];
-                    else {
-                        for (let n = 1; n <= MAX_SLIDES; n++) {
-                            const u = await tryLoadImage(`${key}.${n}`);
-                            if (!u) break;
-                            slides.push(u);
-                        }
-                    }
+                    else for (const u of numbered) { if (!u) break; slides.push(u); }
                     if (slides[0]) firstImage[key] = slides[0];
                     return slides;
                 })();
@@ -791,7 +794,7 @@
                     itemsEl.innerHTML += `
                         <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
                             <div class="flex items-center gap-3">
-                                <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover">
+                                <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover" onerror="handleImageError(this, ${jsArg(item.name)})">
                                 <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">\u20B9${item.price} x ${item.qty}</p></div>
                             </div>
                             <div class="flex items-center gap-2">
@@ -985,12 +988,22 @@ Total Amount: \u20B9${finalTotal}
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 500);
         }
         
-        function placeholderUrl(name) { return `https://placehold.co/600x600/1a1a1a/D4AF37?text=${encodeURIComponent(name)}`; }
+        function placeholderUrl(name) {
+            const label = String(name).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#1a1a1a"/><text x="50%" y="50%" fill="#D4AF37" font-family="Georgia,serif" font-size="36" text-anchor="middle" dominant-baseline="middle">${label}</text></svg>`;
+            return 'data:image/svg+xml,' + encodeURIComponent(svg);
+        }
         function getImageUrl(name) {
             const p = perfumesData.find(x => x.name === name);
-            return (p && firstImage[p.imgKey]) || placeholderUrl(name);
+            if (!p) return placeholderUrl(name);
+            return firstImage[p.imgKey] || `${IMAGE_FOLDER}${p.imgKey}.jpg`;
         }
-        function handleImageError(img, name) { img.onerror = null; img.src = placeholderUrl(name); }
+                function handleImageError(img, name) {
+            img.onerror = null;
+            const p = perfumesData.find(x => x.name === name);
+            if (!p) { img.src = placeholderUrl(name); return; }
+            resolveSlides(p.imgKey).then(slides => { img.src = slides[0] || placeholderUrl(name); });
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.emailjs) {
@@ -1005,11 +1018,11 @@ Total Amount: \u20B9${finalTotal}
             let gridHTML = "";
             perfumesData.forEach((p, index) => {
                 const safeName = p.name.replace(/'/g, "\\'");
-                const delay = index * 100;
+                const delay = (index % 3) * 70;
                 gridHTML += `
                     <div class="reveal-node glass-panel rounded-3xl overflow-hidden cursor-pointer flex flex-col group h-full hover:z-10 transition-all duration-700" onclick="showScentDetails('${safeName}')" style="transition-delay: ${delay}ms">
                         <div class="relative h-64 sm:h-72 overflow-hidden">
-                            <img loading="lazy" decoding="async" src="${placeholderUrl(p.name)}" data-img-key="${p.imgKey}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
+                            <img ${index < 2 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" src="${IMAGE_FOLDER}${p.imgKey}.jpg" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
                             <div class="absolute bottom-5 left-5 right-5">
                                 <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
@@ -1027,10 +1040,6 @@ Total Amount: \u20B9${finalTotal}
             grid.innerHTML = gridHTML;
             lucide.createIcons();
 
-            document.querySelectorAll('img[data-img-key]').forEach(async img => {
-                const slides = await resolveSlides(img.dataset.imgKey);
-                if (slides[0]) img.src = slides[0];
-            });
             
             const revealElements = document.querySelectorAll('.reveal-node');
             revealElements.forEach(el => el.classList.add('js-reveal-hidden'));
@@ -1039,7 +1048,6 @@ Total Amount: \u20B9${finalTotal}
             
             cart = loadCart();
             updateCartUI();
-            Promise.all(perfumesData.map(p => resolveSlides(p.imgKey))).then(updateCartUI);
         });
 
         function toggleMobileMenu() {
@@ -1071,10 +1079,12 @@ Total Amount: \u20B9${finalTotal}
                     if (entry.isIntersecting) { 
                         entry.target.classList.remove('js-reveal-hidden');
                         entry.target.classList.add('is-visible'); 
+                        const t = entry.target;
+                        setTimeout(() => { t.style.transitionDelay = ''; }, 900);
                         observer.unobserve(entry.target); 
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.05, rootMargin: "0px 0px 150px 0px" });
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
