@@ -31,17 +31,17 @@
     <style>
         /* --- Dynamic Theming Variables --- */
         :root {
-            --bg-canvas: #f2f4f7;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-            --glass-highlight: rgba(255, 255, 255, 0.9);
-            --color-text: #1a1a1c;
-            --color-text-muted: #6e6e73;
-            --color-gold: #bfa05a; 
-            --orb-1: #c4d7ed; 
-            --orb-2: #e8dff5; 
-            --orb-3: #fceec5; 
+            --bg-canvas: #faf6f0; /* Warm alabaster / soft cream */
+            --glass-bg: rgba(255, 251, 244, 0.72); /* Translucent warm ivory */
+            --glass-border: rgba(215, 200, 178, 0.55); /* Subtle champagne-beige border */
+            --glass-shadow: 0 8px 32px 0 rgba(74, 58, 35, 0.06); /* Soft warm umber shadow */
+            --glass-highlight: rgba(255, 253, 248, 0.9);
+            --color-text: #1f1c18; /* Deep espresso charcoal */
+            --color-text-muted: #6e6559; /* Warm taupe-grey */
+            --color-gold: #b5924c; /* Rich antique gold */
+            --orb-1: #efe2cc; /* Warm sand glow */
+            --orb-2: #f5dec9; /* Soft peach-amber glow */
+            --orb-3: #f7e9c8; /* Pale honey glow */
         }
 
         [data-theme="dark"] {
@@ -84,7 +84,7 @@
         } }
 
         .glass-menu {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(250, 246, 240, 0.97);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
@@ -449,11 +449,11 @@
                 </div>
                 <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.4s">
                     <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="snowflake" class="w-8 h-8"></i></div>
-                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Keep inside refrigerator for 5 days for maturation.</p>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Keep away from sunlight for 5 days for maturation.</p>
                 </div>
                 <div class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full" style="transition-delay: 0.5s">
                     <div class="w-16 h-16 rounded-full bg-avira-text/5 flex items-center justify-center mb-6 text-avira-gold group-hover:scale-110 transition-transform duration-500 border border-avira-text/10"><i data-lucide="shirt" class="w-8 h-8"></i></div>
-                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Prefer cotton clothes for greater experience.</p>
+                    <p class="text-avira-textMuted font-inter leading-relaxed text-sm">Prefer layering for greater experience.</p>
                 </div>
             </div>
             
