@@ -619,12 +619,12 @@
 
     <!-- Quiz Modal -->
     <div id="quiz-modal" role="dialog" aria-modal="true" aria-label="Scent finder quiz" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 opacity-0" id="quiz-backdrop"></div>
-        <div id="quiz-content" class="glass-panel w-full max-w-2xl max-h-[85dvh] rounded-[2rem] p-6 sm:p-8 md:p-12 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
-            <button aria-label="Close" onclick="closeQuiz()" class="absolute top-6 right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
-                <i data-lucide="x" class="w-6 h-6"></i>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 opacity-0" id="quiz-backdrop" onclick="closeQuiz()"></div>
+        <div id="quiz-content" class="glass-panel w-full max-w-2xl max-h-[90dvh] rounded-[2rem] p-6 sm:p-8 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
+            <button aria-label="Close" onclick="closeQuiz()" class="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col overflow-y-auto overscroll-contain pt-10"></div>
+            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col overflow-y-auto overscroll-contain pt-2"></div>
         </div>
     </div>
     
@@ -949,8 +949,11 @@
                             <div class="flex items-center gap-3">
                                 <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover" onerror="handleImageError(this, ${jsArg(item.name)})">
                                 <div>
-                                    <p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p>
-                                    <p class="text-xs text-avira-textMuted"><span class="line-through opacity-50 mr-1">\u20B9${mrp}</span> <span class="text-avira-gold font-bold">\u20B9450</span> x ${item.qty}</p>
+                                    <p class="text-sm font-inter mt-1">
+    <span class="text-avira-text font-bold">\u20B9450</span>
+    <span class="text-xs text-avira-textMuted line-through opacity-60 mr-1">\u20B9${mrp}</span>
+    <span class="text-xs text-avira-gold font-bold">\u00D7 ${item.qty}</span>
+</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2">
@@ -967,7 +970,7 @@
                                     <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Harvest Offer</span><span class="text-[0.5rem] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
                 }
                 summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B9149</span> \u20B9${deliveryFee}</span></div>`;
-                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>\u20B9${finalTotal}</span></div>`;
+                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold mt-2 border-t border-avira-text/10 pt-3"><span>Total</span><span class="text-avira-gold">\u20B9${finalTotal}</span></div>`;
                 summaryEl.innerHTML = summaryHTML;
             }
         }
@@ -1339,17 +1342,19 @@ Total Amount: \u20B9${finalTotal}
             const sel = quizState.selected[step];
             const isLast = step === total - 1;
             const options = q.options.map((opt, idx) => `
-                <button onclick="selectAnswer(${step}, ${idx})" class="quiz-option w-full text-left p-4 md:p-5 rounded-2xl transition-all duration-300 flex items-center justify-between gap-3 ${sel === idx ? 'is-selected' : ''}">
+                <button onclick="selectAnswer(${step}, ${idx})" class="quiz-option w-full text-left py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-between gap-3 ${sel === idx ? 'is-selected' : ''}">
                     <span class="font-inter text-sm md:text-base tracking-wide">${opt.text}</span>
                     ${sel === idx ? '<span class="font-bold">&#9679;</span>' : ''}
                 </button>`).join('');
             document.getElementById('quiz-body').innerHTML = `
-                <div class="my-auto animate-[fadeIn_0.5s_ease-out]">
-                    <div class="quiz-progress mb-5"><div style="width:${((step + 1) / total) * 100}%"></div></div>
-                    <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted mb-2 text-center">Question ${step + 1} / ${total}</p>
-                    <h3 class="quiz-title font-playfair text-avira-text text-center mb-8 leading-tight">${q.question}</h3>
-                    <div class="space-y-3 mb-8">${options}</div>
-                    <div class="flex justify-between items-center">
+                <div class="my-auto animate-[fadeIn_0.5s_ease-out] flex flex-col justify-between h-full">
+                    <div>
+                        <div class="quiz-progress mb-3 mr-10"><div style="width:${((step + 1) / total) * 100}%"></div></div>
+                        <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted mb-1 text-center">Question ${step + 1} / ${total}</p>
+                        <h3 class="text-xl md:text-2xl font-playfair text-avira-text text-center mb-4 leading-tight">${q.question}</h3>
+                        <div class="space-y-2 mb-4">${options}</div>
+                    </div>
+                    <div class="flex justify-between items-center pt-3 border-t border-avira-text/10 sticky bottom-0 bg-[var(--bg-canvas)] md:bg-transparent">
                         <button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${step === 0 ? 'opacity-0 pointer-events-none' : ''}">Back</button>
                         <button onclick="nextStep()" class="quiz-next px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${sel !== null ? 'is-ready' : ''}">${isLast ? 'Reveal' : 'Next'}</button>
                     </div>
