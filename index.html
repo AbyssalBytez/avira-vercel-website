@@ -727,18 +727,136 @@
 
 
         const perfumesData = [
-            { name: "Cherry Blossom", imgKey: "cherry_blossom", price: 499, feel: "Airy, Delicate", notes: "Pink Petals, Water Lotus, Sandalwood", description: "A soft, ephemeral bloom capturing the light sweetness of spring. A delicate dance of pink petals and cool air.", profile: "Fresh", traits: { floral: 3, fresh: 3, soft: 3 } },
-            { name: "Cafe Date", imgKey: "cafe_date", price: 499, feel: "Warm, Gourmand", notes: "Espresso Bean, Vanilla, Aged Leather", description: "The perfect companion for a cozy afternoon. Rich espresso blended with sweet vanilla and a hint of worn leather.", profile: "Warm", traits: { sweet: 3, cozy: 2, dark: 2, bold: 1 } },
-            { name: "Mystic Santale", imgKey: "mystic_santale", price: 499, feel: "Deep, Woody", notes: "Creamy Santal, Cumin, Amber", description: "An ancient, almost meditative scent. Built around creamy sandalwood, deepened by exotic cumin and warm amber.", profile: "Warm", traits: { woody: 3, cozy: 2, dark: 1, soft: 1, luxe: 1 } },
-            { name: "Floral Specter", imgKey: "floral_specter", price: 499, feel: "Ethereal, White Floral", notes: "Ghost Flower, Green Moss, Cool Air", description: "Intriguing and otherworldly. A cold, pure white floral mixed with mineral notes and verdant moss.", profile: "Fresh", traits: { floral: 3, dark: 2, soft: 1, luxe: 1 } },
-            { name: "After Hour", imgKey: "after_hour", price: 499, feel: "Sensual, Clandestine", notes: "Dark Rum, Tobacco Leaf, Black Musk", description: "A fragrance for when the sun goes down. A rich, boozy blend of dark rum and cured tobacco leaf.", profile: "Dark", traits: { dark: 3, sweet: 2, luxe: 1, bold: 1 } },
-            { name: "Glacial Getaway", imgKey: "glacial_gataway", price: 499, feel: "Crisp, Aquatic", notes: "Icy Mint, Mountain Pine, Clean Ozone", description: "An invigorating escape to the high peaks. A rush of icy mint, fresh ozone, and sharp mountain pine.", profile: "Fresh", traits: { fresh: 3, soft: 1, woody: 1 } },
-            { name: "Orion Hunt", imgKey: "orion_hunt", price: 499, feel: "Spicy, Ambitious", notes: "Black Pepper, Cedarwood, Vetiver", description: "Bold and commanding, an expression of ambition. Sharp black pepper, dry cedarwood, and earthy vetiver.", profile: "Dark", traits: { bold: 3, woody: 2, fresh: 1 } },
-            { name: "Midnight Swim", imgKey: "midnight_swim", price: 499, feel: "Intriguing, Clean Amber", notes: "Saltwater Mist, Ambergris, Night Jasmine", description: "The scent of a warm ocean under a cool night sky. Saltwater mist meets clean ambergris and jasmine.", profile: "Fresh", traits: { fresh: 2, dark: 2, luxe: 2, floral: 1 } },
-            { name: "Amber Creme", imgKey: "amber_creme", price: 499, feel: "Boozy, Comforting", notes: "Roasted Barley, Honeyed Malt, Patchouli", description: "Pure comfort and rich indulgence. The nutty, sweet warmth of malt liquor with deep earthiness.", profile: "Warm", traits: { cozy: 3, woody: 2, sweet: 1 } },
-            { name: "Rebel Night", imgKey: "rebel_night", price: 499, feel: "Edgy, Magnetic", notes: "Leather, Spiced Rum, Smoked Wood", description: "For those who walk their own path. A rebellious mix of worn leather, spiced rum, and a trail of smoked wood.", profile: "Dark", traits: { bold: 3, dark: 2, woody: 3 } },
-            { name: "Crystal Bloom", imgKey: "crystal_bloom", price: 499, feel: "Radiant, Sparkling", notes: "Peony, Lychee, White Musk", description: "A burst of pure light. Sparkling lychee and radiant peony petals settle into a soft, clean white musk.", profile: "Fresh", traits: { floral: 2, sweet: 3, luxe: 2, soft: 2, fresh: 1 } },
-            { name: "Avira Signature", imgKey: "avira_signature", price: 599, feel: "Timeless, Iconic", notes: "Oud, Saffron, Vanilla Absolute", description: "The essence of our craft. A timeless blend of rare oud and warm vanilla that leaves an unforgettable mark.", profile: "Luxurious", traits: { luxe: 3, bold: 2, sweet: 1, woody: 1, dark: 1 } }
+            { 
+                name: "Golden Brown", 
+                imgKey: "golden_brown", 
+                price: 450, 
+                feel: "Amber Aromatic", 
+                notes: "Lavender, Mint, Vanilla, Benzoin, Honey, Tonka Bean, Tobacco", 
+                description: "Fresh aromatic opening with a rich, addictive heart of vanilla and honeyed warmth, settling into a deep tobacco-like finish.", 
+                profile: "Warm", 
+                traits: { sweet: 3, cozy: 3, dark: 2, fresh: 1 } 
+            },
+            { 
+                name: "Amber Smoke", 
+                imgKey: "amber_smoke", 
+                price: 450, 
+                feel: "Woody Spicy", 
+                notes: "Rosewood, Cardamom, Chinese Pepper, Oud, Sandalwood, Vetiver, Tonka, Vanilla, Amber", 
+                description: "Polished woods meet soft spice and dark oud for a composed, understated scent with a warm, smoky finish.", 
+                profile: "Warm", 
+                traits: { woody: 3, dark: 2, cozy: 2, luxe: 2, bold: 1 } 
+            },
+            { 
+                name: "Midnight Swim", 
+                imgKey: "midnight_swim", 
+                price: 450, 
+                feel: "Spicy Woody Aromatic", 
+                notes: "Grapefruit, Cinnamon, Nutmeg, Cardamom, Lavender, Licorice, Amber Woods, Vetiver, Patchouli", 
+                description: "Bright citrus and aromatic lavender are balanced by warming spices and a deep, lasting woody character.", 
+                profile: "Dark", 
+                traits: { woody: 3, bold: 2, fresh: 2, dark: 2 } 
+            },
+            { 
+                name: "Lavender Land", 
+                imgKey: "lavender_land", 
+                price: 450, 
+                feel: "Amber Floral", 
+                notes: "Mandarin, Bergamot, Lavender, Orange Blossom, Jasmine, Orchid, Vanilla, Tonka, Ambergris, Vetiver", 
+                description: "Fresh lavender and luminous white flowers soften into a creamy vanilla and warm amber trail.", 
+                profile: "Fresh", 
+                traits: { floral: 3, sweet: 2, soft: 2, cozy: 2, fresh: 1 } 
+            },
+            { 
+                name: "Wildflower Valley", 
+                imgKey: "wildflower_valley", 
+                price: 450, 
+                feel: "White Floral Fruity", 
+                notes: "Pear, White Nectarine, Gardenia, Tuberose, Orange Blossom, Jasmine, Vanilla, Patchouli, Sandalwood, Musk", 
+                description: "Juicy fruits and white blossoms are wrapped in creamy woods and soft musk for an elegant, comforting finish.", 
+                profile: "Fresh", 
+                traits: { floral: 3, sweet: 2, soft: 3, cozy: 1 } 
+            },
+            { 
+                name: "Fluid Vanilla", 
+                imgKey: "fluid_vanilla", 
+                price: 450, 
+                feel: "Ambery Woody Vanilla", 
+                notes: "Juniper Berries, Coriander, Nutmeg, Vanilla, Musks, Amber Woods", 
+                description: "An airy take on vanilla: lightly aromatic at first, then smooth and warm with musks and amber woods.", 
+                profile: "Warm", 
+                traits: { sweet: 3, cozy: 3, soft: 2, woody: 2 } 
+            },
+            { 
+                name: "Oud Flower", 
+                imgKey: "oud_flower", 
+                price: 450, 
+                feel: "Oud Amber Floral", 
+                notes: "Saffron, Rose, Oud, Smoky Woods, Amber, Patchouli, Musk", 
+                description: "A floral interpretation of oud, pairing rose-like softness with smoky woods and a deep amber-musk base.", 
+                profile: "Luxurious", 
+                traits: { luxe: 3, floral: 2, woody: 2, dark: 2 } 
+            },
+            { 
+                name: "Lobby 07", 
+                imgKey: "lobby_07", 
+                price: 450, 
+                feel: "Citrus Aromatic Tea", 
+                notes: "Bergamot, Orange, Mandarin, Litsea Cubeba, Oolong Tea, Nutmeg, Fig, Musk", 
+                description: "Fresh citrus and green tea create a bright, welcoming impression, balanced by gentle spice and a soft musky finish.", 
+                profile: "Fresh", 
+                traits: { fresh: 3, soft: 3, cozy: 1 } 
+            },
+            { 
+                name: "Horizon Rain", 
+                imgKey: "horizon_rain", 
+                price: 450, 
+                feel: "Woody Aromatic", 
+                notes: "Lemon, Mint, Pink Pepper, Grapefruit, Ginger, Nutmeg, Jasmine, Incense, Vetiver, Cedar, Sandalwood, Patchouli, Musk", 
+                description: "Cool citrus and mint bring an invigorating opening, while gentle spice and refined woods leave a clean, confident impression.", 
+                profile: "Fresh", 
+                traits: { fresh: 3, woody: 3, bold: 1, soft: 1 } 
+            },
+            { 
+                name: "Clean Deal", 
+                imgKey: "clean_deal", 
+                price: 450, 
+                feel: "Woody Floral Citrus", 
+                notes: "Bergamot, Lemon, Neroli, Blackcurrant, Violet, Cyclamen, Jasmine, African Marigold, Vetiver, Cedarwood, Musk, Amber", 
+                description: "Sparkling citrus and soft florals create a sunny, easygoing scent, grounded by smooth woods and a warm, clean finish.", 
+                profile: "Fresh", 
+                traits: { fresh: 3, floral: 2, soft: 2, woody: 1 } 
+            },
+            { 
+                name: "Cherry Rain", 
+                imgKey: "cherry_rain", 
+                price: 450, 
+                feel: "Fruity Floral Gourmand", 
+                notes: "Cherry, Green Mandarin, Jasmine, Orange Blossom, Coffee, Vanilla, Patchouli", 
+                description: "Juicy cherry and bright mandarin meet a soft floral heart, followed by a warm blend of coffee, vanilla and patchouli.", 
+                profile: "Warm", 
+                traits: { sweet: 3, floral: 2, cozy: 2, dark: 1 } 
+            },
+            { 
+                name: "After Dark", 
+                imgKey: "after_dark", 
+                price: 450, 
+                feel: "Chypre Amber Floral", 
+                notes: "Saffron, Black Truffle, Black Rose, Patchouli, Vanilla, Oud, Oakmoss", 
+                description: "A dramatic dark-rose fragrance with earthy depth and a warm, resinous base, made for an elegant evening mood.", 
+                profile: "Dark", 
+                traits: { dark: 3, luxe: 3, floral: 2, bold: 2 } 
+            },
+            { 
+                name: "Winter Jacket", 
+                imgKey: "winter_jacket", 
+                price: 450, 
+                feel: "Leather Chypre", 
+                notes: "Saffron, Raspberry, Thyme, Olibanum, Jasmine, Leather, Suede, Amberwood", 
+                description: "Bold leather is softened by a hint of fruit and aromatic spice, settling into a smooth suede-like warmth.", 
+                profile: "Luxurious", 
+                traits: { bold: 3, woody: 2, dark: 2, luxe: 2, cozy: 1 } 
+            }
         ];
         
         const CART_KEY = 'avira-cart';
