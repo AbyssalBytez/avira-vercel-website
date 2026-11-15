@@ -597,7 +597,7 @@
                 <div>
                     <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold mb-2 pr-8"></p>
                     <h2 id="modal-name" class="text-3xl md:text-4xl font-playfair text-avira-text mb-2 leading-tight"></h2>
-                    <p class="text-xl font-cormorant italic text-avira-textMuted mb-6" id="modal-price"></p>
+                    <div class="flex items-center gap-3 mb-6" id="modal-price"></div>
                     <div class="glass-panel border-0 bg-white/5 dark:bg-black/20 rounded-2xl p-4 sm:p-6 mb-6 relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-1 h-full bg-avira-gold"></div>
                         <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-textMuted mb-2">Olfactory Notes</p>
@@ -1180,9 +1180,13 @@ Total Amount: \u20B9${finalTotal}
                         <div class="relative h-64 sm:h-72 overflow-hidden">
                             <img ${index < 2 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" src="${IMAGE_FOLDER}${p.imgKey}.jpg" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
+                            <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-sm border border-avira-gold px-4 py-1 rounded-full flex items-center gap-2 shadow-lg">
+                                <span class="text-xs font-inter text-white/40 line-through">\u20B9549</span>
+                                <span class="text-sm font-playfair font-bold text-avira-gold">\u20B9450</span>
+                            </div>
                             <div class="absolute bottom-5 left-5 right-5">
                                 <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
-                                <h3 class="text-2xl playfair font-medium text-white group-hover:text-avira-gold transition-colors duration-500">${p.name}</h3>
+                                <h3 class="text-2xl font-playfair font-medium text-white group-hover:text-avira-gold transition-colors duration-500">${p.name}</h3>
                             </div>
                         </div>
                         <div class="p-6 flex-grow flex flex-col justify-end bg-transparent">
@@ -1266,7 +1270,11 @@ Total Amount: \u20B9${finalTotal}
             if (!currentScent) return;
             modalQty = 1; document.getElementById('modal-qty').innerText = modalQty;
             document.getElementById('modal-name').textContent = currentScent.name;
-            document.getElementById('modal-price').textContent = '\u20B9' + currentScent.price;
+            document.getElementById('modal-price').innerHTML = `
+    <span class="text-2xl md:text-3xl font-playfair font-bold text-avira-text">\u20B9450</span>
+    <span class="text-base font-inter text-avira-textMuted line-through opacity-60">\u20B9549</span>
+    <span class="py-1 px-2 rounded-full bg-avira-gold text-black text-[0.625rem] font-inter font-bold uppercase tracking-widest shadow-sm">Save \u20B999</span>
+`;
             document.getElementById('modal-feel').textContent = currentScent.feel;
             document.getElementById('modal-notes').textContent = currentScent.notes;
             document.getElementById('modal-description').textContent = currentScent.description;
