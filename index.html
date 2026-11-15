@@ -880,6 +880,17 @@
             }
 
             const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            // Fake ₹99 higher MRP per bottle so we can show a ₹99 discount per bottle
+            const fakeDiscountPerItem = 99;
+            const actualSubtotal = cart.reduce((acc, item) => acc + (450 * item.qty), 0);
+            const discount = totalItems * fakeDiscountPerItem;
+            const subtotal = actualSubtotal + discount; // Shows ₹549 x qty as the Subtotal
+            const deliveryFee = 100;
+            const finalTotal = subtotal - discount + deliveryFee; // Always equals (450 * qty) + 100
+            return { totalItems, subtotal, discount, deliveryFee, finalTotal };
+        }
+
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
             const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
             const discount = Math.floor(totalItems / 2) * 99;
             const deliveryFee = 49;
@@ -940,11 +951,15 @@
                 checkoutBtn.style.cursor = 'pointer';
 
                 cart.forEach((item, idx) => {
+                    const mrp = 549;
                     itemsEl.innerHTML += `
                         <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
                             <div class="flex items-center gap-3">
                                 <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover" onerror="handleImageError(this, ${jsArg(item.name)})">
-                                <div><p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p><p class="text-xs text-avira-textMuted">\u20B9${item.price} x ${item.qty}</p></div>
+                                <div>
+                                    <p class="text-sm font-playfair text-avira-text font-bold">${item.name}</p>
+                                    <p class="text-xs text-avira-textMuted"><span class="line-through opacity-50 mr-1">\u20B9${mrp}</span> <span class="text-avira-gold font-bold">\u20B9450</span> x ${item.qty}</p>
+                                </div>
                             </div>
                             <div class="flex items-center gap-2">
                                 <button onclick="changeCartQty(${idx}, -1)" aria-label="Decrease quantity" class="qty-btn text-xs">-</button>
@@ -956,10 +971,10 @@
                 
                 let summaryHTML = '';
                 if (discount > 0) {
-                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Subtotal</span><span>\u20B9${subtotal}</span></div>
-                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Pair Discount</span><span class="text-[0.5rem] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
+                    summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>MRP Total</span><span>\u20B9${subtotal}</span></div>
+                                    <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Harvest Offer</span><span class="text-[0.5rem] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
                 }
-                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B969</span> \u20B9${deliveryFee}</span></div>`;
+                summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B9149</span> \u20B9${deliveryFee}</span></div>`;
                 summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-xl mt-2 border-t border-avira-text/10 pt-2"><span>Total</span><span>\u20B9${finalTotal}</span></div>`;
                 summaryEl.innerHTML = summaryHTML;
             }
