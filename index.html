@@ -6,19 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
         content="Avira Perfumes - Hand-crafted, long-lasting luxury fragrances designed for the individual." />
+    <link rel="canonical" href="https://avira-vercel-website.vercel.app/" />
+    <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Avira Perfumes" />
     <meta property="og:title" content="Avira Perfumes" />
     <meta property="og:description"
         content="Hand-crafted, long-lasting luxury fragrances designed for the individual." />
-    <meta property="og:image" content="https://avira-vercel-website.vercel.app/images/avira_signature.jpg" />
+    <meta property="og:image" content="https://avira-vercel-website.vercel.app/images/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Avira Golden Brown eau de parfum" />
     <meta property="og:url" content="https://avira-vercel-website.vercel.app/" />
+    <meta property="og:locale" content="en_IN" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Avira Perfumes" />
+    <meta name="twitter:description"
+        content="Hand-crafted, long-lasting luxury fragrances designed for the individual." />
+    <meta name="twitter:image" content="https://avira-vercel-website.vercel.app/images/og-image.jpg" />
+    <meta name="theme-color" content="#f3ead8" />
     <title>Avira Perfumes | Liquid Glass Edition</title>
 
-    <!-- Load Tailwind CSS -->
+    <!-- Apply the saved theme before first paint to avoid a light/dark flash -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem("avira-theme");
+                var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                var dark = saved === "dark" || (!saved && prefersDark);
+                var root = document.documentElement;
+                if (dark) {
+                    root.setAttribute("data-theme", "dark");
+                    root.classList.add("dark");
+                }
+                root.style.colorScheme = dark ? "dark" : "light";
+                var themeMeta = document.querySelector('meta[name="theme-color"]');
+                if (themeMeta)
+                    themeMeta.setAttribute("content", dark ? "#050505" : "#f3ead8");
+            } catch (e) { }
+        })();
+    </script>
 
     <!-- Load EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,11 +59,12 @@
         rel="stylesheet" />
 
     <!-- Icons -->
-    <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js" defer></script>
 
-    <!-- Generic Favicon -->
-    <link rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 L90 50 L50 90 L10 50 Z' fill='none' stroke='%23bfa05a' stroke-width='5'/%3E%3C/svg%3E" />
+    <!-- Favicon: AVIRA monogram, inlined so it needs no extra request -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0a0a'/%3E%3Cpath d='M30 78 L50 22 L70 78' fill='none' stroke='%23bfa05a' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M39 60 H61' stroke='%23bfa05a' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
 
     <style>
         /* --- Dynamic Theming Variables --- */
@@ -52,6 +84,17 @@
             /* Muted warm bronze-taupe */
             --color-gold: #b0893e;
             /* Deep antique brass-gold */
+            --color-gold-text: #7d5e26;
+            /* Same brass hue, darkened for legible small text on cream
+               (--color-gold on --bg-canvas is only ~2.7:1). */
+            /* Checkout surfaces: the form is its own panel over the cart, so it
+               needs the same light/dark treatment rather than a fixed black. */
+            --surface: #fbf5e9;
+            --surface-field: rgba(255, 255, 255, 0.72);
+            --surface-field-focus: #fffdf8;
+            --surface-border: rgba(120, 98, 62, 0.24);
+            --surface-muted: #6b5e4c;
+            --color-danger: #a3231b;
             --orb-1: #e6d3b3;
             /* Warm sandstone */
             --orb-2: #ebd5be;
@@ -69,6 +112,13 @@
             --color-text: #f5f5f7;
             --color-text-muted: #86868b;
             --color-gold: #d4af37;
+            --color-gold-text: #d4af37;
+            --surface: #0b0b0c;
+            --surface-field: rgba(30, 30, 30, 0.6);
+            --surface-field-focus: rgba(30, 30, 30, 0.9);
+            --surface-border: rgba(255, 255, 255, 0.1);
+            --surface-muted: #86868b;
+            --color-danger: #f87171;
             --orb-1: #102a43;
             --orb-2: #240b2f;
             --orb-3: #3d2c05;
@@ -101,7 +151,9 @@
         }
 
         @media (hover: hover) {
-            .glass-panel:hover {
+            /* Lift content cards only. Applying this to the modals overrode their
+               open/close transforms and made them jump while the cursor was over them. */
+            .glass-panel:not(#cart-content):not(#scent-content):not(#quiz-content):not(#modal-notes-box):hover {
                 transform: translateY(-6px) scale(1.005);
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
                 border-color: var(--color-gold);
@@ -129,29 +181,71 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* Collection cards are role="button" now, so they need a visible
+           keyboard focus ring (the browser default is invisible on the glass). */
+        .reveal-node:focus-visible {
+            outline: 2px solid var(--color-gold);
+            outline-offset: 4px;
+        }
+
+        /* The dialogs move focus to their own container, which is a scroll
+           target rather than a control, so it must not draw a focus ring. */
+        #cart-modal:focus,
+        #scent-modal:focus,
+        #quiz-modal:focus,
+        #billing-form:focus,
+        #order-success-overlay:focus {
+            outline: none;
+        }
+
         /* Checkout Specific Styles */
+        #billing-form {
+            background: var(--surface);
+            color: var(--color-text);
+        }
+
+        /* Same panel colour, feathered over the cart behind it. The plain
+           declaration is the fallback for browsers without color-mix(). */
+        #order-success-overlay {
+            background: var(--surface);
+            background: color-mix(in srgb, var(--surface) 96%, transparent);
+        }
+
+        /* red-400 is unreadable on the cream panel, so the error colour is a
+           token too. */
+        #checkout-error {
+            color: var(--color-danger);
+        }
+
+        #checkout-error a {
+            color: inherit;
+        }
+
         .checkout-input {
-            background: rgba(30, 30, 30, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f5f5f7;
+            background: var(--surface-field);
+            border: 1px solid var(--surface-border);
+            color: var(--color-text);
             padding: 16px;
             border-radius: 12px;
             width: 100%;
             outline: none;
             transition: all 0.3s ease;
             font-family: "Inter", sans-serif;
-            font-size: 1rem;
+            font-size: 16px;
+            /* 16px minimum stops iOS Safari from zooming on focus. */
+            font-size: max(16px, 1rem);
             letter-spacing: 0.05em;
         }
 
         .checkout-input:focus {
             border-color: var(--color-gold);
-            background: rgba(30, 30, 30, 0.9);
+            background: var(--surface-field-focus);
             box-shadow: 0 0 0 1px var(--color-gold);
         }
 
         .checkout-input::placeholder {
-            color: #666;
+            color: var(--surface-muted);
+            opacity: 1;
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 0.1em;
@@ -162,17 +256,32 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.15em;
-            color: #888;
+            color: var(--surface-muted);
             margin-bottom: 8px;
             display: block;
             font-weight: 600;
         }
 
         .checkout-box {
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--surface-border);
             border-radius: 16px;
             padding: 20px;
-            background: rgba(20, 20, 20, 0.4);
+            background: var(--surface-field);
+        }
+
+        /* The checkout view is absolutely positioned over the cart, and the cart
+           view is hidden while it shows. Without an explicit height the shell
+           collapses to its padding and the form is clipped to a few pixels. */
+        #cart-content.is-checkout {
+            height: 85vh;
+            height: 85dvh;
+        }
+
+        @media (min-width: 640px) {
+            #cart-content.is-checkout {
+                height: 80vh;
+                height: 80dvh;
+            }
         }
 
         /* Buttons */
@@ -210,7 +319,9 @@
 
         .btn-liquid:hover {
             border-color: var(--color-gold);
-            color: var(--bg-canvas);
+            /* The hover fill is gold, so dark text is the only readable option
+               in both themes. */
+            color: #000;
             transform: scale(1.02);
         }
 
@@ -493,9 +604,11 @@
             right: -5px;
             background: var(--color-gold);
             color: black;
-            width: 18px;
+            min-width: 18px;
+            width: auto;
             height: 18px;
-            border-radius: 50%;
+            padding: 0 4px;
+            border-radius: 999px;
             font-size: 10px;
             display: flex;
             align-items: center;
@@ -532,21 +645,155 @@
 
         /* Payment Card Styling */
         .payment-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid var(--surface-border);
+            background: var(--surface-field);
             transition: all 0.3s ease;
             position: relative;
         }
 
         .payment-radio:checked+.payment-card {
-            background: rgba(20, 20, 20, 0.8);
+            background: var(--surface-field-focus);
             border-color: var(--color-gold);
-            box-shadow: 0 0 15px rgba(191, 160, 90, 0.05);
+            box-shadow: 0 0 15px rgba(191, 160, 90, 0.12);
         }
 
         .payment-radio:checked+.payment-card .check-icon {
             opacity: 1;
             transform: scale(1);
+        }
+
+        /* The payment icon is a direct child (Lucide swaps <i> for <svg>) */
+        .payment-radio:checked+.payment-card>svg {
+            color: var(--color-gold-text);
+        }
+
+        /* Custom easings used by the floating nav and the modals */
+        .ease-liquid {
+            transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .ease-liquid-in {
+            transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        /* Floating navigation: a grid keeps the wordmark centred without letting
+           the links collide with it on tablets or the controls on 320px phones.
+           Equal side tracks (rather than auto/1fr) are what keep the centre
+           column on the true centre line at narrow widths. */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
+            column-gap: 0.5rem;
+        }
+
+        .nav-grid > :last-child {
+            justify-self: end;
+        }
+
+        .nav-links {
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            font-size: 0.625rem;
+            letter-spacing: 0.15em;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 768px) {
+            .nav-grid {
+                column-gap: 1rem;
+            }
+        }
+
+        /* At tablet widths the links, wordmark and all three controls compete for
+           the same row. Trim the action button slightly so the wordmark never
+           touches it. */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .nav-grid .nav-scent-btn {
+                padding-left: 1rem;
+                padding-right: 1rem;
+                letter-spacing: 0.12em;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-links {
+                gap: 2rem;
+            }
+
+            .nav-links a {
+                font-size: 0.6875rem;
+                letter-spacing: 0.2em;
+            }
+        }
+
+        @media (max-width: 359px) {
+            .nav-grid .nav-logo {
+                font-size: 1.125rem;
+            }
+
+            /* The quantity also sits in the -/+ stepper, so on very narrow
+               phones the extra "x n" label is redundant and forces a wrap. */
+            .cart-line-qty {
+                display: none;
+            }
+        }
+
+        /* Short viewports: reserve room for the scroll cue so it can never sit
+           on top of the hero buttons. */
+        @media (max-height: 700px) {
+            .hero-section {
+                padding-bottom: 7rem;
+            }
+        }
+
+        /* Payment radios stay focusable for keyboard users while looking hidden. */
+        .payment-radio {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+            border: 0;
+            opacity: 0;
+        }
+
+        .payment-radio:focus-visible + .payment-card {
+            outline: 2px solid var(--color-gold);
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .blur-enter {
+                animation: none !important;
+                opacity: 1;
+                filter: none;
+                transform: none;
+            }
+
+            .animate-shimmer,
+            .animate-float,
+            .animate-pulse {
+                animation: none !important;
+            }
+
+            .reveal-node,
+            .js-reveal-hidden {
+                transition: none !important;
+            }
         }
 
         /* ---------------------------------------------------- */
@@ -566,25 +813,222 @@
     </style>
     <!-- Loaded last so utility classes win over the custom CSS above (same order the old CDN used) -->
     <link rel="stylesheet" href="tailwind.css" />
+
+    <!-- Structured data: who the brand is, and the collection as a list of
+         products so search engines can show price/availability. Prices and
+         copy must stay in sync with perfumesData in the script below. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://avira-vercel-website.vercel.app/#organization",
+          "name": "Avira Perfumes",
+          "url": "https://avira-vercel-website.vercel.app/",
+          "description": "Hand-crafted, long-lasting luxury fragrances designed for the individual.",
+          "logo": "https://avira-vercel-website.vercel.app/images/og-image.jpg",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+91-81149-19452",
+            "contactType": "customer service",
+            "areaServed": "IN",
+            "availableLanguage": ["en", "hi"]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://avira-vercel-website.vercel.app/#website",
+          "url": "https://avira-vercel-website.vercel.app/",
+          "name": "Avira Perfumes",
+          "inLanguage": "en-IN",
+          "publisher": { "@id": "https://avira-vercel-website.vercel.app/#organization" }
+        },
+        {
+          "@type": "ItemList",
+          "name": "Avira fragrance collection",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "Product",
+                "name": "Golden Brown",
+                "image": "https://avira-vercel-website.vercel.app/images/golden_brown.jpeg",
+                "description": "Amber Aromatic eau de parfum by Avira.",
+                "sku": "golden-brown",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "Product",
+                "name": "Amber Smoke",
+                "image": "https://avira-vercel-website.vercel.app/images/amber_smoke.jpeg",
+                "description": "Woody Spicy eau de parfum by Avira.",
+                "sku": "amber-smoke",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "Product",
+                "name": "Midnight Swim",
+                "image": "https://avira-vercel-website.vercel.app/images/midnight_swim.jpeg",
+                "description": "Spicy Woody Aromatic eau de parfum by Avira.",
+                "sku": "midnight-swim",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "Product",
+                "name": "Lavender Land",
+                "image": "https://avira-vercel-website.vercel.app/images/lavender_land.jpeg",
+                "description": "Amber Floral eau de parfum by Avira.",
+                "sku": "lavender-land",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "item": {
+                "@type": "Product",
+                "name": "Wildflower Valley",
+                "image": "https://avira-vercel-website.vercel.app/images/wildflower_valley.jpeg",
+                "description": "White Floral Fruity eau de parfum by Avira.",
+                "sku": "wildflower-valley",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "item": {
+                "@type": "Product",
+                "name": "Fluid Vanilla",
+                "image": "https://avira-vercel-website.vercel.app/images/fluid_vanilla.jpeg",
+                "description": "Ambery Woody Vanilla eau de parfum by Avira.",
+                "sku": "fluid-vanilla",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "item": {
+                "@type": "Product",
+                "name": "Oud Flower",
+                "image": "https://avira-vercel-website.vercel.app/images/oud_flower.jpeg",
+                "description": "Oud Amber Floral eau de parfum by Avira.",
+                "sku": "oud-flower",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "item": {
+                "@type": "Product",
+                "name": "Lobby 07",
+                "image": "https://avira-vercel-website.vercel.app/images/lobby_07.jpeg",
+                "description": "Citrus Aromatic Tea eau de parfum by Avira.",
+                "sku": "lobby-07",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "item": {
+                "@type": "Product",
+                "name": "Horizon Rain",
+                "image": "https://avira-vercel-website.vercel.app/images/horizon_rain.jpeg",
+                "description": "Woody Aromatic eau de parfum by Avira.",
+                "sku": "horizon-rain",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 10,
+              "item": {
+                "@type": "Product",
+                "name": "Clean Deal",
+                "image": "https://avira-vercel-website.vercel.app/images/clean_deal.jpeg",
+                "description": "Woody Floral Citrus eau de parfum by Avira.",
+                "sku": "clean-deal",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 11,
+              "item": {
+                "@type": "Product",
+                "name": "Cherry Rain",
+                "image": "https://avira-vercel-website.vercel.app/images/cherry_rain.jpeg",
+                "description": "Fruity Floral Gourmand eau de parfum by Avira.",
+                "sku": "cherry-rain",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 12,
+              "item": {
+                "@type": "Product",
+                "name": "After Dark",
+                "image": "https://avira-vercel-website.vercel.app/images/after_dark.jpeg",
+                "description": "Chypre Amber Floral eau de parfum by Avira.",
+                "sku": "after-dark",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 13,
+              "item": {
+                "@type": "Product",
+                "name": "Winter Jacket",
+                "image": "https://avira-vercel-website.vercel.app/images/winter_jacket.jpeg",
+                "description": "Leather Chypre eau de parfum by Avira.",
+                "sku": "winter-jacket",
+                "brand": { "@type": "Brand", "name": "Avira" },
+                "offers": { "@type": "Offer", "price": "450", "priceCurrency": "INR", "availability": "https://schema.org/InStock", "url": "https://avira-vercel-website.vercel.app/#collection" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 </head>
 
-<body class="antialiased selection:bg-avira-gold selection:text-black">
-    <script>
-        (function () {
-            try {
-                const saved = localStorage.getItem("avira-theme");
-                const prefersDark = window.matchMedia(
-                    "(prefers-color-scheme: dark)",
-                ).matches;
-                if (saved === "dark" || (!saved && prefersDark))
-                    document.body.setAttribute("data-theme", "dark");
-            } catch (e) { }
-        })();
-    </script>
+<body class="antialiased font-inter selection:bg-avira-gold selection:text-black">
 
     <!-- Toast Container -->
     <div id="toast-container"
-        class="fixed top-24 right-0 left-0 z-[110] pointer-events-none flex flex-col items-center gap-2 px-4"
+        class="fixed top-24 right-0 left-0 z-[130] pointer-events-none flex flex-col items-center gap-2 px-4"
         aria-live="polite"></div>
 
     <!-- Ambient Liquid Background -->
@@ -596,44 +1040,46 @@
 
     <!-- Floating Navigation -->
     <header
-        class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 transition-all duration-700 cubic-bezier(0.2, 0.8, 0.2, 1)"
+        class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4 transition-all duration-700 ease-liquid"
         id="navbar">
         <nav
-            class="glass-nav rounded-full px-4 py-2 md:px-8 md:py-3 flex items-center justify-between w-full max-w-6xl relative">
-            <button onclick="toggleMobileMenu()"
-                class="md:hidden p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors z-50 relative focus:outline-none active:scale-90 transition-transform"
-                aria-label="Toggle Menu">
-                <i data-lucide="menu" class="w-6 h-6 text-avira-text"></i>
-            </button>
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="#collection"
-                    class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Collection</a>
-                <a href="#philosophy"
-                    class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Philosophy</a>
-                <a href="#how-to-use"
-                    class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">How
-                    To Use</a>
+            class="glass-nav nav-grid rounded-full px-4 py-2 md:px-8 md:py-3 w-full max-w-6xl relative">
+            <div class="flex items-center min-w-0">
+                <button type="button" onclick="toggleMobileMenu()" id="menu-toggle"
+                    class="md:hidden p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 z-50 relative focus:outline-none active:scale-90"
+                    aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+                    <i data-lucide="menu" class="w-6 h-6 text-avira-text"></i>
+                </button>
+                <div class="nav-links hidden md:flex items-center">
+                    <a href="#collection"
+                        class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Collection</a>
+                    <a href="#philosophy"
+                        class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">Philosophy</a>
+                    <a href="#how-to-use"
+                        class="text-[0.6875rem] font-inter uppercase tracking-[0.2em] text-avira-textMuted hover:text-avira-text transition-colors duration-300">How
+                        To Use</a>
+                </div>
             </div>
-            <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-30">
+            <div class="flex justify-center items-center pointer-events-none z-30 min-w-0">
                 <a href="#"
                     class="group flex items-center gap-3 pointer-events-auto bg-transparent px-2 hover:scale-105 transition-transform duration-500">
                     <span
-                        class="text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
+                        class="nav-logo text-xl md:text-3xl font-playfair font-bold tracking-[0.15em] text-avira-text">AVIRA</span>
                 </a>
             </div>
-            <div class="flex items-center space-x-3 md:space-x-8 absolute right-4 md:static z-40">
+            <div class="flex items-center space-x-2 md:space-x-8 z-40">
                 <button type="button" class="theme-toggle scale-90 md:scale-100" onclick="toggleTheme()"
                     title="Switch Mode" aria-label="Switch light or dark mode">
                     <span class="toggle-knob"></span>
                 </button>
                 <button onclick="openCart()" id="main-cart-btn"
-                    class="relative p-2 rounded-full hover:bg-avira-text/5 transition-colors duration-300 focus:outline-none active:scale-90 transition-transform"
+                    class="relative p-2 rounded-full hover:bg-avira-text/5 transition-all duration-300 focus:outline-none active:scale-90"
                     aria-label="Cart">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-avira-text"></i>
                     <span id="cart-count" class="cart-badge">0</span>
                 </button>
                 <button onclick="openQuiz()"
-                    class="hidden md:block btn-liquid px-6 py-2 rounded-full text-[0.625rem] font-bold uppercase tracking-[0.2em]">
+                    class="nav-scent-btn hidden md:block btn-liquid px-6 py-2 rounded-full text-[0.625rem] font-bold uppercase tracking-[0.2em] whitespace-nowrap shrink-0">
                     <span>Scent Finder</span>
                 </button>
             </div>
@@ -641,32 +1087,34 @@
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu"
-        class="fixed inset-0 z-[100] transform -translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) glass-menu flex flex-col justify-center items-center space-y-8 overflow-y-auto">
-        <button onclick="toggleMobileMenu()"
-            class="absolute top-8 right-8 p-3 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-[101] cursor-pointer shadow-lg hover:rotate-90"
+    <div id="mobile-menu" aria-hidden="true" inert
+        class="fixed inset-0 z-[100] transform -translate-y-full transition-transform duration-700 ease-liquid-in glass-menu flex md:hidden overflow-y-auto">
+        <button type="button" onclick="toggleMobileMenu()"
+            class="absolute top-8 right-8 p-3 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-gold hover:text-black transition-all duration-300 z-[101] cursor-pointer shadow-lg hover:rotate-90"
             aria-label="Close Menu">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
-        <a href="#collection" onclick="toggleMobileMenu()"
-            class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Collection</a>
-        <a href="#philosophy" onclick="toggleMobileMenu()"
-            class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Philosophy</a>
-        <a href="#how-to-use" onclick="toggleMobileMenu()"
-            class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">How
-            To Use</a>
-        <button onclick="
-          toggleMobileMenu();
-          openQuiz();
-        "
-            class="text-lg font-inter uppercase tracking-widest text-avira-gold border border-avira-gold p-4 rounded-full px-10 hover:bg-avira-gold hover:text-black transition-colors duration-300 cursor-pointer active:scale-95">
-            Take Scent Quiz
-        </button>
+        <div class="my-auto w-full flex flex-col items-center space-y-8 px-6 py-24">
+            <a href="#collection" onclick="toggleMobileMenu()"
+                class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Collection</a>
+            <a href="#philosophy" onclick="toggleMobileMenu()"
+                class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">Philosophy</a>
+            <a href="#how-to-use" onclick="toggleMobileMenu()"
+                class="text-4xl font-playfair text-avira-text hover:scale-105 transition-transform duration-500 cursor-pointer">How
+                To Use</a>
+            <button onclick="
+              toggleMobileMenu();
+              openQuiz();
+            "
+                class="text-lg font-inter uppercase tracking-widest text-avira-gold border border-avira-gold p-4 rounded-full px-10 hover:bg-avira-gold hover:text-black transition-colors duration-300 cursor-pointer active:scale-95">
+                Take Scent Quiz
+            </button>
+        </div>
     </div>
 
     <!-- Hero Section -->
     <section
-        class="min-h-[100svh] flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
+        class="hero-section min-h-[100svh] flex flex-col justify-center items-center relative px-6 pt-24 text-center overflow-hidden">
         <div class="z-10 max-w-5xl mx-auto perspective-1000">
             <h1 class="blur-enter hero-title font-playfair text-avira-text mb-8 leading-[0.9] drop-shadow-sm"
                 style="animation-delay: 0.3s">
@@ -697,10 +1145,10 @@
     </section>
 
     <!-- Collection Grid -->
-    <section id="collection" class="py-20 md:py-32 px-6 relative z-10">
+    <section id="collection" class="py-16 md:py-20 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
             <div
-                class="reveal-node flex flex-col md:flex-row justify-between items-start md:items-end mb-16 border-b border-avira-text/10 pb-8">
+                class="reveal-node flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-avira-text/10 pb-8">
                 <div>
                     <h2 class="h2-fluid font-playfair text-avira-text mb-4">
                         The Expressions
@@ -717,7 +1165,7 @@
     </section>
 
     <!-- Philosophy -->
-    <section id="philosophy" class="py-20 md:py-32 px-6 relative z-10">
+    <section id="philosophy" class="py-16 md:py-20 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
             <!-- Featured Intro Card -->
             <div
@@ -834,14 +1282,14 @@
     </section>
 
     <!-- How To Use Section -->
-    <section id="how-to-use" class="py-20 md:py-32 px-6 relative z-10">
+    <section id="how-to-use" class="py-16 md:py-20 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal-node">
+            <div class="text-center mb-12 reveal-node">
                 <h2 class="h2-fluid font-playfair text-avira-text mb-6">
                     How To Use <br /><span class="italic text-avira-gold">Our Product</span>
                 </h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-14">
                 <div
                     class="reveal-node glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group h-full">
                     <div
@@ -918,25 +1366,25 @@
 
     <!-- Cart Modal -->
     <div id="cart-modal" role="dialog" aria-modal="true" aria-label="Your cart"
-        class="fixed inset-0 z-[90] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
+        class="fixed inset-0 z-[120] hidden items-end sm:items-center justify-end sm:justify-center p-0 sm:p-4">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-700 ease-in-out opacity-0"
             id="cart-backdrop" onclick="closeCart()"></div>
         <div id="cart-content"
-            class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80dvh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col overflow-hidden">
+            class="glass-panel w-full sm:max-w-xl max-h-[85dvh] sm:max-h-[80dvh] rounded-t-[2rem] sm:rounded-[2rem] p-8 relative transform translate-y-full transition-transform duration-700 ease-liquid-in flex flex-col overflow-hidden">
             <div id="cart-header"
                 class="flex justify-between items-center mb-6 pb-4 border-b border-avira-text/10 shrink-0">
                 <h2 class="text-3xl font-playfair text-avira-text transition-all duration-300" id="cart-title">
                     Your Selection
                 </h2>
                 <button aria-label="Close" onclick="closeCart()"
-                    class="p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-sm hover:rotate-90">
+                    class="p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-gold hover:text-black transition-all duration-300 shadow-sm hover:rotate-90">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
             <!-- Items View -->
-            <div id="cart-view" class="flex-grow flex flex-col overflow-hidden transition-all duration-500">
-                <div class="flex-grow overflow-y-auto flex flex-col">
+            <div id="cart-view" class="flex-grow min-h-0 flex flex-col overflow-hidden transition-all duration-500">
+                <div class="flex-grow min-h-0 overflow-y-auto flex flex-col">
                     <div id="cart-items" class="flex-grow space-y-4 mb-6 pr-2"></div>
 
                     <div class="border-t border-avira-text/10 pt-4 mb-6 shrink-0" id="cart-summary">
@@ -959,42 +1407,42 @@
 
             <!-- Checkout Form View -->
             <div id="billing-form"
-                class="hidden flex-col h-full relative transition-all duration-500 bg-[#050505] absolute inset-0 rounded-[2rem] p-8 z-20 overflow-hidden opacity-0">
-                <div class="flex justify-between items-center mb-6 pb-2 border-b border-[#333]">
-                    <h2 class="text-3xl font-playfair text-[#f5f5f7]">Checkout</h2>
-                    <button aria-label="Close" onclick="closeCart()" class="text-[#6e6e73] hover:text-[#f5f5f7]">
+                class="hidden flex-col h-full transition-all duration-500 absolute inset-0 rounded-t-[2rem] sm:rounded-[2rem] p-8 z-20 overflow-hidden opacity-0">
+                <div class="flex justify-between items-center mb-6 pb-2 border-b border-avira-text/10">
+                    <h2 class="text-3xl font-playfair text-avira-text">Checkout</h2>
+                    <button aria-label="Close" onclick="closeCart()" class="text-avira-textMuted hover:text-avira-text">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
 
-                <div id="order-success-overlay"
-                    class="absolute inset-0 z-50 bg-black/95 flex flex-col items-center justify-center text-center p-6 hidden">
+                <div id="order-success-overlay" role="status" tabindex="-1"
+                    class="absolute inset-0 z-50 flex flex-col items-center justify-center text-center p-6 hidden">
                     <div
                         class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6 text-green-500 animate-pulse">
                         <i data-lucide="check" class="w-10 h-10"></i>
                     </div>
-                    <h3 class="text-3xl font-playfair text-[#f5f5f7] mb-2">
+                    <h3 class="text-3xl font-playfair text-avira-text mb-2">
                         Order Confirmed
                     </h3>
-                    <p class="text-sm text-[#888] max-w-xs mx-auto">
+                    <p class="text-sm text-avira-textMuted max-w-xs mx-auto">
                         We have received your request. Our artisan will contact you
                         shortly.
                     </p>
                 </div>
 
-                <div class="overflow-y-auto flex-grow pr-2 pb-4">
+                <div class="overflow-y-auto flex-grow min-h-0 pr-2 pb-4">
                     <!-- Total Box -->
                     <div class="checkout-box mb-6 flex justify-between items-center">
                         <div>
-                            <p class="text-[0.625rem] uppercase tracking-widest text-[#888] mb-1">
+                            <p class="text-[0.625rem] uppercase tracking-widest text-avira-textMuted mb-1">
                                 Total Amount
                             </p>
-                            <p class="text-2xl font-playfair font-bold text-[#f5f5f7]" id="checkout-total-display">
+                            <p class="text-2xl font-playfair font-bold text-avira-text" id="checkout-total-display">
                                 &#8377;0.00
                             </p>
                         </div>
                         <button onclick="hideCheckout()"
-                            class="text-xs text-avira-gold hover:text-white hover:underline transition-colors">
+                            class="text-xs text-avira-gold hover:text-avira-text hover:underline transition-colors">
                             Edit Cart
                         </button>
                     </div>
@@ -1004,7 +1452,7 @@
                 submitOrder();
               " class="space-y-6">
                         <div>
-                            <label class="checkout-label"><i data-lucide="user" class="w-3 h-3 inline mr-1"></i>
+                            <label class="checkout-label" for="bill-name"><i data-lucide="user" class="w-3 h-3 inline mr-1"></i>
                                 Contact Information</label>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <input type="text" id="bill-name" placeholder="Full Name" autocomplete="name"
@@ -1017,7 +1465,7 @@
                         </div>
 
                         <div>
-                            <label class="checkout-label"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i>
+                            <label class="checkout-label" for="bill-address"><i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i>
                                 Shipping</label>
                             <input type="text" id="bill-address" placeholder="House / Flat No., Building"
                                 autocomplete="address-line1" class="checkout-input" />
@@ -1034,14 +1482,14 @@
                                 Payment Method</label>
                             <div class="grid grid-cols-2 gap-4">
                                 <label class="cursor-pointer relative group">
-                                    <input type="radio" name="payment" value="UPI" class="hidden payment-radio peer"
+                                    <input type="radio" name="payment" value="UPI" class="payment-radio peer"
                                         checked />
                                     <div
                                         class="payment-card rounded-xl p-6 flex flex-col items-center justify-center gap-3 h-32 hover:border-avira-gold/50">
                                         <i data-lucide="smartphone"
-                                            class="w-8 h-8 text-[#666] peer-checked:text-avira-gold transition-colors"></i>
+                                            class="w-8 h-8 text-avira-textMuted peer-checked:text-avira-gold transition-colors"></i>
                                         <span
-                                            class="text-xs font-bold uppercase tracking-widest text-[#f5f5f7]">UPI</span>
+                                            class="text-xs font-bold uppercase tracking-widest text-avira-text">UPI</span>
                                         <div
                                             class="check-icon absolute top-3 right-3 text-avira-gold opacity-0 transform scale-50 transition-all duration-300">
                                             <i data-lucide="check-circle-2" class="w-4 h-4"></i>
@@ -1049,13 +1497,13 @@
                                     </div>
                                 </label>
                                 <label class="cursor-pointer relative group">
-                                    <input type="radio" name="payment" value="COD" class="hidden payment-radio peer" />
+                                    <input type="radio" name="payment" value="COD" class="payment-radio peer" />
                                     <div
                                         class="payment-card rounded-xl p-6 flex flex-col items-center justify-center gap-3 h-32 hover:border-avira-gold/50">
                                         <i data-lucide="banknote"
-                                            class="w-8 h-8 text-[#666] peer-checked:text-avira-gold transition-colors"></i>
+                                            class="w-8 h-8 text-avira-textMuted peer-checked:text-avira-gold transition-colors"></i>
                                         <span
-                                            class="text-xs font-bold uppercase tracking-widest text-[#f5f5f7]">CASH</span>
+                                            class="text-xs font-bold uppercase tracking-widest text-avira-text">CASH</span>
                                         <div
                                             class="check-icon absolute top-3 right-3 text-avira-gold opacity-0 transform scale-50 transition-all duration-300">
                                             <i data-lucide="check-circle-2" class="w-4 h-4"></i>
@@ -1068,9 +1516,9 @@
                 </div>
 
                 <p id="checkout-error" role="alert" class="hidden text-sm text-red-400 text-center pt-3"></p>
-                <div class="flex gap-4 mt-auto pt-4 border-t border-[#333]">
+                <div class="flex gap-4 mt-auto pt-4 border-t border-avira-text/10">
                     <button onclick="hideCheckout()"
-                        class="px-6 py-4 rounded-xl border border-avira-text/20 text-[#6e6e73] hover:text-[#f5f5f7] hover:border-[#f5f5f7] transition-all uppercase tracking-widest text-xs font-bold">
+                        class="px-6 py-4 rounded-xl border border-avira-text/20 text-avira-textMuted hover:text-avira-text hover:border-avira-gold transition-all uppercase tracking-widest text-xs font-bold">
                         Back
                     </button>
                     <button type="button" onclick="submitOrder()" id="btn-submit-order"
@@ -1084,27 +1532,27 @@
 
     <!-- Scent Detail Modal -->
     <div id="scent-modal" role="dialog" aria-modal="true" aria-label="Product details"
-        class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+        class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-700 ease-in-out opacity-0"
             id="scent-backdrop" onclick="closeScentDetails()"></div>
         <div id="scent-content"
-            class="glass-panel w-full max-w-5xl max-h-[90dvh] rounded-[2rem] md:rounded-[3rem] overflow-y-auto md:overflow-hidden overscroll-contain relative transform translate-y-20 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col md:flex-row">
+            class="glass-panel w-full max-w-5xl max-h-[90dvh] rounded-[2rem] md:rounded-[3rem] overflow-y-auto md:overflow-hidden overscroll-contain relative transform translate-y-20 opacity-0 transition-all duration-700 ease-liquid-in flex flex-col md:flex-row">
             <button aria-label="Close" onclick="closeScentDetails()"
-                class="sticky top-4 self-end mr-4 mt-4 -mb-14 shrink-0 z-20 md:absolute md:top-6 md:right-6 md:m-0 p-2 rounded-full bg-black/40 md:bg-avira-text/5 border border-avira-text/10 text-white md:text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 shadow-lg hover:rotate-90">
+                class="sticky top-4 self-end mr-4 mt-4 -mb-14 shrink-0 z-20 md:absolute md:top-6 md:right-6 md:m-0 p-2 rounded-full bg-black/40 md:bg-avira-text/5 border border-avira-text/10 text-white md:text-avira-text hover:bg-avira-gold hover:text-black transition-all duration-300 shadow-lg hover:rotate-90">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div class="w-full md:w-1/2 h-64 sm:h-72 md:h-auto relative bg-black/10 shrink-0">
-                <img id="modal-image" src=""
+                <img id="modal-image" width="1024" height="1280"
                     class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" alt="">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent md:bg-gradient-to-r"></div>
-                <button id="modal-prev" onclick="changeModalSlide(-1)"
+                <button id="modal-prev" onclick="changeModalSlide(-1)" aria-label="Previous image"
                     class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">&lsaquo;</button>
-                <button id="modal-next" onclick="changeModalSlide(1)"
+                <button id="modal-next" onclick="changeModalSlide(1)" aria-label="Next image"
                     class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/40 text-white items-center justify-center text-xl active:scale-90">&rsaquo;</button>
                 <div id="modal-dots" class="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2"></div>
             </div>
             <div id="modal-right-panel"
-                class="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-avira-text/5 md:overflow-y-auto transition-colors duration-500">
+                class="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-avira-text/5 md:overflow-y-auto min-h-0 transition-colors duration-500">
                 <div>
                     <div class="flex items-center gap-3 mb-2 pr-8">
                         <p id="modal-feel" class="text-xs font-bold uppercase tracking-[0.25em] text-avira-gold"></p>
@@ -1143,16 +1591,16 @@
 
     <!-- Quiz Modal -->
     <div id="quiz-modal" role="dialog" aria-modal="true" aria-label="Scent finder quiz"
-        class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+        class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 opacity-0"
             id="quiz-backdrop" onclick="closeQuiz()"></div>
         <div id="quiz-content"
-            class="glass-panel w-full max-w-2xl max-h-[90dvh] rounded-[2rem] p-6 sm:p-8 relative transform scale-90 opacity-0 transition-all duration-700 cubic-bezier(0.32, 0.72, 0, 1) overflow-hidden shadow-2xl flex flex-col">
+            class="glass-panel w-full max-w-2xl max-h-[90dvh] rounded-[2rem] p-6 sm:p-8 relative transform scale-90 opacity-0 transition-all duration-700 ease-liquid-in overflow-hidden shadow-2xl flex flex-col">
             <button aria-label="Close" onclick="closeQuiz()"
-                class="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-text hover:text-avira-gold transition-all duration-300 z-20 shadow-sm hover:rotate-90">
+                class="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-avira-text/5 border border-avira-text/10 text-avira-text hover:bg-avira-gold hover:text-black transition-all duration-300 z-20 shadow-sm hover:rotate-90">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div id="quiz-body" class="relative z-10 flex-grow flex flex-col overflow-y-auto overscroll-contain pt-2">
+            <div id="quiz-body" class="relative z-10 flex-grow min-h-0 flex flex-col overflow-y-auto overscroll-contain pt-2">
             </div>
         </div>
     </div>
@@ -1168,9 +1616,9 @@
         <span class="hidden md:inline text-xs font-inter font-bold uppercase tracking-widest pr-1">Chat with Us</span>
     </a>
 
-    <footer id="credits" class="py-20 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 mt-0">
+    <footer id="credits" class="py-16 px-6 relative z-10 border-t border-avira-text/5 bg-avira-text/5 mt-0">
         <div class="max-w-6xl mx-auto text-center">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left mb-12">
                 <div>
                     <h3
                         class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">
@@ -1184,7 +1632,7 @@
                 <div>
                     <h3
                         class="text-xs font-bold uppercase tracking-widest text-avira-textMuted mb-6 pb-2 border-b border-avira-text/10">
-                        Managment
+                        Management
                     </h3>
                     <ul class="space-y-3 font-inter text-sm text-avira-textMuted">
                         <li>Chinmay yashmanzit das</li>
@@ -1243,82 +1691,62 @@
         let modalQty = 1;
         let quizState = { step: 0, questions: [], selected: [] };
 
+        // Pending transition timers (cleared so rapid open/close can't race)
+        let cartCloseTimer = null;
+        let scentCloseTimer = null;
+        let quizCloseTimer = null;
+        let quizResultTimer = null;
+        let checkoutTimer = null;
+
+        // Safe wrapper: the Lucide CDN can fail without breaking the whole page
+        function refreshIcons() {
+            if (!window.lucide || typeof window.lucide.createIcons !== "function")
+                return;
+            try {
+                window.lucide.createIcons();
+            } catch (e) {
+                console.error("Lucide failed to render icons", e);
+            }
+        }
+
         const EMAILJS_SERVICE_ID = "service_bsilwzs";
         const EMAILJS_TEMPLATE_ID = "template_sj18onc";
         const EMAILJS_PUBLIC_KEY = "6FcTy6BrBiOrvXvOP";
 
         /* =========================================================
              IMAGE SYSTEM
-             Each perfume has an imgKey (filename WITHOUT extension).
-             Files live in the images/ folder:
-               - single image : images/<imgKey>.jpg   (png/jpeg/webp also work)
-               - slideshow    : images/<imgKey>.1.jpg, <imgKey>.2.jpg ... up to 4
-             The plain file is checked first, then the numbered ones.
-             Avoid dots inside the key itself (use _ or -).
+             Every perfume points at a real file inside images/:
+               image: "golden_brown.jpeg"          // single image
+               images: ["front.jpg", "pack.jpg"]   // optional slideshow
+             Naming: lowercase, spaces to underscores, .jpeg
+             (e.g. Lobby 07 -> lobby_07.jpeg). Dropping a file with the
+             listed name into images/ is all it takes to replace that
+             scent's gradient; if a file is missing or broken the card
+             falls back to the scent's colour gradient, so nothing is
+             ever left blank.
              ========================================================= */
         const IMAGE_FOLDER = "images/";
-        const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "webp"];
-        const MAX_SLIDES = 4;
-        const slideCache = {};
-        const firstImage = {};
 
-        // Cheap existence check (HEAD request, no image download). Falls back to
-        // loading the image when HEAD isn't possible (e.g. opening the file locally).
-        function imageExists(url) {
-            return fetch(url, { method: "HEAD" })
-                .then(
-                    (r) =>
-                        r.ok &&
-                        (r.headers.get("content-type") || "").startsWith("image/"),
-                )
-                .catch(
-                    () =>
-                        new Promise((resolve) => {
-                            const img = new Image();
-                            img.onload = () => resolve(true);
-                            img.onerror = () => resolve(false);
-                            img.src = url;
-                        }),
+        function scentImageUrls(perfume) {
+            if (!perfume) return [];
+            const files = Array.isArray(perfume.images)
+                ? perfume.images
+                : perfume.image
+                    ? [perfume.image]
+                    : [];
+            return files
+                .filter(Boolean)
+                .map((file) =>
+                    /^(?:https?:)?\/\//.test(file) || file.startsWith("data:")
+                        ? file
+                        : `${IMAGE_FOLDER}${file}`,
                 );
-        }
-
-        // Checks all extensions in parallel, returns the first match in IMAGE_EXTENSIONS order.
-        async function tryLoadImage(base) {
-            const urls = IMAGE_EXTENSIONS.map(
-                (ext) => `${IMAGE_FOLDER}${base}.${ext}`,
-            );
-            const found = await Promise.all(urls.map(imageExists));
-            const i = found.indexOf(true);
-            return i === -1 ? null : urls[i];
-        }
-
-        function resolveSlides(key) {
-            if (!slideCache[key]) {
-                slideCache[key] = (async () => {
-                    const [plain, ...numbered] = await Promise.all([
-                        tryLoadImage(key),
-                        ...Array.from({ length: MAX_SLIDES }, (_, i) =>
-                            tryLoadImage(`${key}.${i + 1}`),
-                        ),
-                    ]);
-                    let slides = [];
-                    if (plain) slides = [plain];
-                    else
-                        for (const u of numbered) {
-                            if (!u) break;
-                            slides.push(u);
-                        }
-                    if (slides[0]) firstImage[key] = slides[0];
-                    return slides;
-                })();
-            }
-            return slideCache[key];
         }
 
         const perfumesData = [
             {
                 name: "Golden Brown",
-                imgKey: "golden_brown",
+                image: "golden_brown.jpeg",
                 price: 450,
                 colors: ["#A65E24", "#D6A84B", "#3B2520"],
                 feel: "Amber Aromatic",
@@ -1329,7 +1757,7 @@
             },
             {
                 name: "Amber Smoke",
-                imgKey: "amber_smoke",
+                image: "amber_smoke.jpeg",
                 price: 450,
                 colors: ["#574238", "#B49A7A", "#292725"],
                 feel: "Woody Spicy",
@@ -1340,7 +1768,7 @@
             },
             {
                 name: "Midnight Swim",
-                imgKey: "midnight_swim",
+                image: "midnight_swim.jpeg",
                 price: 450,
                 colors: ["#142B4A", "#777B80", "#17191D"],
                 feel: "Spicy Woody Aromatic",
@@ -1351,7 +1779,7 @@
             },
             {
                 name: "Lavender Land",
-                imgKey: "lavender_land",
+                image: "lavender_land.jpeg",
                 price: 450,
                 colors: ["#B77B36", "#E4C99A", "#482D35"],
                 feel: "Amber Floral",
@@ -1362,7 +1790,7 @@
             },
             {
                 name: "Wildflower Valley",
-                imgKey: "wildflower_valley",
+                image: "wildflower_valley.jpeg",
                 price: 450,
                 colors: ["#F1E7D5", "#C6A7A0", "#A68A55"],
                 feel: "White Floral Fruity",
@@ -1373,7 +1801,7 @@
             },
             {
                 name: "Fluid Vanilla",
-                imgKey: "fluid_vanilla",
+                image: "fluid_vanilla.jpeg",
                 price: 450,
                 colors: ["#D5B36A", "#F0E5CD", "#A18A69"],
                 feel: "Ambery Woody Vanilla",
@@ -1384,7 +1812,7 @@
             },
             {
                 name: "Oud Flower",
-                imgKey: "oud_flower",
+                image: "oud_flower.jpeg",
                 price: 450,
                 colors: ["#3A2027", "#96703D", "#242322"],
                 feel: "Oud Amber Floral",
@@ -1395,7 +1823,7 @@
             },
             {
                 name: "Lobby 07",
-                imgKey: "lobby_07",
+                image: "lobby_07.jpeg",
                 price: 450,
                 colors: ["#A9B89A", "#D6C58B", "#53675A"],
                 feel: "Citrus Aromatic Tea",
@@ -1406,7 +1834,7 @@
             },
             {
                 name: "Horizon Rain",
-                imgKey: "horizon_rain",
+                image: "horizon_rain.jpeg",
                 price: 450,
                 colors: ["#172C48", "#8B969F", "#222426"],
                 feel: "Woody Aromatic",
@@ -1417,7 +1845,7 @@
             },
             {
                 name: "Clean Deal",
-                imgKey: "clean_deal",
+                image: "clean_deal.jpeg",
                 price: 450,
                 colors: ["#D9A441", "#E5C9A0", "#B86C46"],
                 feel: "Woody Floral Citrus",
@@ -1428,7 +1856,7 @@
             },
             {
                 name: "Cherry Rain",
-                imgKey: "cherry_rain",
+                image: "cherry_rain.jpeg",
                 price: 450,
                 colors: ["#9D1D36", "#3D1726", "#C49A51"],
                 feel: "Fruity Floral Gourmand",
@@ -1439,7 +1867,7 @@
             },
             {
                 name: "After Dark",
-                imgKey: "after_dark",
+                image: "after_dark.jpeg",
                 price: 450,
                 colors: ["#3B202B", "#75404D", "#B39A63"],
                 feel: "Chypre Amber Floral",
@@ -1450,7 +1878,7 @@
             },
             {
                 name: "Winter Jacket",
-                imgKey: "winter_jacket",
+                image: "winter_jacket.jpeg",
                 price: 450,
                 colors: ["#632F2E", "#49352C", "#B18A54"],
                 feel: "Leather Chypre",
@@ -1485,6 +1913,10 @@
             } catch (e) { }
         }
 
+        const MRP_MARKUP = 99; // shown as a per-bottle saving
+        const DELIVERY_FEE = 100;
+        const MAX_QTY = 99;
+
         function calculateTotals() {
             if (cart.length === 0) {
                 return {
@@ -1497,22 +1929,21 @@
             }
 
             const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
-            // Fake ₹99 higher MRP per bottle so we can show a ₹99 discount per bottle
-            const fakeDiscountPerItem = 99;
+            // MRP markup is per bottle, the charged price comes from the item so
+            // a price change in perfumesData can never desync the totals.
             const actualSubtotal = cart.reduce(
-                (acc, item) => acc + 450 * item.qty,
+                (acc, item) => acc + (item.price || 450) * item.qty,
                 0,
             );
-            const discount = totalItems * fakeDiscountPerItem;
-            const subtotal = actualSubtotal + discount; // Shows ₹549 x qty as the Subtotal
-            const deliveryFee = 100;
-            const finalTotal = subtotal - discount + deliveryFee; // Always equals (450 * qty) + 100
+            const discount = totalItems * MRP_MARKUP;
+            const subtotal = actualSubtotal + discount; // Shows Rs. 1,549 x qty as the Subtotal
+            const deliveryFee = DELIVERY_FEE;
+            const finalTotal = actualSubtotal + deliveryFee;
             return { totalItems, subtotal, discount, deliveryFee, finalTotal };
         }
 
         function changeModalQty(delta) {
-            modalQty += delta;
-            if (modalQty < 1) modalQty = 1;
+            modalQty = Math.min(MAX_QTY, Math.max(1, modalQty + delta));
             document.getElementById("modal-qty").innerText = modalQty;
         }
 
@@ -1521,7 +1952,8 @@
             const existingItem = cart.find(
                 (item) => item.name === currentScent.name,
             );
-            if (existingItem) existingItem.qty += modalQty;
+            if (existingItem)
+                existingItem.qty = Math.min(MAX_QTY, existingItem.qty + modalQty);
             else cart.push({ ...currentScent, qty: modalQty });
 
             const cartBtn = document.getElementById("main-cart-btn");
@@ -1534,7 +1966,8 @@
         }
 
         function changeCartQty(index, delta) {
-            cart[index].qty += delta;
+            if (!cart[index]) return;
+            cart[index].qty = Math.min(MAX_QTY, cart[index].qty + delta);
             if (cart[index].qty <= 0) cart.splice(index, 1);
             updateCartUI();
         }
@@ -1545,7 +1978,7 @@
                 calculateTotals();
 
             const countEl = document.getElementById("cart-count");
-            countEl.innerText = totalItems;
+            countEl.innerText = totalItems > 99 ? "99+" : totalItems;
             totalItems > 0
                 ? countEl.classList.add("show")
                 : countEl.classList.remove("show");
@@ -1569,20 +2002,21 @@
                 checkoutBtn.style.cursor = "pointer";
 
                 cart.forEach((item, idx) => {
-                    const mrp = 549;
+                    const price = item.price || 450;
+                    const mrp = price + MRP_MARKUP;
                     itemsEl.innerHTML += `
                         <div class="flex justify-between items-center bg-avira-text/5 p-3 rounded-xl animate-[fadeIn_0.3s_ease]">
-                            <div class="flex items-center gap-3">
-                                <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover" onerror="handleImageError(this, ${jsArg(item.name)})">
-                                <div>
-                                    <p class="text-sm font-inter mt-1">
-    <span class="text-avira-text font-bold">\u20B9450</span>
+                            <div class="flex items-center gap-3 min-w-0">
+                                <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover shrink-0" onerror="handleImageError(this, ${jsArg(item.name)})">
+                                <div class="min-w-0">
+                                    <p class="text-sm font-inter mt-1 whitespace-nowrap">
+    <span class="text-avira-text font-bold">\u20B9${price}</span>
     <span class="text-xs text-avira-textMuted line-through opacity-60 mr-1">\u20B9${mrp}</span>
-    <span class="text-xs text-avira-gold font-bold">\u00D7 ${item.qty}</span>
+    <span class="cart-line-qty text-xs text-avira-gold font-bold">\u00D7 ${item.qty}</span>
 </p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 shrink-0">
                                 <button onclick="changeCartQty(${idx}, -1)" aria-label="Decrease quantity" class="qty-btn text-xs">-</button>
                                 <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
                                 <button onclick="changeCartQty(${idx}, 1)" aria-label="Increase quantity" class="qty-btn text-xs">+</button>
@@ -1596,9 +2030,28 @@
                                     <div class="flex justify-between text-xs text-avira-gold mb-2 items-center"><div class="flex items-center gap-2"><span>Harvest Offer</span><span class="text-[0.5rem] font-bold bg-avira-gold/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You Save</span></div><span>-\u20B9${discount}</span></div>`;
                 }
                 summaryHTML += `<div class="flex justify-between text-xs text-avira-textMuted mb-2"><span>Delivery</span><span><span class="line-through opacity-50 mr-2">\u20B9149</span> \u20B9${deliveryFee}</span></div>`;
-                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold mt-2 border-t border-avira-text/10 pt-3"><span>Total</span><span class="text-avira-gold">\u20B9${finalTotal}</span></div>`;
+                summaryHTML += `<div class="flex justify-between items-center text-avira-text font-playfair text-2xl font-bold mt-2 border-t border-avira-text/10 pt-3"><span>Total</span><span id="cart-total" class="text-avira-gold">\u20B9${finalTotal}</span></div>`;
                 summaryEl.innerHTML = summaryHTML;
             }
+        }
+
+        function resetCheckoutView() {
+            clearTimeout(checkoutTimer);
+            const cartView = document.getElementById("cart-view");
+            const billingForm = document.getElementById("billing-form");
+            const header = document.getElementById("cart-header");
+
+            billingForm.classList.remove("flex");
+            billingForm.classList.add("hidden");
+            billingForm.style.opacity = "0";
+            document.getElementById("cart-content").classList.remove("is-checkout");
+            header.style.display = "";
+            cartView.style.display = "flex";
+            cartView.style.opacity = "1";
+            document
+                .getElementById("order-success-overlay")
+                .classList.add("hidden");
+            showCheckoutError("");
         }
 
         function showCheckout() {
@@ -1606,15 +2059,17 @@
 
             const cartView = document.getElementById("cart-view");
             const billingForm = document.getElementById("billing-form");
-            const title = document.getElementById("cart-title");
 
+            clearTimeout(checkoutTimer);
             cartView.style.opacity = "0";
 
-            setTimeout(() => {
+            checkoutTimer = setTimeout(() => {
+                if (!isModalOpen("cart-modal")) return;
                 cartView.style.display = "none";
                 document.getElementById("cart-header").style.display = "none";
                 billingForm.classList.remove("hidden");
                 billingForm.classList.add("flex");
+                document.getElementById("cart-content").classList.add("is-checkout");
 
                 void billingForm.offsetWidth;
 
@@ -1623,19 +2078,24 @@
                 const { finalTotal } = calculateTotals();
                 document.getElementById("checkout-total-display").innerText =
                     `\u20B9${finalTotal}`;
+
+                // The Proceed button has just been hidden with its parent view;
+                // move focus into the form so keyboard users don't end up on
+                // <body>.
+                activateDialog("billing-form");
             }, 300);
 
-            lucide.createIcons();
+            refreshIcons();
         }
 
         function hideCheckout() {
             const cartView = document.getElementById("cart-view");
             const billingForm = document.getElementById("billing-form");
-            const title = document.getElementById("cart-title");
 
+            clearTimeout(checkoutTimer);
             billingForm.style.opacity = "0";
 
-            setTimeout(() => {
+            checkoutTimer = setTimeout(() => {
                 billingForm.classList.remove("flex");
                 billingForm.classList.add("hidden");
                 document.getElementById("cart-header").style.display = "";
@@ -1643,7 +2103,112 @@
                 cartView.style.display = "flex";
                 void cartView.offsetWidth;
                 cartView.style.opacity = "1";
+                document.getElementById("cart-content").classList.remove("is-checkout");
+                // Restore focus only once the cart view is visible again.
+                deactivateDialog("billing-form");
             }, 300);
+        }
+
+        function isModalOpen(id) {
+            return !document.getElementById(id).classList.contains("hidden");
+        }
+
+        /* -------------------------------------------------------------
+             DIALOG FOCUS MANAGEMENT
+             The overlays declare aria-modal="true", which promises that
+             everything outside them is unreachable. That is only true if
+             focus is actually moved inside and Tab is kept there, so every
+             open/close pair registers with this little stack.
+             ------------------------------------------------------------- */
+        const FOCUSABLE =
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const dialogStack = [];
+
+        function focusableIn(root) {
+            return Array.prototype.filter.call(
+                root.querySelectorAll(FOCUSABLE),
+                (el) => el.getClientRects().length > 0,
+            );
+        }
+
+        function activeDialog() {
+            const entry = dialogStack[dialogStack.length - 1];
+            return entry ? document.getElementById(entry.id) : null;
+        }
+
+        function activateDialog(id) {
+            if (dialogStack.some((d) => d.id === id)) return;
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            const active = document.activeElement;
+            dialogStack.push({
+                id,
+                returnTo: active && active !== document.body ? active : null,
+            });
+            // The container itself takes focus (preventScroll avoids a jump and,
+            // on phones, stops the keyboard opening on the first text field).
+            if (!modal.hasAttribute("tabindex")) modal.setAttribute("tabindex", "-1");
+            modal.focus({ preventScroll: true });
+        }
+
+        // Closes the dialog *and* anything opened on top of it, then hands
+        // focus back to whatever opened the outermost one.
+        function deactivateDialog(id) {
+            const idx = dialogStack.findIndex((d) => d.id === id);
+            if (idx === -1) return;
+            const { returnTo } = dialogStack[idx];
+            dialogStack.length = idx;
+            if (
+                returnTo &&
+                document.contains(returnTo) &&
+                !returnTo.closest("[inert]")
+            ) {
+                returnTo.focus({ preventScroll: true });
+            }
+        }
+
+        // Keeps the page locked while *any* overlay is open, so closing one
+        // modal can't unlock scrolling behind another.
+        //
+        // `overflow: hidden` alone is ignored by iOS Safari, where the page
+        // behind an overlay still scrolls. Pinning the body at its current
+        // offset works everywhere, and the offset is restored on unlock so the
+        // reader never loses their place. The padding compensates for the
+        // desktop scrollbar disappearing, which would otherwise shift the
+        // whole layout sideways for a frame.
+        let scrollLockY = 0;
+
+        function syncScrollLock() {
+            const menuOpen = isMobileMenuOpen();
+            const locked =
+                menuOpen ||
+                isModalOpen("cart-modal") ||
+                isModalOpen("scent-modal") ||
+                isModalOpen("quiz-modal");
+            const body = document.body;
+            const isPinned = body.style.position === "fixed";
+
+            if (locked && !isPinned) {
+                const doc = document.documentElement;
+                const gap = window.innerWidth - doc.clientWidth;
+                scrollLockY = window.scrollY || window.pageYOffset || 0;
+                body.style.position = "fixed";
+                body.style.top = "-" + scrollLockY + "px";
+                body.style.left = "0";
+                body.style.right = "0";
+                body.style.width = "100%";
+                body.style.overflow = "hidden";
+                if (gap > 0) body.style.paddingRight = gap + "px";
+            } else if (!locked && isPinned) {
+                body.style.position = "";
+                body.style.top = "";
+                body.style.left = "";
+                body.style.right = "";
+                body.style.width = "";
+                body.style.overflow = "";
+                body.style.paddingRight = "";
+                window.scrollTo(0, scrollLockY);
+            }
         }
 
         function showCheckoutError(msg) {
@@ -1652,7 +2217,48 @@
             el.classList.toggle("hidden", !msg);
         }
 
+        const WHATSAPP_NUMBER = "918114919452";
+
+        function whatsappOrderUrl(body) {
+            return (
+                "https://wa.me/" +
+                WHATSAPP_NUMBER +
+                "?text=" +
+                encodeURIComponent(body.trim())
+            );
+        }
+
+        function openWhatsAppOrder(body) {
+            const url = whatsappOrderUrl(body);
+            const win = window.open(url, "_blank", "noopener");
+            if (!win) window.location.href = url;
+        }
+
+        // If the order can never leave the browser (EmailJS blocked by an
+        // extension/offline, or its API rejecting), don't dead-end the buyer:
+        // offer the exact same order text over WhatsApp, which needs no key.
+        function showWhatsAppFallback(body) {
+            const el = document.getElementById("checkout-error");
+            if (!el) {
+                openWhatsAppOrder(body);
+                return;
+            }
+            el.textContent = "";
+            el.classList.remove("hidden");
+            el.append("We could not email your order. ");
+            const link = document.createElement("a");
+            link.href = whatsappOrderUrl(body);
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.className = "underline font-semibold";
+            link.textContent = "Send it on WhatsApp instead";
+            el.append(link, ".");
+        }
+
         function submitOrder() {
+            if (!cart.length) return;
+            if (document.getElementById("btn-submit-order").disabled) return;
+
             const name = document.getElementById("bill-name").value.trim();
             const address = document.getElementById("bill-address").value.trim();
             const street = document.getElementById("bill-street").value.trim();
@@ -1696,15 +2302,14 @@
                 btn.classList.add("animate-shake");
                 setTimeout(() => btn.classList.remove("animate-shake"), 500);
                 bad.forEach((k) => {
-                    document.getElementById(ids[k]).style.borderColor = "#ef4444";
+                    document.getElementById(ids[k]).style.borderColor =
+                        "var(--color-danger)";
                 });
                 showCheckoutError(errorMsg);
                 setTimeout(() => {
                     document
                         .querySelectorAll(".checkout-input")
-                        .forEach(
-                            (el) => (el.style.borderColor = "rgba(255, 255, 255, 0.1)"),
-                        );
+                        .forEach((el) => (el.style.borderColor = ""));
                 }, 2000);
                 return;
             }
@@ -1718,7 +2323,7 @@
 
             btnSpan.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-2"></i> Sending...`;
             btn.disabled = true;
-            lucide.createIcons();
+            refreshIcons();
 
             const { subtotal, discount, deliveryFee, finalTotal } =
                 calculateTotals();
@@ -1747,9 +2352,7 @@ Total Amount: \u20B9${finalTotal}
             `;
 
             if (typeof emailjs === "undefined") {
-                showCheckoutError(
-                    "Email service not loaded. Please check your internet connection.",
-                );
+                showWhatsAppFallback(generatedOrderBody);
                 btnSpan.innerText = originalContent;
                 btn.disabled = false;
                 return;
@@ -1766,7 +2369,8 @@ Total Amount: \u20B9${finalTotal}
                     () => {
                         const overlay = document.getElementById("order-success-overlay");
                         overlay.classList.remove("hidden");
-                        lucide.createIcons();
+                        overlay.focus({ preventScroll: true });
+                        refreshIcons();
                         setTimeout(() => {
                             cart = [];
                             updateCartUI();
@@ -1785,7 +2389,7 @@ Total Amount: \u20B9${finalTotal}
                     },
                     (error) => {
                         console.error("EmailJS Error:", error);
-                        showCheckoutError("Failed to send order. Please try again.");
+                        showWhatsAppFallback(generatedOrderBody);
                         btnSpan.innerText = originalContent;
                         btn.disabled = false;
                     },
@@ -1796,10 +2400,12 @@ Total Amount: \u20B9${finalTotal}
             const modal = document.getElementById("cart-modal");
             const content = document.getElementById("cart-content");
             const backdrop = document.getElementById("cart-backdrop");
-            hideCheckout();
+            clearTimeout(cartCloseTimer);
+            resetCheckoutView();
             modal.classList.remove("hidden");
             modal.classList.add("flex");
-            document.body.style.overflow = "hidden";
+            syncScrollLock();
+            activateDialog("cart-modal");
             requestAnimationFrame(() => {
                 backdrop.classList.remove("opacity-0");
                 content.classList.remove("translate-y-full");
@@ -1809,12 +2415,15 @@ Total Amount: \u20B9${finalTotal}
             const modal = document.getElementById("cart-modal");
             const content = document.getElementById("cart-content");
             const backdrop = document.getElementById("cart-backdrop");
+            clearTimeout(cartCloseTimer);
+            deactivateDialog("cart-modal");
             backdrop.classList.add("opacity-0");
             content.classList.add("translate-y-full");
-            setTimeout(() => {
+            cartCloseTimer = setTimeout(() => {
+                if (!content.classList.contains("translate-y-full")) return;
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
-                document.body.style.overflow = "";
+                syncScrollLock();
             }, 500);
         }
 
@@ -1839,18 +2448,12 @@ Total Amount: \u20B9${finalTotal}
         function getImageUrl(name) {
             const p = perfumesData.find((x) => x.name === name);
             if (!p) return placeholderUrl(name);
-            return firstImage[p.imgKey] || `${IMAGE_FOLDER}${p.imgKey}.jpg`;
+            return scentImageUrls(p)[0] || placeholderUrl(name);
         }
         function handleImageError(img, name) {
+            // The file is missing or broken: swap in the scent's gradient once.
             img.onerror = null;
-            const p = perfumesData.find((x) => x.name === name);
-            if (!p) {
-                img.src = placeholderUrl(name);
-                return;
-            }
-            resolveSlides(p.imgKey).then((slides) => {
-                img.src = slides[0] || placeholderUrl(name);
-            });
+            img.src = placeholderUrl(name);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -1863,10 +2466,13 @@ Total Amount: \u20B9${finalTotal}
             }
 
             const grid = document.getElementById("collection-grid");
-            const isDark = document.body.getAttribute("data-theme") === "dark";
-            document.querySelector(".toggle-knob").innerHTML = isDark
-                ? '<i data-lucide="moon" class="w-4 h-4"></i>'
-                : '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
+            const isDark =
+                document.documentElement.getAttribute("data-theme") === "dark";
+            const knob = document.querySelector(".toggle-knob");
+            if (knob)
+                knob.innerHTML = isDark
+                    ? '<i data-lucide="moon" class="w-4 h-4"></i>'
+                    : '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
 
             document.getElementById("year").textContent = new Date().getFullYear();
             let gridHTML = "";
@@ -1874,13 +2480,13 @@ Total Amount: \u20B9${finalTotal}
                 const safeName = p.name.replace(/'/g, "\\'");
                 const delay = (index % 3) * 70;
                 gridHTML += `
-                    <div class="reveal-node glass-panel rounded-3xl overflow-hidden cursor-pointer flex flex-col group h-full hover:z-10 transition-all duration-700" onclick="showScentDetails('${safeName}')" style="transition-delay: ${delay}ms">
+                    <div class="reveal-node glass-panel rounded-3xl overflow-hidden cursor-pointer flex flex-col group h-full hover:z-10 transition-all duration-700" role="button" tabindex="0" aria-label="View ${safeName} details" onclick="showScentDetails('${safeName}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScentDetails('${safeName}');}" style="transition-delay: ${delay}ms">
                         <div class="relative h-64 sm:h-72 overflow-hidden">
-                            <img ${index < 2 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" src="${IMAGE_FOLDER}${p.imgKey}.jpg" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
+                            <img ${index < 2 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="1024" height="1280" src="${getImageUrl(p.name)}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
                             <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-sm border border-avira-gold px-4 py-1 rounded-full flex items-center gap-2 shadow-lg">
-                               <span class="text-xs font-inter text-white opacity-60 line-through">&#8377;549</span>
-                               <span class="text-sm font-playfair font-bold text-avira-gold">&#8377;450</span>
+                               <span class="text-xs font-inter text-white opacity-60 line-through">&#8377;${p.price + MRP_MARKUP}</span>
+                               <span class="text-sm font-playfair font-bold text-avira-gold">&#8377;${p.price}</span>
                             </div>
                             <div class="absolute bottom-5 left-5 right-5">
                                 <p class="text-[0.625rem] uppercase tracking-[0.2em] text-avira-gold font-bold mb-2 opacity-90">${p.feel}</p>
@@ -1896,7 +2502,7 @@ Total Amount: \u20B9${finalTotal}
                     </div>`;
             });
             grid.innerHTML = gridHTML;
-            lucide.createIcons();
+            refreshIcons();
 
             const revealElements = document.querySelectorAll(".reveal-node");
             revealElements.forEach((el) => el.classList.add("js-reveal-hidden"));
@@ -1904,47 +2510,90 @@ Total Amount: \u20B9${finalTotal}
 
             cart = loadCart();
             updateCartUI();
+
+            // The hamburger disappears at >=768px; if the menu was open when the
+            // viewport grew it would stay on screen, so close it and release the
+            // scroll lock.
+            window.addEventListener("resize", () => {
+                if (window.innerWidth < 768) return;
+                if (isMobileMenuOpen()) setMobileMenu(false);
+            });
         });
 
-        function toggleMobileMenu() {
+        function isMobileMenuOpen() {
             const menu = document.getElementById("mobile-menu");
-            const isOpen = !menu.classList.contains("-translate-y-full");
-            if (isOpen) {
-                menu.classList.add("-translate-y-full");
-                document.body.style.overflow = "";
+            return !!menu && !menu.classList.contains("-translate-y-full");
+        }
+
+        // Single place that opens/closes the overlay so the visual state, the
+        // ARIA state and (importantly) `inert` can never drift apart. While the
+        // menu is closed its links are removed from the tab order entirely.
+        function setMobileMenu(open) {
+            const menu = document.getElementById("mobile-menu");
+            const toggle = document.getElementById("menu-toggle");
+            if (!menu) return;
+            menu.classList.toggle("-translate-y-full", !open);
+            menu.setAttribute("aria-hidden", open ? "false" : "true");
+            if (open) {
+                menu.removeAttribute("inert");
             } else {
-                menu.classList.remove("-translate-y-full");
-                document.body.style.overflow = "hidden";
+                menu.setAttribute("inert", "");
             }
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", open ? "true" : "false");
+                toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+            }
+            syncScrollLock();
+        }
+
+        function toggleMobileMenu() {
+            setMobileMenu(!isMobileMenuOpen());
         }
 
         function toggleTheme() {
-            const body = document.body;
-            const current = body.getAttribute("data-theme");
+            const root = document.documentElement;
+            const isDark = root.getAttribute("data-theme") === "dark";
             const iconContainer = document.querySelector(".toggle-knob");
-            if (current === "dark") {
-                body.removeAttribute("data-theme");
+            if (isDark) {
+                root.removeAttribute("data-theme");
+                root.classList.remove("dark");
+                root.style.colorScheme = "light";
                 try {
                     localStorage.setItem("avira-theme", "light");
                 } catch (e) { }
-                iconContainer.innerHTML =
-                    '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
+                if (iconContainer)
+                    iconContainer.innerHTML =
+                        '<i data-lucide="sun" class="w-4 h-4 text-avira-gold"></i>';
             } else {
-                body.setAttribute("data-theme", "dark");
+                root.setAttribute("data-theme", "dark");
+                root.classList.add("dark");
+                root.style.colorScheme = "dark";
                 try {
                     localStorage.setItem("avira-theme", "dark");
                 } catch (e) { }
-                iconContainer.innerHTML =
-                    '<i data-lucide="moon" class="w-4 h-4"></i>';
+                if (iconContainer)
+                    iconContainer.innerHTML =
+                        '<i data-lucide="moon" class="w-4 h-4"></i>';
             }
+            const themeMeta = document.querySelector('meta[name="theme-color"]');
+            if (themeMeta)
+                themeMeta.setAttribute(
+                    "content",
+                    isDark ? "#f3ead8" : "#050505",
+                );
             document.querySelectorAll("#collection-grid img").forEach((img) => {
                 if (img.src.startsWith("data:image/svg+xml"))
                     img.src = placeholderUrl(img.alt);
             });
-            lucide.createIcons();
+            refreshIcons();
         }
 
         function setupScrollReveal() {
+            const nodes = document.querySelectorAll(".reveal-node");
+            if (!("IntersectionObserver" in window)) {
+                nodes.forEach((el) => el.classList.remove("js-reveal-hidden"));
+                return;
+            }
             const observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
@@ -1961,9 +2610,7 @@ Total Amount: \u20B9${finalTotal}
                 },
                 { threshold: 0.05, rootMargin: "0px 0px 150px 0px" },
             );
-            document
-                .querySelectorAll(".reveal-node")
-                .forEach((el) => observer.observe(el));
+            nodes.forEach((el) => observer.observe(el));
         }
 
         let modalSlides = [],
@@ -1998,11 +2645,12 @@ Total Amount: \u20B9${finalTotal}
             currentScent = perfumesData.find(p => p.name === name);
             if (!currentScent) return;
             modalQty = 1; document.getElementById('modal-qty').innerText = modalQty;
+            const price = currentScent.price || 450;
             document.getElementById('modal-name').textContent = currentScent.name;
             document.getElementById('modal-price').innerHTML = `
-                <span class="text-2xl md:text-3xl font-playfair font-bold text-avira-text">\u20B9450</span>
-                <span class="text-base font-inter text-avira-textMuted line-through opacity-60">\u20B9549</span>
-                <span id="modal-save-badge" class="py-1 px-2 rounded-full bg-avira-gold text-black text-[0.625rem] font-inter font-bold uppercase tracking-widest shadow-sm">Save \u20B999</span>
+                <span class="text-2xl md:text-3xl font-playfair font-bold text-avira-text">\u20B9${price}</span>
+                <span class="text-base font-inter text-avira-textMuted line-through opacity-60">\u20B9${price + MRP_MARKUP}</span>
+                <span id="modal-save-badge" class="py-1 px-2 rounded-full bg-avira-gold text-black text-[0.625rem] font-inter font-bold uppercase tracking-widest shadow-sm">Save \u20B9${MRP_MARKUP}</span>
             `;
             document.getElementById('modal-feel').textContent = currentScent.feel;
             document.getElementById('modal-notes').textContent = currentScent.notes;
@@ -2024,36 +2672,41 @@ Total Amount: \u20B9${finalTotal}
             ).join('');
 
             const imgEl = document.getElementById('modal-image');
-            imgEl.alt = currentScent.name;
-            imgEl.src = placeholderUrl(currentScent.name);
-            imgEl.onerror = function () { handleImageError(this, currentScent.name) };
-            modalSlides = []; modalSlideIdx = 0; renderModalSlide();
             const shown = currentScent;
-            resolveSlides(shown.imgKey).then(slides => {
-                if (currentScent !== shown || !slides.length) return;
-                modalSlides = slides; modalSlideIdx = 0; renderModalSlide();
-            });
+            imgEl.alt = shown.name;
+            imgEl.onerror = function () { handleImageError(this, shown.name) };
+            modalSlides = scentImageUrls(shown);
+            modalSlideIdx = 0;
+            imgEl.src = modalSlides[0] || placeholderUrl(shown.name);
+            renderModalSlide();
             const modal = document.getElementById('scent-modal');
             const backdrop = document.getElementById('scent-backdrop');
+            clearTimeout(scentCloseTimer);
             modal.classList.remove('hidden'); modal.classList.add('flex');
             content.scrollTop = 0;
-            document.body.style.overflow = 'hidden';
+            syncScrollLock();
+            activateDialog("scent-modal");
             requestAnimationFrame(() => { backdrop.classList.remove('opacity-0'); content.classList.remove('opacity-0', 'translate-y-20'); });
         }
         function closeScentDetails() {
             const modal = document.getElementById("scent-modal");
             const content = document.getElementById("scent-content");
             const backdrop = document.getElementById("scent-backdrop");
+            clearTimeout(scentCloseTimer);
+            deactivateDialog("scent-modal");
             backdrop.classList.add("opacity-0");
             content.classList.add("opacity-0", "translate-y-20");
-            setTimeout(() => {
+            scentCloseTimer = setTimeout(() => {
+                if (!content.classList.contains("opacity-0")) return;
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
-                document.body.style.overflow = "";
+                syncScrollLock();
             }, 500);
         }
 
         function openQuiz() {
+            clearTimeout(quizResultTimer);
+            clearTimeout(quizCloseTimer);
             quizState = buildQuizRun();
             const modal = document.getElementById("quiz-modal");
             const content = document.getElementById("quiz-content");
@@ -2061,7 +2714,8 @@ Total Amount: \u20B9${finalTotal}
             renderQuiz();
             modal.classList.remove("hidden");
             modal.classList.add("flex");
-            document.body.style.overflow = "hidden";
+            syncScrollLock();
+            activateDialog("quiz-modal");
             requestAnimationFrame(() => {
                 backdrop.classList.remove("opacity-0");
                 content.classList.remove("opacity-0", "scale-90");
@@ -2072,21 +2726,32 @@ Total Amount: \u20B9${finalTotal}
             const modal = document.getElementById("quiz-modal");
             const content = document.getElementById("quiz-content");
             const backdrop = document.getElementById("quiz-backdrop");
+            clearTimeout(quizResultTimer);
+            clearTimeout(quizCloseTimer);
+            deactivateDialog("quiz-modal");
             backdrop.classList.add("opacity-0");
             content.classList.add("opacity-0", "scale-90");
             content.classList.remove("scale-100");
-            setTimeout(() => {
+            quizCloseTimer = setTimeout(() => {
+                if (!content.classList.contains("opacity-0")) return;
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
-                document.body.style.overflow = "";
+                syncScrollLock();
             }, 500);
         }
         function selectAnswer(qIdx, optIdx) {
             quizState.selected[qIdx] = optIdx;
+            // Re-rendering resets the panel scroll; keep the option the user just
+            // tapped in view on short screens.
+            const body = document.getElementById("quiz-body");
+            const scrollTop = body ? body.scrollTop : 0;
             renderQuiz();
+            const nextBody = document.getElementById("quiz-body");
+            if (nextBody) nextBody.scrollTop = scrollTop;
         }
         function nextStep() {
-            if (quizState.selected[quizState.step] === null) return;
+            if (!quizState.questions.length) return;
+            if (quizState.selected[quizState.step] == null) return;
             if (quizState.step < quizState.questions.length - 1) {
                 quizState.step++;
                 renderQuiz();
@@ -2126,7 +2791,7 @@ Total Amount: \u20B9${finalTotal}
                     </div>
                     <div class="flex justify-between items-center pt-3 border-t border-avira-text/10 sticky bottom-0 bg-[var(--bg-canvas)] md:bg-transparent">
                         <button onclick="prevStep()" class="text-xs uppercase tracking-widest text-avira-textMuted hover:text-avira-text transition-colors ${step === 0 ? "opacity-0 pointer-events-none" : ""}">Back</button>
-                        <button onclick="nextStep()" class="quiz-next px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${sel !== null ? "is-ready" : ""}">${isLast ? "Reveal" : "Next"}</button>
+                        <button onclick="nextStep()" class="quiz-next px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${sel != null ? "is-ready" : ""}">${isLast ? "Reveal" : "Next"}</button>
                     </div>
                 </div>`;
             document.getElementById("quiz-body").scrollTop = 0;
@@ -2139,14 +2804,17 @@ Total Amount: \u20B9${finalTotal}
                     <div class="w-16 h-16 border-4 border-avira-gold/30 border-t-avira-gold rounded-full animate-spin mb-6"></div>
                     <p class="text-avira-text font-playfair text-2xl animate-pulse">Analyzing your persona...</p>
                 </div>`;
-            setTimeout(() => showResult(ranked), 1300);
+            quizResultTimer = setTimeout(() => {
+                if (!isModalOpen("quiz-modal")) return;
+                showResult(ranked);
+            }, 1300);
         }
 
         function quickAddToCart(name, btn) {
             const p = perfumesData.find((x) => x.name === name);
             if (!p) return;
             const existing = cart.find((i) => i.name === name);
-            if (existing) existing.qty = Math.min(existing.qty + 1, 99);
+            if (existing) existing.qty = Math.min(existing.qty + 1, MAX_QTY);
             else cart.push({ ...p, qty: 1 });
             const cartBtn = document.getElementById("main-cart-btn");
             cartBtn.classList.remove("animate-pop");
@@ -2203,6 +2871,10 @@ Total Amount: \u20B9${finalTotal}
             "scroll",
             () => {
                 const nav = document.getElementById("navbar");
+                // While an overlay pins the body (see syncScrollLock) the page
+                // reports a scroll of 0, which would make the nav pop back in
+                // behind the overlay. Ignore those events.
+                if (document.body.style.position === "fixed") return;
                 const currentScrollY = window.scrollY;
 
                 // Hide navbar when scrolling down past 80px, show when scrolling up
@@ -2235,12 +2907,39 @@ Total Amount: \u20B9${finalTotal}
             if (isOpen("quiz-modal")) closeQuiz();
             else if (isOpen("scent-modal")) closeScentDetails();
             else if (isOpen("cart-modal")) closeCart();
-            else if (
-                !document
-                    .getElementById("mobile-menu")
-                    .classList.contains("-translate-y-full")
-            )
-                toggleMobileMenu();
+            else if (isMobileMenuOpen()) toggleMobileMenu();
+        });
+
+        // Keep Tab inside the topmost dialog. The list of focusable elements is
+        // rebuilt on every press because the quiz re-renders its options after
+        // each answer (the old buttons are gone by the next Tab).
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Tab" || !dialogStack.length) return;
+            const modal = activeDialog();
+            if (!modal) return;
+            const items = focusableIn(modal);
+            if (!items.length) {
+                e.preventDefault();
+                return;
+            }
+            const first = items[0];
+            const last = items[items.length - 1];
+            const inside = modal.contains(document.activeElement);
+            if (
+                e.shiftKey &&
+                (!inside ||
+                    document.activeElement === first ||
+                    document.activeElement === modal)
+            ) {
+                e.preventDefault();
+                last.focus();
+            } else if (
+                !e.shiftKey &&
+                (!inside || document.activeElement === last)
+            ) {
+                e.preventDefault();
+                first.focus();
+            }
         });
 
         /* =========================================================
