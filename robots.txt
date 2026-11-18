@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://avira-vercel-website.vercel.app/sitemap.xml
+Sitemap: https://avira-perfumes.vercel.app/sitemap.xml
