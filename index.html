@@ -2026,10 +2026,11 @@
                             <div class="flex items-center gap-3 min-w-0">
                                 <img src="${getImageUrl(item.name)}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover shrink-0" onerror="handleImageError(this, ${jsArg(item.name)})">
                                 <div class="min-w-0">
-                                    <p class="text-sm font-inter mt-1 whitespace-nowrap">
+                                    <p class="text-sm font-playfair text-avira-text truncate">${item.name}</p>
+                                    <p class="text-xs font-inter mt-1 whitespace-nowrap flex items-baseline gap-2">
     <span class="text-avira-text font-bold">\u20B9${price}</span>
-    <span class="text-xs text-avira-textMuted line-through opacity-60 mr-1">\u20B9${mrp}</span>
-    <span class="cart-line-qty text-xs text-avira-gold font-bold">\u00D7 ${item.qty}</span>
+    <span class="text-avira-textMuted line-through opacity-60">\u20B9${mrp}</span>
+    <span class="cart-line-qty text-avira-gold font-bold">\u00D7 ${item.qty}</span>
 </p>
                                 </div>
                             </div>
