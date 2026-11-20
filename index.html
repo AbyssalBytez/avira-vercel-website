@@ -2501,9 +2501,6 @@ Total Amount: \u20B9${finalTotal}
                         <div class="relative h-64 sm:h-72 overflow-hidden">
                             <img ${index < 2 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="1024" height="1280" src="${getImageUrl(p.name)}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100" onerror="handleImageError(this, '${safeName}')">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
-                            <div class="absolute top-4 left-4 bg-black/70 backdrop-blur-sm border border-white/25 px-3 py-1 rounded-full shadow-lg">
-                               <span class="text-[0.625rem] font-inter uppercase tracking-[0.15em] text-white/90">${BOTTLE_SIZE}</span>
-                            </div>
                             <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-sm border border-avira-gold px-4 py-1 rounded-full flex items-center gap-2 shadow-lg">
                                <span class="text-xs font-inter text-white opacity-60 line-through">&#8377;${p.price + MRP_MARKUP}</span>
                                <span class="text-sm font-playfair font-bold text-avira-gold">&#8377;${p.price}</span>
